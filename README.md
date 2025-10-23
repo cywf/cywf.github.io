@@ -20,5 +20,4 @@ I also maintain dedicated GitHub Pages for select repositories. Each project pag
 You can connect with me through these platforms:  
 - [GitHub](https://github.com/cywf)  
 - [LinkedIn](https://www.linkedin.com/in/kparisher/)  
-- Discord: [ALT‑F4 Society](https://discord.gg/nQgTBZZrA4)  
-- [PR‑CYBR](https://github.com/pr-cybr) 
+- [PR‑CYBR](https://github.com/pr-cybr)
