@@ -1,4 +1,5 @@
 /* Dashboard Styles - Dark Modern Theme */
+/* Scoped to dashboard container to avoid theme conflicts */
 :root {
   --bg-primary: #111827;
   --bg-secondary: #1f2937;
@@ -16,18 +17,10 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-* {
+.dashboard-container * {
   box-sizing: border-box;
 }
 
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
-}
 
 .dashboard-container {
   max-width: 1400px;
@@ -353,13 +346,13 @@ body {
 }
 
 /* Link Styles */
-a {
+.dashboard-container a {
   color: var(--accent-blue);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-a:hover {
+.dashboard-container a:hover {
   color: #7dd3fc;
   text-decoration: underline;
 }

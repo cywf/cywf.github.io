@@ -1,23 +1,67 @@
-# Kylo Parisher – Personal Portfolio  
-Bienvenidos! Welcome to my personal portfolio site hosted via GitHub Pages. I’m Kylo Parisher (KP), a security engineer, AI/ML researcher, instructor, and founder of PR‑CYBR. My mission is to build resilient systems that protect and empower communities.  
+# Kylo Parisher – Developer Portfolio Dashboard  
+🚀 **Live Dashboard:** [https://cywf.github.io](https://cywf.github.io)
+
+This is my personal portfolio site transformed into an **interactive analytics and visualization hub** that tracks repository health, workflow status, and contribution activity across the PR-CYBR organization and my personal projects.
+
+## 🎯 Features
+
+### 📊 Real-Time Metrics
+- **Repository Health Dashboard** - Live CI/CD status, active repositories, and workflow success rates
+- **AI-Agent Monitoring** - Build status for PR-CYBR agent repositories with category badges
+- **Contribution Analytics** - GitHub stats, top languages, and contribution streaks
+- **Deployment Insights** - GitHub Pages deployment status and history
+
+### 🎨 Tech Stack
+- **Jekyll** - Static site generator with GitHub Pages
+- **Chart.js** - Interactive data visualizations (doughnut, bar, line charts)
+- **GitHub REST API** - Real-time data fetching with local caching
+- **TailwindCSS-inspired** - Dark modern theme with responsive design
+- **GitHub Readme Stats** - Embedded statistics cards
+
+### 🔄 Data Management
+- Automatic data caching (1-hour duration) via localStorage
+- Real-time GitHub API integration for:
+  - Workflow runs and CI/CD status
+  - Repository commits and activity
+  - Issues and pull requests
+  - Agent build statuses
+
+## 📁 Project Structure
+
+```
+.
+├── assets/
+│   ├── css/
+│   │   └── dashboard.css      # Dark theme styles
+│   └── js/
+│       └── dashboard.js       # GitHub API client & Chart.js integration
+├── index.html                 # Main dashboard page
+├── _config.yml               # Jekyll configuration
+└── README.md                 # This file
+```
+
+## 🚀 Local Development
+
+This site is built with Jekyll and automatically deployed via GitHub Actions.
+
+To run locally:
+```bash
+bundle install
+bundle exec jekyll serve
+```
+
+Visit `http://localhost:4000` to view the dashboard.
 
 ## About Me  
-I balance roles as an AI & ML research engineer, security instructor, and lifelong student. My work spans cybersecurity, executive protection, psionics, space systems, and quantum exploration. Guided by the Seven Hermetic Principles, I focus on ethical innovation and intergenerational stewardship through initiatives like the G8 System.  
+I'm Kylo Parisher (KP), a security engineer, AI/ML researcher, instructor, and founder of PR‑CYBR. My mission is to build resilient systems that protect and empower communities.
+
+I balance roles as an AI & ML research engineer, security instructor, and lifelong student. My work spans cybersecurity, executive protection, psionics, space systems, and quantum exploration. Guided by the Seven Hermetic Principles, I focus on ethical innovation and intergenerational stewardship through initiatives like the G8 System.
 
 ## PR‑CYBR  
-[PR‑CYBR](https://github.com/pr-cybr) is a Puerto Rico initiative I founded to promote digital resilience and education. It aims to build community protection and drive innovation in cybersecurity, AI/ML, and technology.  
-
-## Projects & Initiatives  
-This GitHub portfolio highlights some of my key projects and interests, including:  
-- **AI/ML & Security Tools:** automation, defense, and ethical AI for cybersecurity.  
-- **Space & Quantum:** research on space systems and quantum communications.  
-- **Open‑source contributions:** forks and tools that support the wider community.  
-- **Education & Community:** teaching with Executive Security International (ESI) and building training programs for security professionals.  
-
-I also maintain dedicated GitHub Pages for select repositories. Each project page provides up‑to‑date information and visual data about the project’s status.  
+[PR‑CYBR](https://github.com/pr-cybr) is a Puerto Rico initiative I founded to promote digital resilience and education. It aims to build community protection and drive innovation in cybersecurity, AI/ML, and technology.
 
 ## Contact & Links  
-You can connect with me through these platforms:  
 - [GitHub](https://github.com/cywf)  
-- [LinkedIn](https://www.linkedin.com/in/kparisher/)  
+- [LinkedIn](https://www.linkedin.com/in/kparisher/)
+- [Discord: ALT-F4 Society](https://discord.gg/nQgTBZZrA4)
 - [PR‑CYBR](https://github.com/pr-cybr)
