@@ -1,0 +1,157 @@
+---
+layout: default
+title: "Kylo Parisher – Portfolio Dashboard"
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Live dashboard visualizing operational health and performance of open-source projects including PR-CYBR, F4ORGE, and AI-agent initiatives">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <h1 class="hero-title">⚡ Developer Portfolio Dashboard</h1>
+      <p class="hero-description">
+        This live dashboard visualizes the operational health and collaborative performance of my open-source ecosystem, 
+        including <strong>PR-CYBR</strong>, <strong>F4ORGE</strong>, and experimental <strong>AI-agent projects</strong>. 
+        Real-time metrics powered by GitHub API showcase repository activity, CI/CD pipeline health, and community contributions.
+      </p>
+      <div style="margin-top: 1.5rem;">
+        <button id="refresh-data" style="background: var(--accent-blue); color: var(--bg-primary); border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-family: 'Courier New', monospace; font-weight: 600; cursor: pointer; transition: opacity 0.2s;">
+          🔄 Refresh Data
+        </button>
+      </div>
+    </section>
+
+    <!-- Repository Health Section -->
+    <h2 class="section-header">📊 Repository Health</h2>
+    <div class="dashboard-grid" data-loading>
+      
+      <!-- Active Repositories -->
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-title">Active Repositories</span>
+          <span class="metric-icon">📦</span>
+        </div>
+        <div class="metric-value" id="active-repos-count">--</div>
+        <div class="metric-subtitle" id="total-repos-count">Loading...</div>
+      </div>
+
+      <!-- CI/CD Status -->
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-title">CI/CD Success Rate</span>
+          <span class="metric-icon">✓</span>
+        </div>
+        <div class="metric-value" id="workflow-success-rate">--%</div>
+        <div class="metric-subtitle">Past 30 days</div>
+        <div class="chart-container">
+          <canvas id="cicd-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Open Issues -->
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-title">Open Issues</span>
+          <span class="metric-icon">🔍</span>
+        </div>
+        <div class="metric-value" id="open-issues-count">--</div>
+        <div class="metric-subtitle">Across monitored projects</div>
+        <div class="chart-container">
+          <canvas id="issues-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Pull Requests Merged -->
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-title">Pull Requests</span>
+          <span class="metric-icon">🔀</span>
+        </div>
+        <div class="metric-value" id="pr-count">--</div>
+        <div class="metric-subtitle" id="pr-total-count">Loading...</div>
+      </div>
+
+    </div>
+
+    <!-- AI-Agent Metrics Section -->
+    <h2 class="section-header">🧠 AI-Agent Metrics</h2>
+    <div data-loading>
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+        Build status and health indicators for PR-CYBR agent repositories. 
+        Color-coded by category: <span class="category-badge core">Core</span> 
+        <span class="category-badge infra">Infrastructure</span> 
+        <span class="category-badge support">Support</span>
+      </p>
+      <div class="agent-badges-grid" id="agent-badges-container">
+        <!-- Agent badges will be dynamically loaded here -->
+      </div>
+    </div>
+
+    <!-- Contributions & Languages Section -->
+    <h2 class="section-header">🛠️ Contributions & Languages</h2>
+    <div class="stats-section">
+      <div class="stats-card">
+        <img src="https://github-readme-stats.vercel.app/api?username=cywf&show_icons=true&theme=github_dark&hide_border=true&bg_color=1f2937&title_color=38bdf8&text_color=d1d5db&icon_color=38bdf8" alt="GitHub Stats">
+      </div>
+      <div class="stats-card">
+        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=cywf&layout=compact&theme=github_dark&hide_border=true&bg_color=1f2937&title_color=38bdf8&text_color=d1d5db" alt="Top Languages">
+      </div>
+    </div>
+
+    <!-- GitHub Streak -->
+    <div class="stats-section">
+      <div class="stats-card">
+        <img src="https://github-readme-streak-stats.herokuapp.com/?user=cywf&theme=github-dark-blue&hide_border=true&background=1f2937&stroke=38bdf8&ring=38bdf8&fire=f87171&currStreakLabel=d1d5db" alt="GitHub Streak">
+      </div>
+    </div>
+
+    <!-- Deployment Insights Section -->
+    <h2 class="section-header">🚀 Deployment Insights</h2>
+    <div class="deployment-info" id="deployment-info" data-loading>
+      <!-- Deployment info will be dynamically loaded here -->
+    </div>
+
+    <!-- About Section -->
+    <h2 class="section-header">👨‍💻 About Me</h2>
+    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+      <p style="color: var(--text-secondary); line-height: 1.8; margin: 0 0 1rem 0;">
+        I'm <strong style="color: var(--text-primary);">Kylo Parisher (KP)</strong>, a security engineer, AI/ML researcher, 
+        instructor, and founder of <a href="https://github.com/pr-cybr" target="_blank">PR-CYBR</a>. 
+        My mission is to build resilient systems that protect and empower communities.
+      </p>
+      <p style="color: var(--text-secondary); line-height: 1.8; margin: 0 0 1rem 0;">
+        I balance roles as an AI & ML research engineer, security instructor, and lifelong student. My work spans 
+        cybersecurity, executive protection, psionics, space systems, and quantum exploration. Guided by the Seven 
+        Hermetic Principles, I focus on ethical innovation and intergenerational stewardship through initiatives like the G8 System.
+      </p>
+      <div style="margin-top: 1.5rem;">
+        <h3 style="font-family: 'Courier New', monospace; font-size: 1.125rem; color: var(--accent-blue); margin-bottom: 0.75rem;">Connect</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="https://github.com/cywf" target="_blank" style="color: var(--accent-blue);">GitHub</a>
+          <a href="https://linkedin.com/in/kparisher" target="_blank" style="color: var(--accent-blue);">LinkedIn</a>
+          <a href="https://github.com/pr-cybr" target="_blank" style="color: var(--accent-blue);">PR-CYBR</a>
+          <a href="https://discord.gg/nQgTBZZrA4" target="_blank" style="color: var(--accent-blue);">Discord</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Last Updated -->
+    <div class="last-updated" id="last-updated">
+      Last updated: --
+    </div>
+
+  </div>
+
+  <!-- Load Dashboard JavaScript -->
+  <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
