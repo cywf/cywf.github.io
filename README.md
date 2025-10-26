@@ -52,6 +52,8 @@ bundle exec jekyll serve
 
 Visit `http://localhost:4000` to view the dashboard.
 
+> **Note:** The dashboard's real-time metrics require GitHub API access. When running locally, you may see CORS errors in the browser console. The dashboard works best when deployed to GitHub Pages at [https://cywf.github.io](https://cywf.github.io), where all API calls function properly.
+
 ## About Me  
 I'm Kylo Parisher (KP), a security engineer, AI/ML researcher, instructor, and founder of PR‑CYBR. My mission is to build resilient systems that protect and empower communities.
 
