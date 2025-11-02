@@ -1,0 +1,86 @@
+name: Deploy Astro site to Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: site/package-lock.json
+
+      - name: Prepare legacy dashboard
+        run: |
+          echo "Copying legacy dashboard assets..."
+          mkdir -p site/public/legacy/assets
+          cp -r assets/* site/public/legacy/assets/
+          cp index.html site/public/legacy/index.html
+          echo "✓ Legacy dashboard copied"
+
+      - name: Install dependencies
+        run: |
+          cd site
+          npm ci
+
+      - name: Snapshot repository data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd site
+          echo "Fetching repository statistics..."
+          npx tsx src/scripts/fetch_repo_data.ts || echo "Warning: Failed to fetch repo data"
+          
+          echo "Fetching discussions..."
+          npx tsx src/scripts/fetch_discussions.ts || echo "Warning: Failed to fetch discussions"
+          
+          echo "Fetching project data..."
+          npx tsx src/scripts/fetch_projects.ts || echo "Warning: Failed to fetch projects"
+          
+          echo "✓ Data snapshot complete"
+
+      - name: Build with Astro
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          NODE_OPTIONS: --max-old-space-size=4096
+        run: |
+          cd site
+          npm run typecheck || echo "Warning: Type check failed, continuing with build"
+          npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site/dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

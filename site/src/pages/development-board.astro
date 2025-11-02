@@ -1,0 +1,99 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Development Board - Kylo Parisher Portfolio" description="Project development board">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold mb-2">🗂️ Development Board</h1>
+    <p class="text-base-content/70">
+      Project tracking and development status.
+    </p>
+  </div>
+
+  <div id="board-container" class="space-y-4">
+    <div class="flex justify-center py-12">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  </div>
+
+  <script>
+    interface ProjectItem {
+      title: string;
+      status: string;
+      labels: string[];
+      assignees: string[];
+      url: string;
+    }
+
+    async function loadBoard() {
+      try {
+        const response = await fetch('/data/projects.json');
+        if (!response.ok) {
+          throw new Error('Failed to load projects');
+        }
+        const items: ProjectItem[] = await response.json();
+        
+        const container = document.getElementById('board-container')!;
+        
+        // Group items by status
+        const grouped = items.reduce((acc, item) => {
+          const status = item.status || 'todo';
+          if (!acc[status]) acc[status] = [];
+          acc[status].push(item);
+          return acc;
+        }, {} as Record<string, ProjectItem[]>);
+
+        const statuses = ['todo', 'doing', 'done'];
+        const statusLabels: Record<string, string> = {
+          todo: '📋 To Do',
+          doing: '🔄 In Progress',
+          done: '✅ Done',
+        };
+
+        container.innerHTML = `
+          <div class="grid md:grid-cols-3 gap-4">
+            ${statuses.map(status => `
+              <div class="card bg-base-200 shadow-xl">
+                <div class="card-body">
+                  <h2 class="card-title">${statusLabels[status]}</h2>
+                  <div class="space-y-2">
+                    ${(grouped[status] || []).map(item => `
+                      <div class="card bg-base-300 shadow">
+                        <div class="card-body p-4">
+                          <h3 class="font-semibold">
+                            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link link-hover">
+                              ${item.title}
+                            </a>
+                          </h3>
+                          ${item.labels.length > 0 ? `
+                            <div class="flex flex-wrap gap-1 mt-2">
+                              ${item.labels.map(label => `
+                                <span class="badge badge-sm badge-outline">${label}</span>
+                              `).join('')}
+                            </div>
+                          ` : ''}
+                        </div>
+                      </div>
+                    `).join('') || '<p class="text-sm text-base-content/70 text-center py-4">No items</p>'}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } catch (error) {
+        console.error('Error loading development board:', error);
+        document.getElementById('board-container')!.innerHTML = `
+          <div class="alert alert-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>Project data not available. This data is generated during CI/CD deployment.</span>
+          </div>
+        `;
+      }
+    }
+
+    loadBoard();
+  </script>
+</Layout>

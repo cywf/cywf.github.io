@@ -1,0 +1,183 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Statistics - Kylo Parisher Portfolio" description="Repository statistics and analytics">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold mb-2">📈 Repository Statistics</h1>
+    <p class="text-base-content/70">
+      Comprehensive analytics and visualizations for repository health and activity.
+    </p>
+  </div>
+
+  <div id="stats-container" class="space-y-8">
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">⭐ Stars</h2>
+          <div class="stat-value" id="stars-count">--</div>
+        </div>
+      </div>
+      <div class="card bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">🍴 Forks</h2>
+          <div class="stat-value" id="forks-count">--</div>
+        </div>
+      </div>
+      <div class="card bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">👀 Watchers</h2>
+          <div class="stat-value" id="watchers-count">--</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">💻 Language Breakdown</h2>
+        <div id="language-chart-container">
+          <div class="h-64 flex items-center justify-center">
+            <span class="loading loading-spinner loading-lg"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">📊 Commit Activity (Last 12 Weeks)</h2>
+        <div id="commits-chart-container">
+          <div class="h-64 flex items-center justify-center">
+            <span class="loading loading-spinner loading-lg"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { Chart, registerables } from 'chart.js';
+    Chart.register(...registerables);
+
+    interface StatsData {
+      stars: number;
+      forks: number;
+      watchers: number;
+      languages: Record<string, number>;
+      commitActivity: { week: string; commits: number }[];
+    }
+
+    async function loadStats() {
+      try {
+        const response = await fetch('/data/stats.json');
+        if (!response.ok) {
+          throw new Error('Failed to load stats');
+        }
+        const data: StatsData = await response.json();
+        
+        // Update stats
+        document.getElementById('stars-count')!.textContent = data.stars.toString();
+        document.getElementById('forks-count')!.textContent = data.forks.toString();
+        document.getElementById('watchers-count')!.textContent = data.watchers.toString();
+
+        // Language chart
+        const languageCtx = document.createElement('canvas');
+        document.getElementById('language-chart-container')!.innerHTML = '';
+        document.getElementById('language-chart-container')!.appendChild(languageCtx);
+
+        const languageLabels = Object.keys(data.languages);
+        const languageData = Object.values(data.languages);
+        
+        new Chart(languageCtx, {
+          type: 'doughnut',
+          data: {
+            labels: languageLabels,
+            datasets: [{
+              data: languageData,
+              backgroundColor: [
+                'rgba(56, 189, 248, 0.8)',
+                'rgba(129, 140, 248, 0.8)',
+                'rgba(16, 185, 129, 0.8)',
+                'rgba(251, 191, 36, 0.8)',
+                'rgba(248, 113, 113, 0.8)',
+              ],
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                position: 'right',
+                labels: {
+                  color: 'rgb(249, 250, 251)',
+                },
+              },
+            },
+          },
+        });
+
+        // Commit activity chart
+        const commitCtx = document.createElement('canvas');
+        document.getElementById('commits-chart-container')!.innerHTML = '';
+        document.getElementById('commits-chart-container')!.appendChild(commitCtx);
+
+        new Chart(commitCtx, {
+          type: 'line',
+          data: {
+            labels: data.commitActivity.map(w => w.week),
+            datasets: [{
+              label: 'Commits',
+              data: data.commitActivity.map(w => w.commits),
+              borderColor: 'rgba(56, 189, 248, 1)',
+              backgroundColor: 'rgba(56, 189, 248, 0.1)',
+              tension: 0.4,
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: 'rgb(249, 250, 251)',
+                },
+                grid: {
+                  color: 'rgba(249, 250, 251, 0.1)',
+                },
+              },
+              x: {
+                ticks: {
+                  color: 'rgb(249, 250, 251)',
+                },
+                grid: {
+                  color: 'rgba(249, 250, 251, 0.1)',
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                labels: {
+                  color: 'rgb(249, 250, 251)',
+                },
+              },
+            },
+          },
+        });
+      } catch (error) {
+        console.error('Error loading statistics:', error);
+        document.getElementById('stats-container')!.innerHTML = `
+          <div class="alert alert-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>Statistics data not available. This data is generated during CI/CD deployment.</span>
+          </div>
+        `;
+      }
+    }
+
+    loadStats();
+  </script>
+</Layout>
