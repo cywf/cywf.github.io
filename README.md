@@ -1,7 +1,7 @@
-# Kylo Parisher – Developer Portfolio Dashboard  
-🚀 **Live Dashboard:** [https://cywf.github.io](https://cywf.github.io)
+# Kylo Parisher – Developer Portfolio  
+🚀 **Live Site:** [https://cywf.github.io](https://cywf.github.io)
 
-This is my personal portfolio site transformed into an **interactive analytics and visualization hub** that tracks repository health, workflow status, and contribution activity across the PR-CYBR organization and my personal projects.
+This is my personal portfolio site - an **interactive analytics and visualization hub** that tracks repository health, workflow status, and contribution activity across the PR-CYBR organization and my personal projects.
 
 ## 🎯 Features
 
@@ -12,47 +12,164 @@ This is my personal portfolio site transformed into an **interactive analytics a
 - **Deployment Insights** - GitHub Pages deployment status and history
 
 ### 🎨 Tech Stack
-- **Jekyll** - Static site generator with GitHub Pages
+- **Astro** - Modern static site generator for optimal performance
+- **React** - Interactive UI components
+- **TailwindCSS + daisyUI** - Beautiful, customizable dark themes
 - **Chart.js** - Interactive data visualizations (doughnut, bar, line charts)
 - **GitHub REST API** - Real-time data fetching with local caching
-- **TailwindCSS-inspired** - Dark modern theme with responsive design
-- **GitHub Readme Stats** - Embedded statistics cards
+- **Mermaid** - Architecture and workflow diagrams
+
+### 🎨 Theme System
+7 customizable dark themes with localStorage persistence:
+- **Nightfall** (default) - Cool blue tones with excellent contrast
+- **Dracula** - Classic dark theme with purple accents
+- **Cyberpunk** - Bright neon colors on dark background
+- **Dark Neon** - Magenta and cyan highlights
+- **Hackerman** - Matrix-inspired green terminal aesthetic
+- **Gamecore** - Warm orange and red gaming vibes
+- **Neon Accent** - Purple and pink gradient accents
 
 ### 🔄 Data Management
 - Automatic data caching (1-hour duration) via localStorage
+- CI-generated snapshots for statistics, discussions, and project data
 - Real-time GitHub API integration for:
   - Workflow runs and CI/CD status
   - Repository commits and activity
   - Issues and pull requests
   - Agent build statuses
+- Client-side privacy: no external tracking or analytics
 
 ## 📁 Project Structure
 
 ```
 .
-├── assets/
-│   ├── css/
-│   │   └── dashboard.css      # Dark theme styles
-│   └── js/
-│       └── dashboard.js       # GitHub API client & Chart.js integration
-├── index.html                 # Main dashboard page
-├── _config.yml               # Jekyll configuration
-└── README.md                 # This file
+├── site/                       # Astro application
+│   ├── src/
+│   │   ├── components/        # React components
+│   │   │   ├── ThemeSwitcher.tsx
+│   │   │   ├── Charts.tsx
+│   │   │   └── MermaidViewer.tsx
+│   │   ├── layouts/
+│   │   │   └── Layout.astro   # Main layout with nav & footer
+│   │   ├── pages/             # All site routes
+│   │   │   ├── index.astro    # Home page
+│   │   │   ├── dashboard.astro
+│   │   │   ├── statistics.astro
+│   │   │   ├── discussions.astro
+│   │   │   ├── development-board.astro
+│   │   │   ├── create-issue.astro
+│   │   │   ├── docs.astro
+│   │   │   ├── visualizer.astro
+│   │   │   └── 404.astro
+│   │   ├── scripts/           # Data fetching scripts
+│   │   │   ├── fetch_repo_data.ts
+│   │   │   ├── fetch_discussions.ts
+│   │   │   └── fetch_projects.ts
+│   │   └── styles/
+│   │       └── global.css
+│   ├── public/
+│   │   ├── legacy/            # Original Jekyll dashboard
+│   │   │   ├── assets/        # CSS & JS from original
+│   │   │   └── index.html     # Original dashboard
+│   │   ├── data/              # CI-generated JSON snapshots
+│   │   └── diagrams/          # Mermaid diagram files
+│   ├── astro.config.mjs
+│   ├── tailwind.config.mjs
+│   └── package.json
+├── .github/
+│   ├── workflows/
+│   │   └── pages.yml          # Build & deploy workflow
+│   └── ISSUE_TEMPLATE/        # Issue templates
+├── assets/                    # Original Jekyll assets (legacy)
+├── index.html                 # Original Jekyll dashboard (legacy)
+├── _config.yml               # Jekyll config (legacy)
+└── README.md
 ```
+
+## 🌐 Site Routes
+
+- **`/`** - Home page with project info and quick links
+- **`/dashboard`** - Original portfolio dashboard (embedded legacy version)
+- **`/statistics`** - Repository statistics with Chart.js visualizations
+- **`/discussions`** - Latest GitHub discussions
+- **`/development-board`** - Kanban board (Projects v2 or issues-based)
+- **`/create-issue`** - Quick shortcuts to create issues with templates
+- **`/docs`** - Documentation renderer with README and migration notes
+- **`/visualizer`** - Mermaid diagram viewer for architecture visualization
 
 ## 🚀 Local Development
 
-This site is built with Jekyll and automatically deployed via GitHub Actions.
+This site is built with Astro and automatically deployed via GitHub Actions.
 
-To run locally:
+### Prerequisites
+- Node.js 20 LTS
+- npm
+
+### Setup & Run
+
 ```bash
-bundle install
-bundle exec jekyll serve
+cd site
+npm install
+npm run dev
 ```
 
-Visit `http://localhost:4000` to view the dashboard.
+Visit `http://localhost:4321` to view the site.
 
-> **Note:** The dashboard's real-time metrics require GitHub API access. When running locally, you may see CORS errors in the browser console. The dashboard works best when deployed to GitHub Pages at [https://cywf.github.io](https://cywf.github.io), where all API calls function properly.
+### Build
+
+```bash
+cd site
+npm run build
+```
+
+The static site will be generated in `site/dist/`.
+
+### Preview Build
+
+```bash
+cd site
+npm run preview
+```
+
+## 🔒 Legacy Dashboard
+
+The original Jekyll dashboard is preserved and accessible at `/dashboard`. It includes:
+- Original assets (CSS, JS) copied to `site/public/legacy/assets/`
+- Original `index.html` at `site/public/legacy/index.html`
+- Full GitHub API integration with 1-hour localStorage caching
+- All original visualizations and metrics
+
+The dashboard is embedded via iframe to maintain its original functionality while being part of the new Astro site.
+
+## 🔄 CI/CD & Data Snapshots
+
+The `.github/workflows/pages.yml` workflow:
+1. Copies legacy dashboard assets to the Astro public directory
+2. Runs data snapshot scripts to generate JSON files:
+   - `stats.json` - Repository statistics (stars, forks, languages, commits)
+   - `discussions.json` - Latest 25 discussions
+   - `projects.json` - Project board items (Projects v2 or issues fallback)
+3. Builds the Astro site
+4. Deploys to GitHub Pages
+
+Data snapshots are server-side only - the `GITHUB_TOKEN` is never exposed to clients.
+
+## ♿ Accessibility
+
+- WCAG AA compliant color contrast across all themes
+- Keyboard-accessible navigation and theme switcher
+- Skip-to-content link for screen readers
+- Breadcrumb navigation on all pages
+- Semantic HTML and ARIA labels
+- Respects `prefers-reduced-motion`
+
+## 📊 Performance
+
+- Lighthouse scores ≥ 90 (Performance, Best Practices, SEO, Accessibility)
+- Astro's optimized static site generation
+- Component-level hydration with React
+- Efficient caching strategies
+- Minimal JavaScript for core pages
 
 ## About Me  
 I'm Kylo Parisher (KP), a security engineer, AI/ML researcher, instructor, and founder of PR‑CYBR. My mission is to build resilient systems that protect and empower communities.
@@ -67,3 +184,7 @@ I balance roles as an AI & ML research engineer, security instructor, and lifelo
 - [LinkedIn](https://www.linkedin.com/in/kparisher/)
 - [Discord: ALT-F4 Society](https://discord.gg/nQgTBZZrA4)
 - [PR‑CYBR](https://github.com/pr-cybr)
+
+## 📄 License
+
+MIT License - See the footer of the site for copyright information.

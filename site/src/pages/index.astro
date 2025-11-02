@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Home - Kylo Parisher Portfolio" description="Interactive portfolio and analytics hub for developer Kylo Parisher">
+  <div class="hero min-h-[50vh] bg-base-200 rounded-lg mb-8">
+    <div class="hero-content text-center">
+      <div class="max-w-2xl">
+        <h1 class="text-5xl font-bold mb-4">⚡ Developer Portfolio Dashboard</h1>
+        <p class="text-lg mb-6">
+          Interactive analytics and visualization hub tracking repository health, workflow status, 
+          and contribution activity across the <strong>PR-CYBR</strong> organization and personal projects.
+        </p>
+        <div class="flex gap-4 justify-center flex-wrap">
+          <a href="/dashboard" class="btn btn-primary">View Dashboard</a>
+          <a href="/statistics" class="btn btn-outline">Statistics</a>
+          <a href="/docs" class="btn btn-outline">Documentation</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-8 mb-8">
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">📊 Features</h2>
+        <ul class="space-y-2">
+          <li><strong>Real-Time Metrics</strong> - Live CI/CD status, repository health, and workflow success rates</li>
+          <li><strong>AI-Agent Monitoring</strong> - Build status for PR-CYBR agent repositories</li>
+          <li><strong>Contribution Analytics</strong> - GitHub stats, top languages, and contribution streaks</li>
+          <li><strong>Deployment Insights</strong> - GitHub Pages deployment status and history</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">🎨 Tech Stack</h2>
+        <ul class="space-y-2">
+          <li><strong>Astro</strong> - Modern static site generator</li>
+          <li><strong>React</strong> - Interactive UI components</li>
+          <li><strong>TailwindCSS + daisyUI</strong> - Beautiful dark themes</li>
+          <li><strong>Chart.js</strong> - Data visualizations</li>
+          <li><strong>GitHub API</strong> - Real-time data with caching</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-200 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">🔄 Data Management</h2>
+      <ul class="space-y-2">
+        <li>Automatic data caching via localStorage (1-hour duration)</li>
+        <li>Real-time GitHub API integration for workflow runs, commits, issues, and PRs</li>
+        <li>CI-generated snapshots for statistics and discussions</li>
+        <li>Client-side privacy with no external tracking</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card bg-base-200 shadow-xl mb-8">
+    <div class="card-body">
+      <h2 class="card-title">👨‍💻 About Me</h2>
+      <p class="mb-4">
+        I'm <strong>Kylo Parisher (KP)</strong>, a security engineer, AI/ML researcher, instructor, 
+        and founder of <a href="https://github.com/pr-cybr" class="link link-primary" target="_blank" rel="noopener noreferrer">PR-CYBR</a>. 
+        My mission is to build resilient systems that protect and empower communities.
+      </p>
+      <p class="mb-4">
+        I balance roles as an AI & ML research engineer, security instructor, and lifelong student. 
+        My work spans cybersecurity, executive protection, psionics, space systems, and quantum exploration. 
+        Guided by the Seven Hermetic Principles, I focus on ethical innovation and intergenerational 
+        stewardship through initiatives like the G8 System.
+      </p>
+      <h3 class="font-bold mt-4 mb-2">PR‑CYBR</h3>
+      <p class="mb-4">
+        <a href="https://github.com/pr-cybr" class="link link-primary" target="_blank" rel="noopener noreferrer">PR‑CYBR</a> 
+        is a Puerto Rico initiative I founded to promote digital resilience and education. 
+        It aims to build community protection and drive innovation in cybersecurity, AI/ML, and technology.
+      </p>
+    </div>
+  </div>
+
+  <div class="card bg-base-200 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title">🔗 Quick Links</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="https://github.com/cywf" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          GitHub Profile
+        </a>
+        <a href="https://github.com/pr-cybr" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          PR-CYBR Org
+        </a>
+        <a href="https://www.linkedin.com/in/kparisher/" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          LinkedIn
+        </a>
+        <a href="https://discord.gg/nQgTBZZrA4" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          Discord
+        </a>
+        <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+        <a href="/statistics" class="btn btn-primary">Statistics</a>
+        <a href="/discussions" class="btn btn-primary">Discussions</a>
+        <a href="/development-board" class="btn btn-primary">Dev Board</a>
+      </div>
+    </div>
+  </div>
+</Layout>

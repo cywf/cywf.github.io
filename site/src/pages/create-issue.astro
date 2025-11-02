@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Create Issue - Kylo Parisher Portfolio" description="Create a new issue">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold mb-2">📝 Create Issue</h1>
+    <p class="text-base-content/70">
+      Quick shortcuts to create different types of issues.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">🐛 Bug Report</h2>
+        <p>Report a bug or issue you've encountered.</p>
+        <div class="card-actions justify-end mt-4">
+          <a 
+            href="https://github.com/cywf/cywf.github.io/issues/new?labels=bug&template=bug_report.md&title=%5BBUG%5D%3A+" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            Create Bug Report
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">✨ Feature Request</h2>
+        <p>Suggest a new feature or enhancement.</p>
+        <div class="card-actions justify-end mt-4">
+          <a 
+            href="https://github.com/cywf/cywf.github.io/issues/new?labels=enhancement&template=feature_request.md&title=%5BFEATURE%5D%3A+" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            Request Feature
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">📚 Documentation</h2>
+        <p>Request documentation improvements or additions.</p>
+        <div class="card-actions justify-end mt-4">
+          <a 
+            href="https://github.com/cywf/cywf.github.io/issues/new?labels=documentation&template=documentation.md&title=%5BDOCS%5D%3A+" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            Documentation Issue
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">💡 General Issue</h2>
+        <p>Create an issue that doesn't fit the other categories.</p>
+        <div class="card-actions justify-end mt-4">
+          <a 
+            href="https://github.com/cywf/cywf.github.io/issues/new/choose" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="btn btn-outline"
+          >
+            Choose Template
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-info mt-8">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <div>
+      <p class="font-semibold">Before creating an issue:</p>
+      <ul class="list-disc list-inside mt-2">
+        <li>Search existing issues to avoid duplicates</li>
+        <li>Provide clear and detailed information</li>
+        <li>Include reproduction steps for bugs</li>
+      </ul>
+    </div>
+  </div>
+</Layout>

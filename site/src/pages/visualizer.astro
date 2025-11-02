@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { MermaidViewer } from '../components/MermaidViewer';
+import { readdirSync, readFileSync, existsSync } from 'fs';
+import { join } from 'path';
+
+// Try to load .mmd files from /mermaid directory
+let diagrams: { name: string; content: string }[] = [];
+
+const mermaidDir = join(process.cwd(), '..', 'mermaid');
+if (existsSync(mermaidDir)) {
+  try {
+    const files = readdirSync(mermaidDir).filter((f: string) => f.endsWith('.mmd'));
+    diagrams = files.map((file: string) => ({
+      name: file.replace('.mmd', ''),
+      content: readFileSync(join(mermaidDir, file), 'utf-8'),
+    }));
+  } catch (error) {
+    console.error('Failed to read mermaid files:', error);
+  }
+}
+
+// Fallback: Extract mermaid code blocks from README
+if (diagrams.length === 0) {
+  try {
+    const readme = readFileSync(join(process.cwd(), '..', 'README.md'), 'utf-8');
+    const mermaidRegex = /```mermaid\n([\s\S]*?)```/g;
+    let match;
+    let index = 0;
+    while ((match = mermaidRegex.exec(readme)) !== null) {
+      diagrams.push({
+        name: `Diagram ${index + 1}`,
+        content: match[1].trim(),
+      });
+      index++;
+    }
+  } catch (error) {
+    console.error('Failed to extract mermaid from README:', error);
+  }
+}
+
+// If still no diagrams, create a sample one
+if (diagrams.length === 0) {
+  diagrams = [{
+    name: 'Sample Architecture',
+    content: `graph TB
+    A[User] --> B[Astro Site]
+    B --> C[GitHub Pages]
+    B --> D[GitHub API]
+    D --> E[Repository Data]
+    D --> F[Discussions]
+    D --> G[Projects]
+    style A fill:#38bdf8
+    style B fill:#10b981
+    style C fill:#818cf8
+    style D fill:#fbbf24
+    style E fill:#f87171
+    style F fill:#f87171
+    style G fill:#f87171`
+  }];
+}
+---
+
+<Layout title="Visualizer - Kylo Parisher Portfolio" description="Project architecture and workflow visualizations">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold mb-2">📊 Project Visualizer</h1>
+    <p class="text-base-content/70">
+      Architecture diagrams and workflow visualizations using Mermaid.
+    </p>
+  </div>
+
+  <div class="card bg-base-200 shadow-xl">
+    <div class="card-body">
+      <MermaidViewer client:load diagrams={diagrams} />
+    </div>
+  </div>
+
+  <div class="alert alert-info mt-8">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <div>
+      <p>
+        To add more diagrams, create <code>.mmd</code> files in the <code>/mermaid</code> directory 
+        or include Mermaid code blocks in README.md.
+      </p>
+    </div>
+  </div>
+</Layout>

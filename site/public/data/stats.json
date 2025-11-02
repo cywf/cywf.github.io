@@ -1,0 +1,25 @@
+{
+  "stars": 5,
+  "forks": 2,
+  "watchers": 3,
+  "languages": {
+    "JavaScript": 4500,
+    "TypeScript": 3200,
+    "CSS": 1800,
+    "HTML": 900
+  },
+  "commitActivity": [
+    { "week": "Oct 1", "commits": 15 },
+    { "week": "Oct 8", "commits": 12 },
+    { "week": "Oct 15", "commits": 18 },
+    { "week": "Oct 22", "commits": 22 },
+    { "week": "Oct 29", "commits": 10 },
+    { "week": "Nov 5", "commits": 8 },
+    { "week": "Nov 12", "commits": 14 },
+    { "week": "Nov 19", "commits": 16 },
+    { "week": "Nov 26", "commits": 11 },
+    { "week": "Dec 3", "commits": 19 },
+    { "week": "Dec 10", "commits": 13 },
+    { "week": "Dec 17", "commits": 20 }
+  ]
+}

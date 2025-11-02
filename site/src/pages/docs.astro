@@ -1,0 +1,125 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+// Read README.md from the root
+let readmeContent = '';
+try {
+  readmeContent = readFileSync(join(process.cwd(), '..', 'README.md'), 'utf-8');
+} catch (error) {
+  console.error('Failed to read README.md:', error);
+}
+
+// Simple markdown to HTML converter (basic)
+function markdownToHtml(md: string): string {
+  return md
+    // Headers
+    .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold mt-6 mb-3">$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold mt-8 mb-4">$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mt-10 mb-5">$1</h1>')
+    // Bold
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    // Links
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="link link-primary" target="_blank" rel="noopener noreferrer">$1</a>')
+    // Line breaks
+    .replace(/\n\n/g, '</p><p class="mb-4">')
+    // Bullet points
+    .replace(/^- (.*$)/gim, '<li>$1</li>')
+    // Wrap in paragraphs
+    .split('\n').map(line => {
+      if (line.startsWith('<h') || line.startsWith('<li') || line.trim() === '') return line;
+      return `<p class="mb-4">${line}</p>`;
+    }).join('\n');
+}
+
+const htmlContent = markdownToHtml(readmeContent);
+---
+
+<Layout title="Documentation - Kylo Parisher Portfolio" description="Documentation and guides">
+  <div class="mb-8 flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold mb-2">📚 Documentation</h1>
+      <p class="text-base-content/70">
+        Project documentation and guides.
+      </p>
+    </div>
+    <a 
+      href="https://github.com/cywf/cywf.github.io/blob/main/README.md" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="btn btn-outline btn-sm"
+    >
+      Open in GitHub →
+    </a>
+  </div>
+
+  <div class="grid lg:grid-cols-4 gap-6">
+    <aside class="lg:col-span-1">
+      <div class="card bg-base-200 shadow-xl sticky top-4">
+        <div class="card-body">
+          <h2 class="card-title text-lg">Table of Contents</h2>
+          <ul class="menu menu-sm">
+            <li><a href="#readme">README</a></li>
+            <li><a href="#migration">Migration Notes</a></li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <div class="lg:col-span-3 space-y-8">
+      <div id="readme" class="card bg-base-200 shadow-xl">
+        <div class="card-body prose prose-invert max-w-none">
+          <Fragment set:html={htmlContent} />
+        </div>
+      </div>
+
+      <div id="migration" class="card bg-base-200 shadow-xl">
+        <div class="card-body prose prose-invert max-w-none">
+          <h2 class="text-2xl font-bold mb-4">🔄 Migration Notes</h2>
+          <p class="mb-4">
+            This site has been migrated from Jekyll to Astro for better performance, 
+            developer experience, and modern features.
+          </p>
+          
+          <h3 class="text-xl font-bold mt-6 mb-3">What Changed</h3>
+          <ul class="list-disc list-inside space-y-2 mb-4">
+            <li><strong>Framework:</strong> Jekyll → Astro + React</li>
+            <li><strong>Styling:</strong> Custom CSS → TailwindCSS + daisyUI</li>
+            <li><strong>Build Time:</strong> Improved with Astro's optimizations</li>
+            <li><strong>Multi-Page:</strong> Added dedicated pages for different features</li>
+          </ul>
+
+          <h3 class="text-xl font-bold mt-6 mb-3">What's Preserved</h3>
+          <ul class="list-disc list-inside space-y-2 mb-4">
+            <li>Original dashboard functionality (embedded at <a href="/dashboard" class="link link-primary">/dashboard</a>)</li>
+            <li>GitHub API integration with localStorage caching</li>
+            <li>All existing assets and JavaScript</li>
+            <li>Dark theme aesthetic</li>
+          </ul>
+
+          <h3 class="text-xl font-bold mt-6 mb-3">New Features</h3>
+          <ul class="list-disc list-inside space-y-2 mb-4">
+            <li>7 customizable dark themes (nightfall, dracula, cyberpunk, dark-neon, hackerman, gamecore, neon-accent)</li>
+            <li>Dedicated statistics page with Chart.js visualizations</li>
+            <li>Discussions viewer</li>
+            <li>Development board (Kanban)</li>
+            <li>Documentation renderer with table of contents</li>
+            <li>Mermaid diagram visualizer</li>
+            <li>Better accessibility (WCAG AA, keyboard navigation)</li>
+          </ul>
+
+          <h3 class="text-xl font-bold mt-6 mb-3">Development</h3>
+          <p class="mb-4">To run locally:</p>
+          <pre class="bg-base-300 p-4 rounded-lg mb-4"><code>cd site
+npm install
+npm run dev</code></pre>
+          
+          <p class="mb-4">To build:</p>
+          <pre class="bg-base-300 p-4 rounded-lg mb-4"><code>cd site
+npm run build</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
