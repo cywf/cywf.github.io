@@ -60,8 +60,10 @@ jobs:
       - name: Build with Astro
         env:
           GITHUB_SHA: ${{ github.sha }}
+          NODE_OPTIONS: --max-old-space-size=4096
         run: |
           cd site
+          npm run typecheck || echo "Warning: Type check failed, continuing with build"
           npm run build
 
       - name: Setup Pages
