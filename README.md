@@ -182,7 +182,7 @@ I balance roles as an AI & ML research engineer, security instructor, and lifelo
 ## Contact & Links  
 - [GitHub](https://github.com/cywf)  
 - [LinkedIn](https://www.linkedin.com/in/kparisher/)
-- [Discord: ALT-F4 Society](https://discord.gg/nQgTBZZrA4)
+- [Discord: ALT-F4 Society](https://discord.gg/a6XmRJNAb2)
 - [PR‑CYBR](https://github.com/pr-cybr)
 
 ## 📄 License
