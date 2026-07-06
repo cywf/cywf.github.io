@@ -6,7 +6,10 @@ import Layout from '../layouts/Layout.astro';
   <div class="mb-8">
     <h1 class="text-3xl font-bold mb-2">📈 Repository Statistics</h1>
     <p class="text-base-content/70">
-      Comprehensive analytics and visualizations for repository health and activity.
+      Comprehensive analytics and visualizations across public cywf repositories.
+    </p>
+    <p id="stats-fetched-at" class="text-sm text-base-content/60 mt-2" aria-live="polite">
+      Data as of —
     </p>
   </div>
 
@@ -57,9 +60,11 @@ import Layout from '../layouts/Layout.astro';
 
   <script>
     import { Chart, registerables } from 'chart.js';
+    import { readSnapshot } from '../scripts/snapshot';
     Chart.register(...registerables);
 
     interface StatsData {
+      repoCount: number;
       stars: number;
       forks: number;
       watchers: number;
@@ -73,7 +78,12 @@ import Layout from '../layouts/Layout.astro';
         if (!response.ok) {
           throw new Error('Failed to load stats');
         }
-        const data: StatsData = await response.json();
+        const payload = await response.json();
+        const { data, fetchedAt } = readSnapshot<StatsData>(payload);
+
+        if (fetchedAt) {
+          document.getElementById('stats-fetched-at')!.textContent = `Data as of ${new Date(fetchedAt).toLocaleString()} • ${data.repoCount} repositories`;
+        }
         
         // Update stats
         document.getElementById('stars-count')!.textContent = data.stars.toString();

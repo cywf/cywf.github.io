@@ -1,7 +1,7 @@
 # Kylo Parisher – Developer Portfolio  
 🚀 **Live Site:** [https://cywf.github.io](https://cywf.github.io)
 
-This is my personal portfolio site - an **interactive analytics and visualization hub** that tracks repository health, workflow status, and contribution activity across the PR-CYBR organization and my personal projects.
+This is my personal portfolio site - an **interactive analytics and visualization hub** that tracks repository health, workflow status, contribution activity, and cross-project work queues across my public GitHub projects.
 
 ## 🎯 Features
 
@@ -92,7 +92,7 @@ This is my personal portfolio site - an **interactive analytics and visualizatio
 - **`/dashboard`** - Original portfolio dashboard (embedded legacy version)
 - **`/statistics`** - Repository statistics with Chart.js visualizations
 - **`/discussions`** - Latest GitHub discussions
-- **`/development-board`** - Kanban board (Projects v2 or issues-based)
+- **`/development-board`** - Cross-project command center (Projects v2 or issues-based fallback)
 - **`/create-issue`** - Quick shortcuts to create issues with templates
 - **`/docs`** - Documentation renderer with README and migration notes
 - **`/visualizer`** - Mermaid diagram viewer for architecture visualization
@@ -146,13 +146,13 @@ The dashboard is embedded via iframe to maintain its original functionality whil
 The `.github/workflows/pages.yml` workflow:
 1. Copies legacy dashboard assets to the Astro public directory
 2. Runs data snapshot scripts to generate JSON files:
-   - `stats.json` - Repository statistics (stars, forks, languages, commits)
-   - `discussions.json` - Latest 25 discussions
-   - `projects.json` - Project board items (Projects v2 or issues fallback)
+   - `stats.json` - Aggregated statistics across public `cywf` repositories
+   - `discussions.json` - Latest 25 discussions across public `cywf` repositories
+   - `projects.json` - Cross-project board items from linked Projects v2 boards (with issues fallback)
 3. Builds the Astro site
 4. Deploys to GitHub Pages
 
-Data snapshots are server-side only - the `GITHUB_TOKEN` is never exposed to clients.
+The workflow runs on pushes, manual dispatches, and every 6 hours to keep snapshots fresh. Data snapshots are server-side only - the `GITHUB_TOKEN` is never exposed to clients.
 
 ## ♿ Accessibility
 

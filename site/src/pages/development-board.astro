@@ -2,27 +2,75 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Development Board - Kylo Parisher Portfolio" description="Project development board">
+<Layout title="Development Board - Kylo Parisher Portfolio" description="Cross-project task command center">
   <div class="mb-8">
-    <h1 class="text-3xl font-bold mb-2">🗂️ Development Board</h1>
+    <h1 class="text-3xl font-bold mb-2">🗂️ Development Command Center</h1>
     <p class="text-base-content/70">
-      Project tracking and development status.
+      Cross-project task visibility across public cywf repositories and linked GitHub Projects boards.
+    </p>
+    <p id="board-fetched-at" class="text-sm text-base-content/60 mt-2" aria-live="polite">
+      Data as of —
     </p>
   </div>
 
-  <div id="board-container" class="space-y-4">
+  <div id="board-summary" class="grid gap-4 md:grid-cols-3 mb-8" aria-live="polite">
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-base">Repositories</h2>
+        <p class="text-3xl font-bold" id="repo-count">--</p>
+      </div>
+    </div>
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-base">Boards</h2>
+        <p class="text-3xl font-bold" id="project-count">--</p>
+      </div>
+    </div>
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-base">Tracked Items</h2>
+        <p class="text-3xl font-bold" id="item-count">--</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="board-container" class="space-y-8">
     <div class="flex justify-center py-12">
       <span class="loading loading-spinner loading-lg"></span>
     </div>
   </div>
 
   <script>
+    import { escapeHtml, readSnapshot } from '../scripts/snapshot';
+
     interface ProjectItem {
       title: string;
       status: string;
+      rawStatus: string;
       labels: string[];
       assignees: string[];
       url: string;
+      repository: string;
+      boardName: string;
+      boardUrl: string;
+      scope: 'repository' | 'user';
+      itemType: 'issue' | 'pull_request' | 'draft';
+    }
+
+    interface ProjectBoard {
+      title: string;
+      url: string;
+      scope: 'repository' | 'user';
+      source: string;
+      itemCount: number;
+    }
+
+    interface ProjectsData {
+      repoCount: number;
+      boardCount: number;
+      itemCount: number;
+      boards: ProjectBoard[];
+      items: ProjectItem[];
     }
 
     async function loadBoard() {
@@ -31,55 +79,122 @@ import Layout from '../layouts/Layout.astro';
         if (!response.ok) {
           throw new Error('Failed to load projects');
         }
-        const items: ProjectItem[] = await response.json();
-        
-        const container = document.getElementById('board-container')!;
-        
-        // Group items by status
-        const grouped = items.reduce((acc, item) => {
-          const status = item.status || 'todo';
-          if (!acc[status]) acc[status] = [];
-          acc[status].push(item);
-          return acc;
-        }, {} as Record<string, ProjectItem[]>);
+        const payload = await response.json();
+        const { data, fetchedAt } = readSnapshot<ProjectsData | ProjectItem[]>(payload);
+        const boardData = Array.isArray(data)
+          ? {
+              repoCount: 0,
+              boardCount: 0,
+              itemCount: data.length,
+              boards: [],
+              items: data,
+            }
+          : data;
+        const items = boardData.items;
 
-        const statuses = ['todo', 'doing', 'done'];
+        if (fetchedAt) {
+          document.getElementById('board-fetched-at')!.textContent = `Data as of ${new Date(fetchedAt).toLocaleString()}`;
+        }
+
+        document.getElementById('repo-count')!.textContent = boardData.repoCount.toString();
+        document.getElementById('project-count')!.textContent = boardData.boardCount.toString();
+        document.getElementById('item-count')!.textContent = boardData.itemCount.toString();
+
+        const container = document.getElementById('board-container')!;
+
+        if (items.length === 0) {
+          container.innerHTML = `
+            <div class="alert alert-info">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>No project items were found in the latest snapshot.</span>
+            </div>
+          `;
+          return;
+        }
+
+        const groupedByBoard = items.reduce((acc, item) => {
+          if (!acc[item.boardName]) {
+            acc[item.boardName] = {
+              scope: item.scope,
+              boardUrl: item.boardUrl,
+              statuses: {},
+            };
+          }
+
+          if (!acc[item.boardName].statuses[item.status]) {
+            acc[item.boardName].statuses[item.status] = [];
+          }
+
+          acc[item.boardName].statuses[item.status].push(item);
+          return acc;
+        }, {} as Record<string, { scope: 'repository' | 'user'; boardUrl: string; statuses: Record<string, ProjectItem[]> }>);
+
+        const statuses = ['doing', 'todo', 'blocked', 'done'];
         const statusLabels: Record<string, string> = {
-          todo: '📋 To Do',
           doing: '🔄 In Progress',
+          todo: '📋 Up Next',
+          blocked: '⛔ Blocked',
           done: '✅ Done',
         };
 
         container.innerHTML = `
-          <div class="grid md:grid-cols-3 gap-4">
-            ${statuses.map(status => `
-              <div class="card bg-base-200 shadow-xl">
-                <div class="card-body">
-                  <h2 class="card-title">${statusLabels[status]}</h2>
-                  <div class="space-y-2">
-                    ${(grouped[status] || []).map(item => `
-                      <div class="card bg-base-300 shadow">
-                        <div class="card-body p-4">
-                          <h3 class="font-semibold">
-                            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link link-hover">
-                              ${item.title}
-                            </a>
-                          </h3>
-                          ${item.labels.length > 0 ? `
-                            <div class="flex flex-wrap gap-1 mt-2">
-                              ${item.labels.map(label => `
-                                <span class="badge badge-sm badge-outline">${label}</span>
-                              `).join('')}
-                            </div>
-                          ` : ''}
-                        </div>
-                      </div>
-                    `).join('') || '<p class="text-sm text-base-content/70 text-center py-4">No items</p>'}
-                  </div>
+          ${Object.entries(groupedByBoard).map(([boardName, board]) => `
+            <section class="space-y-4">
+              <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 class="text-2xl font-bold">
+                    <a href="${board.boardUrl}" target="_blank" rel="noopener noreferrer" class="link link-hover">
+                      ${escapeHtml(boardName)}
+                    </a>
+                  </h2>
+                  <p class="text-sm text-base-content/60">
+                    ${board.scope === 'user' ? 'User-level board' : 'Repository-linked board'}
+                  </p>
                 </div>
               </div>
-            `).join('')}
-          </div>
+              <div class="grid gap-4 xl:grid-cols-4">
+                ${statuses.map((status) => `
+                  <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                      <h3 class="card-title text-lg">${statusLabels[status]}</h3>
+                      <div class="space-y-3">
+                        ${(board.statuses[status] || []).map((item) => `
+                          <article class="card bg-base-300 shadow">
+                            <div class="card-body gap-3 p-4">
+                              <div class="flex flex-wrap gap-2">
+                                <span class="badge badge-sm badge-outline">${escapeHtml(item.repository)}</span>
+                                <span class="badge badge-sm ${item.itemType === 'pull_request' ? 'badge-secondary' : item.itemType === 'draft' ? 'badge-ghost' : 'badge-primary'}">${item.itemType === 'pull_request' ? 'PR' : item.itemType === 'draft' ? 'Draft' : 'Issue'}</span>
+                                <span class="badge badge-sm badge-outline">${escapeHtml(item.rawStatus)}</span>
+                              </div>
+                              <h4 class="font-semibold leading-snug">
+                                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link link-hover">
+                                  ${escapeHtml(item.title)}
+                                </a>
+                              </h4>
+                              ${item.labels.length > 0 ? `
+                                <div class="flex flex-wrap gap-1">
+                                  ${item.labels.map((label) => `
+                                    <span class="badge badge-sm badge-outline">${escapeHtml(label)}</span>
+                                  `).join('')}
+                                </div>
+                              ` : ''}
+                              ${item.assignees.length > 0 ? `
+                                <p class="text-sm text-base-content/70">
+                                  Assignees: ${item.assignees.map((assignee) => escapeHtml(assignee)).join(', ')}
+                                </p>
+                              ` : ''}
+                            </div>
+                          </article>
+                        `).join('') || '<p class="text-sm text-base-content/70 py-4 text-center">No items</p>'}
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+          `).join('')}
         `;
       } catch (error) {
         console.error('Error loading development board:', error);

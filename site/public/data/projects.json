@@ -1,1 +1,10 @@
-[]
+{
+  "fetchedAt": "2026-07-06T22:17:43.005Z",
+  "data": {
+    "repoCount": 0,
+    "boardCount": 0,
+    "itemCount": 0,
+    "boards": [],
+    "items": []
+  }
+}

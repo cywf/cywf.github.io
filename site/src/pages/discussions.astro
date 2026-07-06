@@ -6,7 +6,10 @@ import Layout from '../layouts/Layout.astro';
   <div class="mb-8">
     <h1 class="text-3xl font-bold mb-2">💬 Discussions</h1>
     <p class="text-base-content/70">
-      Latest discussions from the repository.
+      Latest discussions across public cywf repositories.
+    </p>
+    <p id="discussions-fetched-at" class="text-sm text-base-content/60 mt-2" aria-live="polite">
+      Data as of —
     </p>
   </div>
 
@@ -17,6 +20,8 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script>
+    import { readSnapshot } from '../scripts/snapshot';
+
     interface Discussion {
       number: number;
       title: string;
@@ -25,6 +30,12 @@ import Layout from '../layouts/Layout.astro';
       createdAt: string;
       comments: number;
       category: string;
+      repository: string;
+    }
+
+    interface DiscussionsData {
+      repoCount: number;
+      discussions: Discussion[];
     }
 
     async function loadDiscussions() {
@@ -33,9 +44,17 @@ import Layout from '../layouts/Layout.astro';
         if (!response.ok) {
           throw new Error('Failed to load discussions');
         }
-        const discussions: Discussion[] = await response.json();
+        const payload = await response.json();
+        const { data, fetchedAt } = readSnapshot<DiscussionsData | Discussion[]>(payload);
+        const discussions = Array.isArray(data) ? data : data.discussions;
+        const repoCount = Array.isArray(data) ? undefined : data.repoCount;
         
         const container = document.getElementById('discussions-container')!;
+
+        if (fetchedAt) {
+          const repoSummary = repoCount ? ` • ${repoCount} repositories` : '';
+          document.getElementById('discussions-fetched-at')!.textContent = `Data as of ${new Date(fetchedAt).toLocaleString()}${repoSummary}`;
+        }
         
         if (discussions.length === 0) {
           container.innerHTML = `
@@ -61,6 +80,7 @@ import Layout from '../layouts/Layout.astro';
                   </h2>
                   <p class="text-sm text-base-content/70 mt-2">
                     <span class="badge badge-sm badge-outline">${discussion.category}</span>
+                    <span class="badge badge-sm badge-outline">${discussion.repository}</span>
                     by ${discussion.author} • ${new Date(discussion.createdAt).toLocaleDateString()} • ${discussion.comments} comments
                   </p>
                 </div>
