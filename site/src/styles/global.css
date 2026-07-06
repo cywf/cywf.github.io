@@ -41,3 +41,27 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+.command-hero {
+  background:
+    radial-gradient(circle at top left, color-mix(in oklab, oklch(var(--p)) 24%, transparent), transparent 34rem),
+    linear-gradient(135deg, color-mix(in oklab, oklch(var(--b2)) 92%, black), oklch(var(--b1)));
+}
+
+.card,
+.btn,
+.badge,
+.alert {
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.card:hover {
+  border-color: color-mix(in oklab, oklch(var(--p)) 22%, transparent);
+}
+
+a:focus-visible,
+button:focus-visible,
+[role='button']:focus-visible {
+  outline: 3px solid oklch(var(--p));
+  outline-offset: 3px;
+}
