@@ -1,108 +1,83 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import statsSnapshot from '../../public/data/stats.json';
+import projectsSnapshot from '../../public/data/projects.json';
+import discussionsSnapshot from '../../public/data/discussions.json';
+import {
+  formatSnapshotDate,
+  freshnessLabel,
+  getActiveRepositories,
+  getFeaturedItems,
+  getStatusCounts,
+  unwrapSnapshot,
+  type DiscussionsData,
+  type ProjectsData,
+  type StatsData,
+} from '../lib/command-center';
+
+const { data: stats, fetchedAt: statsFetchedAt } = unwrapSnapshot<StatsData>(statsSnapshot);
+const { data: projects, fetchedAt: projectsFetchedAt } = unwrapSnapshot<ProjectsData>(projectsSnapshot);
+const { data: discussions, fetchedAt: discussionsFetchedAt } = unwrapSnapshot<DiscussionsData>(discussionsSnapshot);
+const statusCounts = getStatusCounts(projects.items || []);
+const featuredItems = getFeaturedItems(projects.items || [], 8);
+const activeRepos = getActiveRepositories(stats, projects, 6);
+const recentDiscussions = (discussions.discussions || []).slice(0, 4);
+const freshness = freshnessLabel(projectsFetchedAt || statsFetchedAt || discussionsFetchedAt);
+const topLanguages = Object.entries(stats.languages || {}).sort(([, a], [, b]) => b - a).slice(0, 5);
 ---
 
-<Layout title="Home - Kylo Parisher Portfolio" description="Interactive portfolio and analytics hub for developer Kylo Parisher">
-  <div class="hero min-h-[50vh] bg-base-200 rounded-lg mb-8">
-    <div class="hero-content text-center">
-      <div class="max-w-2xl">
-        <h1 class="text-5xl font-bold mb-4">⚡ Developer Portfolio Dashboard</h1>
-        <p class="text-lg mb-6">
-          Interactive analytics and visualization hub tracking repository health, workflow status, 
-          and contribution activity across the <strong>PR-CYBR</strong> organization and personal projects.
-        </p>
-        <div class="flex gap-4 justify-center flex-wrap">
-          <a href="/dashboard" class="btn btn-primary">View Dashboard</a>
-          <a href="/statistics" class="btn btn-outline">Statistics</a>
-          <a href="/docs" class="btn btn-outline">Documentation</a>
+<Layout title="KP Public Projects Command Center" description="Live command center for KP's public projects, tasks, activity, and repository health">
+  <section class="command-hero mb-8 overflow-hidden rounded-[2rem] border border-primary/20 bg-base-200 shadow-2xl">
+    <div class="grid gap-8 p-6 md:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <div>
+        <p class="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">KP public operations dashboard</p>
+        <h1 class="mb-4 max-w-4xl text-4xl font-black leading-tight tracking-tight md:text-6xl">A live command center for public projects, tasks, and momentum.</h1>
+        <p class="max-w-2xl text-lg text-base-content/75">Snapshot-backed visibility across repositories, GitHub Projects, discussions, and recent activity — designed to make the work feel current, trustworthy, and easy to scan.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/development-board" class="btn btn-primary">Open task board</a>
+          <a href="/statistics" class="btn btn-outline">Repository health</a>
+          <a href="/discussions" class="btn btn-outline">Activity feed</a>
         </div>
       </div>
+      <aside class="rounded-3xl border border-base-content/10 bg-base-100/80 p-5 shadow-xl" aria-label="Snapshot freshness">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-sm uppercase tracking-[0.2em] text-base-content/60">Data pulse</p>
+            <p class="mt-2 text-2xl font-bold">{freshness.label}</p>
+          </div>
+          <span class:list={["badge badge-lg", freshness.isStale ? 'badge-warning' : 'badge-success']}>{freshness.isStale ? 'Review' : 'Fresh'}</span>
+        </div>
+        <dl class="mt-6 grid grid-cols-2 gap-3 text-sm">
+          <div class="rounded-2xl bg-base-200 p-4"><dt class="text-base-content/60">Repos</dt><dd class="text-3xl font-black">{stats.repoCount || projects.repoCount}</dd></div>
+          <div class="rounded-2xl bg-base-200 p-4"><dt class="text-base-content/60">Tasks</dt><dd class="text-3xl font-black">{projects.itemCount}</dd></div>
+          <div class="rounded-2xl bg-base-200 p-4"><dt class="text-base-content/60">Boards</dt><dd class="text-3xl font-black">{projects.boardCount}</dd></div>
+          <div class="rounded-2xl bg-base-200 p-4"><dt class="text-base-content/60">Discussions</dt><dd class="text-3xl font-black">{discussions.discussions?.length || 0}</dd></div>
+        </dl>
+        <p class="mt-4 text-xs text-base-content/60">Projects: {formatSnapshotDate(projectsFetchedAt)} · Stats: {formatSnapshotDate(statsFetchedAt)}</p>
+      </aside>
     </div>
-  </div>
+  </section>
 
-  <div class="grid md:grid-cols-2 gap-8 mb-8">
-    <div class="card bg-base-200 shadow-xl">
+  <section class="mb-8 grid gap-4 md:grid-cols-4" aria-label="Task status summary">
+    {[['Blocked', statusCounts.blocked, 'badge-warning'], ['Doing', statusCounts.doing, 'badge-info'], ['Up next', statusCounts.todo, 'badge-primary'], ['Done', statusCounts.done, 'badge-success']].map(([label, count, badge]) => (
+      <div class="card bg-base-200 shadow-xl"><div class="card-body"><span class={`badge ${badge}`}>{label}</span><p class="text-4xl font-black">{count}</p><p class="text-sm text-base-content/65">Cross-project items</p></div></div>
+    ))}
+  </section>
+
+  <div class="grid gap-8 xl:grid-cols-[1.3fr_0.7fr]">
+    <section class="card bg-base-200 shadow-xl" aria-labelledby="priority-work">
       <div class="card-body">
-        <h2 class="card-title">📊 Features</h2>
-        <ul class="space-y-2">
-          <li><strong>Real-Time Metrics</strong> - Live CI/CD status, repository health, and workflow success rates</li>
-          <li><strong>AI-Agent Monitoring</strong> - Build status for PR-CYBR agent repositories</li>
-          <li><strong>Contribution Analytics</strong> - GitHub stats, top languages, and contribution streaks</li>
-          <li><strong>Deployment Insights</strong> - GitHub Pages deployment status and history</li>
-        </ul>
+        <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between"><div><h2 id="priority-work" class="card-title text-2xl">Priority work queue</h2><p class="text-base-content/70">Blocked and active items surface first so reviewers can understand what needs attention.</p></div><a href="/development-board" class="link link-primary">View full board →</a></div>
+        {featuredItems.length > 0 ? <div class="mt-4 grid gap-3">
+          {featuredItems.map((item) => <article class="rounded-2xl border border-base-content/10 bg-base-100 p-4"><div class="flex flex-wrap gap-2"><span class="badge badge-outline">{item.repository}</span><span class="badge badge-primary">{item.rawStatus}</span><span class="badge badge-ghost">{item.itemType.replace('_', ' ')}</span></div><h3 class="mt-3 font-bold leading-snug"><a class="link link-hover" href={item.url} target="_blank" rel="noopener noreferrer">{item.title}</a></h3>{item.assignees.length > 0 && <p class="mt-2 text-sm text-base-content/70">Assigned: {item.assignees.join(', ')}</p>}</article>)}
+        </div> : <div class="alert alert-info mt-4"><span>No project items are in the current public snapshot. CI falls back gracefully when Projects access is unavailable.</span></div>}
       </div>
-    </div>
+    </section>
 
-    <div class="card bg-base-200 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title">🎨 Tech Stack</h2>
-        <ul class="space-y-2">
-          <li><strong>Astro</strong> - Modern static site generator</li>
-          <li><strong>React</strong> - Interactive UI components</li>
-          <li><strong>TailwindCSS + daisyUI</strong> - Beautiful dark themes</li>
-          <li><strong>Chart.js</strong> - Data visualizations</li>
-          <li><strong>GitHub API</strong> - Real-time data with caching</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="card bg-base-200 shadow-xl mb-8">
-    <div class="card-body">
-      <h2 class="card-title">🔄 Data Management</h2>
-      <ul class="space-y-2">
-        <li>Automatic data caching via localStorage (1-hour duration)</li>
-        <li>Real-time GitHub API integration for workflow runs, commits, issues, and PRs</li>
-        <li>CI-generated snapshots for statistics and discussions</li>
-        <li>Client-side privacy with no external tracking</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card bg-base-200 shadow-xl mb-8">
-    <div class="card-body">
-      <h2 class="card-title">👨‍💻 About Me</h2>
-      <p class="mb-4">
-        I'm <strong>Kylo Parisher (KP)</strong>, a security engineer, AI/ML researcher, instructor, 
-        and founder of <a href="https://github.com/pr-cybr" class="link link-primary" target="_blank" rel="noopener noreferrer">PR-CYBR</a>. 
-        My mission is to build resilient systems that protect and empower communities.
-      </p>
-      <p class="mb-4">
-        I balance roles as an AI & ML research engineer, security instructor, and lifelong student. 
-        My work spans cybersecurity, executive protection, psionics, space systems, and quantum exploration. 
-        Guided by the Seven Hermetic Principles, I focus on ethical innovation and intergenerational 
-        stewardship through initiatives like the G8 System.
-      </p>
-      <h3 class="font-bold mt-4 mb-2">PR‑CYBR</h3>
-      <p class="mb-4">
-        <a href="https://github.com/pr-cybr" class="link link-primary" target="_blank" rel="noopener noreferrer">PR‑CYBR</a> 
-        is a Puerto Rico initiative I founded to promote digital resilience and education. 
-        It aims to build community protection and drive innovation in cybersecurity, AI/ML, and technology.
-      </p>
-    </div>
-  </div>
-
-  <div class="card bg-base-200 shadow-xl">
-    <div class="card-body">
-      <h2 class="card-title">🔗 Quick Links</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <a href="https://github.com/cywf" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
-          GitHub Profile
-        </a>
-        <a href="https://github.com/pr-cybr" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
-          PR-CYBR Org
-        </a>
-        <a href="https://www.linkedin.com/in/kparisher/" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
-          LinkedIn
-        </a>
-        <a href="https://discord.gg/a6XmRJNAb2" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
-          Discord
-        </a>
-        <a href="/dashboard" class="btn btn-primary">Dashboard</a>
-        <a href="/statistics" class="btn btn-primary">Statistics</a>
-        <a href="/discussions" class="btn btn-primary">Discussions</a>
-        <a href="/development-board" class="btn btn-primary">Dev Board</a>
-      </div>
-    </div>
+    <aside class="space-y-8">
+      <section class="card bg-base-200 shadow-xl" aria-labelledby="active-repos"><div class="card-body"><h2 id="active-repos" class="card-title">Most active repositories</h2>{activeRepos.length > 0 ? <div class="space-y-3">{activeRepos.map((repo) => <a class="block rounded-2xl bg-base-100 p-4 hover:outline hover:outline-2 hover:outline-primary" href={repo.htmlUrl || `https://github.com/cywf/${repo.name}`} target="_blank" rel="noopener noreferrer"><div class="flex justify-between gap-3"><strong>{repo.name}</strong><span class="badge badge-outline">{repo.taskCount} tasks</span></div><p class="mt-1 line-clamp-2 text-sm text-base-content/70">{repo.description || repo.language || 'Public repository'}</p></a>)}</div> : <p class="text-base-content/70">Repository snapshot is waiting for the next scheduled run.</p>}</div></section>
+      <section class="card bg-base-200 shadow-xl" aria-labelledby="activity-feed"><div class="card-body"><h2 id="activity-feed" class="card-title">Recent public activity</h2>{recentDiscussions.length > 0 ? <div class="space-y-3">{recentDiscussions.map((discussion) => <a class="block rounded-2xl bg-base-100 p-4 hover:outline hover:outline-2 hover:outline-secondary" href={discussion.url} target="_blank" rel="noopener noreferrer"><span class="badge badge-secondary">{discussion.repository}</span><h3 class="mt-2 font-semibold">{discussion.title}</h3></a>)}</div> : <p class="text-base-content/70">No public discussions were captured in this snapshot yet.</p>}</div></section>
+      <section class="card bg-base-200 shadow-xl" aria-labelledby="languages"><div class="card-body"><h2 id="languages" class="card-title">Language signal</h2>{topLanguages.length > 0 ? <div class="space-y-2">{topLanguages.map(([language, bytes]) => <div><div class="flex justify-between text-sm"><span>{language}</span><span>{bytes.toLocaleString()} bytes</span></div><progress class="progress progress-primary" value={bytes} max={topLanguages[0][1]} aria-label={`${language} usage`}></progress></div>)}</div> : <p class="text-base-content/70">Language totals will populate after repository stats refresh.</p>}</div></section>
+    </aside>
   </div>
 </Layout>
