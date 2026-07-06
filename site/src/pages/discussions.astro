@@ -20,6 +20,8 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script>
+    import { readSnapshot } from '../scripts/snapshot';
+
     interface Discussion {
       number: number;
       title: string;
@@ -34,23 +36,6 @@ import Layout from '../layouts/Layout.astro';
     interface DiscussionsData {
       repoCount: number;
       discussions: Discussion[];
-    }
-
-    interface Snapshot<T> {
-      fetchedAt?: string;
-      data?: T;
-    }
-
-    function readSnapshot<T>(payload: T | Snapshot<T>): { data: T; fetchedAt?: string } {
-      if (payload && typeof payload === 'object' && !Array.isArray(payload) && 'data' in payload) {
-        const snapshot = payload as Snapshot<T>;
-        return {
-          data: snapshot.data as T,
-          fetchedAt: snapshot.fetchedAt,
-        };
-      }
-
-      return { data: payload as T };
     }
 
     async function loadDiscussions() {

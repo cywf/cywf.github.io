@@ -260,6 +260,10 @@ function getProjectStatus(fieldValues: ProjectFieldValueNode[]): { status: strin
   };
 }
 
+function findFallbackStatus(labels: string[], state: string): string {
+  return labels.find((label) => /done|closed|progress|doing|review|blocked|hold/i.test(label)) || (state === 'closed' ? 'Done' : 'Todo');
+}
+
 function mapProjectItems(
   boards: ProjectBoardNode[],
   scope: 'repository' | 'user',
@@ -352,9 +356,7 @@ async function fetchIssuesAsFallback(): Promise<ProjectsData> {
 
           return issues.map((issue) => {
             const labels = issue.labels.map((label) => label.name);
-            const rawStatus =
-              labels.find((label) => /done|closed|progress|doing|review|blocked|hold/i.test(label)) ||
-              (issue.state === 'closed' ? 'Done' : 'Todo');
+            const rawStatus = findFallbackStatus(labels, issue.state);
 
             return {
               title: issue.title,

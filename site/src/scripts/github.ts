@@ -43,7 +43,7 @@ export function getRestHeaders(): Record<string, string> {
   };
 
   if (GITHUB_TOKEN) {
-    headers.Authorization = `token ${GITHUB_TOKEN}`;
+    headers.Authorization = 'Bearer ' + GITHUB_TOKEN;
   }
 
   return headers;

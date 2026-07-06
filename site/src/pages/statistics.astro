@@ -60,6 +60,7 @@ import Layout from '../layouts/Layout.astro';
 
   <script>
     import { Chart, registerables } from 'chart.js';
+    import { readSnapshot } from '../scripts/snapshot';
     Chart.register(...registerables);
 
     interface StatsData {
@@ -69,23 +70,6 @@ import Layout from '../layouts/Layout.astro';
       watchers: number;
       languages: Record<string, number>;
       commitActivity: { week: string; commits: number }[];
-    }
-
-    interface Snapshot<T> {
-      fetchedAt?: string;
-      data?: T;
-    }
-
-    function readSnapshot<T>(payload: T | Snapshot<T>): { data: T; fetchedAt?: string } {
-      if (payload && typeof payload === 'object' && !Array.isArray(payload) && 'data' in payload) {
-        const snapshot = payload as Snapshot<T>;
-        return {
-          data: snapshot.data as T,
-          fetchedAt: snapshot.fetchedAt,
-        };
-      }
-
-      return { data: payload as T };
     }
 
     async function loadStats() {
