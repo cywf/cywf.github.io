@@ -57,48 +57,56 @@ const DISCUSSIONS_QUERY = `
 `;
 
 async function fetchDiscussions(): Promise<DiscussionsData> {
-  const repositories = await fetchPublicRepositories();
+  try {
+    const repositories = await fetchPublicRepositories();
 
-  if (!GITHUB_TOKEN) {
-    console.warn('No GITHUB_TOKEN found, skipping discussions fetch');
+    if (!GITHUB_TOKEN) {
+      console.warn('No GITHUB_TOKEN found, skipping discussions fetch');
+      return {
+        repoCount: repositories.length,
+        discussions: [],
+      };
+    }
+
+    const discussions = await Promise.all(
+      repositories.map(async (repository) => {
+        try {
+          const result = await fetchGraphQL<DiscussionsQueryResult>(DISCUSSIONS_QUERY, {
+            owner: REPO_OWNER,
+            name: repository.name,
+          });
+
+          return (result.repository?.discussions.nodes || []).map((discussion) => ({
+            number: discussion.number,
+            title: discussion.title,
+            url: discussion.url,
+            author: discussion.author?.login || 'Unknown',
+            createdAt: discussion.createdAt,
+            comments: discussion.comments?.totalCount || 0,
+            category: discussion.category?.name || 'General',
+            repository: repository.fullName,
+          }));
+        } catch (error) {
+          console.warn(`Warning: Failed to fetch discussions for ${repository.fullName}`, error);
+          return [];
+        }
+      })
+    );
+
     return {
       repoCount: repositories.length,
+      discussions: discussions
+        .flat()
+        .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
+        .slice(0, 25),
+    };
+  } catch (error) {
+    console.error('Error fetching discussions:', error);
+    return {
+      repoCount: 0,
       discussions: [],
     };
   }
-
-  const discussions = await Promise.all(
-    repositories.map(async (repository) => {
-      try {
-        const result = await fetchGraphQL<DiscussionsQueryResult>(DISCUSSIONS_QUERY, {
-          owner: REPO_OWNER,
-          name: repository.name,
-        });
-
-        return (result.repository?.discussions.nodes || []).map((discussion) => ({
-          number: discussion.number,
-          title: discussion.title,
-          url: discussion.url,
-          author: discussion.author?.login || 'Unknown',
-          createdAt: discussion.createdAt,
-          comments: discussion.comments?.totalCount || 0,
-          category: discussion.category?.name || 'General',
-          repository: repository.fullName,
-        }));
-      } catch (error) {
-        console.warn(`Warning: Failed to fetch discussions for ${repository.fullName}`, error);
-        return [];
-      }
-    })
-  );
-
-  return {
-    repoCount: repositories.length,
-    discussions: discussions
-      .flat()
-      .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
-      .slice(0, 25),
-  };
 }
 
 async function main() {

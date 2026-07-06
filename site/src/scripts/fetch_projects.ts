@@ -340,60 +340,71 @@ async function fetchUserProjects(): Promise<{ boards: ProjectBoard[]; items: Pro
 }
 
 async function fetchIssuesAsFallback(): Promise<ProjectsData> {
-  const repositories = await fetchPublicRepositories();
-  const fallbackItems = await Promise.all(
-    repositories.map(async (repository) => {
-      try {
-        const issues = await fetchJson<GitHubIssue[]>(
-          `https://api.github.com/repos/${repository.fullName}/issues?state=all&per_page=100`,
-          { headers: getRestHeaders() }
-        );
+  try {
+    const repositories = await fetchPublicRepositories();
+    const fallbackItems = await Promise.all(
+      repositories.map(async (repository) => {
+        try {
+          const issues = await fetchJson<GitHubIssue[]>(
+            `https://api.github.com/repos/${repository.fullName}/issues?state=all&per_page=100`,
+            { headers: getRestHeaders() }
+          );
 
-        return issues.map((issue) => {
-          const labels = issue.labels.map((label) => label.name);
-          const rawStatus =
-            labels.find((label) => /done|closed|progress|doing|review|blocked|hold/i.test(label)) ||
-            (issue.state === 'closed' ? 'Done' : 'Todo');
+          return issues.map((issue) => {
+            const labels = issue.labels.map((label) => label.name);
+            const rawStatus =
+              labels.find((label) => /done|closed|progress|doing|review|blocked|hold/i.test(label)) ||
+              (issue.state === 'closed' ? 'Done' : 'Todo');
 
-          return {
-            title: issue.title,
-            status: normalizeStatus(rawStatus),
-            rawStatus,
-            labels,
-            assignees: issue.assignees.map((assignee) => assignee.login),
-            url: issue.html_url,
-            repository: repository.fullName,
-            boardName: `${repository.name} issues`,
-            boardUrl: repository.htmlUrl,
-            scope: 'repository' as const,
-            itemType: issue.pull_request ? 'pull_request' as const : 'issue' as const,
-          };
-        });
-      } catch (error) {
-        console.warn(`Warning: Failed to fetch fallback issues for ${repository.fullName}`, error);
-        return [];
-      }
-    })
-  );
+            return {
+              title: issue.title,
+              status: normalizeStatus(rawStatus),
+              rawStatus,
+              labels,
+              assignees: issue.assignees.map((assignee) => assignee.login),
+              url: issue.html_url,
+              repository: repository.fullName,
+              boardName: `${repository.name} issues`,
+              boardUrl: repository.htmlUrl,
+              scope: 'repository' as const,
+              itemType: issue.pull_request ? 'pull_request' as const : 'issue' as const,
+            };
+          });
+        } catch (error) {
+          console.warn(`Warning: Failed to fetch fallback issues for ${repository.fullName}`, error);
+          return [];
+        }
+      })
+    );
 
-  const items = fallbackItems.flat();
-  const boards = repositories
-    .map((repository) => ({
-      title: `${repository.name} issues`,
-      url: repository.htmlUrl,
-      scope: 'repository' as const,
-      source: repository.fullName,
-      itemCount: items.filter((item) => item.repository === repository.fullName).length,
-    }))
-    .filter((board) => board.itemCount > 0);
+    const items = fallbackItems.flat();
+    const boards = repositories
+      .map((repository) => ({
+        title: `${repository.name} issues`,
+        url: repository.htmlUrl,
+        scope: 'repository' as const,
+        source: repository.fullName,
+        itemCount: items.filter((item) => item.repository === repository.fullName).length,
+      }))
+      .filter((board) => board.itemCount > 0);
 
-  return {
-    repoCount: repositories.length,
-    boardCount: boards.length,
-    itemCount: items.length,
-    boards,
-    items,
-  };
+    return {
+      repoCount: repositories.length,
+      boardCount: boards.length,
+      itemCount: items.length,
+      boards,
+      items,
+    };
+  } catch (error) {
+    console.error('Error fetching issues as fallback:', error);
+    return {
+      repoCount: 0,
+      boardCount: 0,
+      itemCount: 0,
+      boards: [],
+      items: [],
+    };
+  }
 }
 
 async function fetchProjects(): Promise<ProjectsData> {
