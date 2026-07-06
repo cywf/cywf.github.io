@@ -1,5 +1,6 @@
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import type { Snapshot } from './snapshot-shared';
 
 export const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 export const REPO_OWNER = 'cywf';
@@ -29,11 +30,6 @@ export interface PublicRepository {
   watchers: number;
   updatedAt: string;
   pushedAt: string;
-}
-
-export interface Snapshot<T> {
-  fetchedAt: string;
-  data: T;
 }
 
 export function getRestHeaders(): Record<string, string> {
