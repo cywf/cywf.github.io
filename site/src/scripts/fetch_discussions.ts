@@ -1,9 +1,4 @@
-import { writeFileSync } from 'fs';
-import { join } from 'path';
-
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
-const REPO_OWNER = 'cywf';
-const REPO_NAME = 'cywf.github.io';
+import { GITHUB_TOKEN, REPO_OWNER, fetchGraphQL, fetchPublicRepositories, writeSnapshot } from './github';
 
 interface Discussion {
   number: number;
@@ -13,91 +8,108 @@ interface Discussion {
   createdAt: string;
   comments: number;
   category: string;
+  repository: string;
 }
 
-async function fetchDiscussions(): Promise<Discussion[]> {
-  if (!GITHUB_TOKEN) {
-    console.warn('No GITHUB_TOKEN found, skipping discussions fetch');
-    return [];
-  }
+interface DiscussionsData {
+  repoCount: number;
+  discussions: Discussion[];
+}
 
-  const query = `
-    query($owner: String!, $name: String!) {
-      repository(owner: $owner, name: $name) {
-        discussions(first: 25, orderBy: {field: CREATED_AT, direction: DESC}) {
-          nodes {
-            number
-            title
-            url
-            author {
-              login
-            }
-            createdAt
-            comments {
-              totalCount
-            }
-            category {
-              name
-            }
+interface DiscussionsQueryResult {
+  repository: {
+    discussions: {
+      nodes: Array<{
+        number: number;
+        title: string;
+        url: string;
+        createdAt: string;
+        author: { login: string } | null;
+        comments: { totalCount: number } | null;
+        category: { name: string } | null;
+      }>;
+    };
+  } | null;
+}
+
+const DISCUSSIONS_QUERY = `
+  query($owner: String!, $name: String!) {
+    repository(owner: $owner, name: $name) {
+      discussions(first: 10, orderBy: { field: CREATED_AT, direction: DESC }) {
+        nodes {
+          number
+          title
+          url
+          author {
+            login
+          }
+          createdAt
+          comments {
+            totalCount
+          }
+          category {
+            name
           }
         }
       }
     }
-  `;
-
-  try {
-    const response = await fetch('https://api.github.com/graphql', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${GITHUB_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        variables: {
-          owner: REPO_OWNER,
-          name: REPO_NAME,
-        },
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch discussions: ${response.statusText}`);
-    }
-
-    const result = await response.json();
-    
-    if (result.errors) {
-      console.error('GraphQL errors:', result.errors);
-      return [];
-    }
-
-    const discussions = result.data?.repository?.discussions?.nodes || [];
-    
-    return discussions.map((d: any) => ({
-      number: d.number,
-      title: d.title,
-      url: d.url,
-      author: d.author?.login || 'Unknown',
-      createdAt: d.createdAt,
-      comments: d.comments?.totalCount || 0,
-      category: d.category?.name || 'General',
-    }));
-  } catch (error) {
-    console.error('Error fetching discussions:', error);
-    return [];
   }
+`;
+
+async function fetchDiscussions(): Promise<DiscussionsData> {
+  const repositories = await fetchPublicRepositories();
+
+  if (!GITHUB_TOKEN) {
+    console.warn('No GITHUB_TOKEN found, skipping discussions fetch');
+    return {
+      repoCount: repositories.length,
+      discussions: [],
+    };
+  }
+
+  const discussions = await Promise.all(
+    repositories.map(async (repository) => {
+      try {
+        const result = await fetchGraphQL<DiscussionsQueryResult>(DISCUSSIONS_QUERY, {
+          owner: REPO_OWNER,
+          name: repository.name,
+        });
+
+        return (result.repository?.discussions.nodes || []).map((discussion) => ({
+          number: discussion.number,
+          title: discussion.title,
+          url: discussion.url,
+          author: discussion.author?.login || 'Unknown',
+          createdAt: discussion.createdAt,
+          comments: discussion.comments?.totalCount || 0,
+          category: discussion.category?.name || 'General',
+          repository: repository.fullName,
+        }));
+      } catch (error) {
+        console.warn(`Warning: Failed to fetch discussions for ${repository.fullName}`, error);
+        return [];
+      }
+    })
+  );
+
+  return {
+    repoCount: repositories.length,
+    discussions: discussions
+      .flat()
+      .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
+      .slice(0, 25),
+  };
 }
 
 async function main() {
   console.log('Fetching discussions...');
-  const discussions = await fetchDiscussions();
-  
-  const outputPath = join(process.cwd(), 'public', 'data', 'discussions.json');
-  writeFileSync(outputPath, JSON.stringify(discussions, null, 2));
-  
-  console.log('✓ Discussions saved to', outputPath);
-  console.log(`  Total discussions: ${discussions.length}`);
+  const data = await fetchDiscussions();
+  const snapshot = writeSnapshot('discussions.json', data);
+
+  console.log('✓ Discussions saved to public/data/discussions.json');
+  console.log(`  Snapshot time: ${snapshot.fetchedAt}`);
+  console.log(`  Repositories scanned: ${data.repoCount}`);
+  console.log(`  Total discussions: ${data.discussions.length}`);
 }
 
 main().catch(console.error);
