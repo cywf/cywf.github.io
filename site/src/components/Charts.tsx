@@ -1,55 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Chart, type ChartConfiguration, registerables } from 'chart.js';
-
 Chart.register(...registerables);
-
-interface ChartProps {
-  type: 'doughnut' | 'bar' | 'line';
-  data: any;
-  options?: any;
-}
-
-export function ChartComponent({ type, data, options = {} }: ChartProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const chartRef = useRef<Chart | null>(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    // Destroy existing chart
-    if (chartRef.current) {
-      chartRef.current.destroy();
-    }
-
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
-
-    const config: ChartConfiguration = {
-      type,
-      data,
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        ...options,
-      },
-    };
-
-    chartRef.current = new Chart(ctx, config);
-
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
-      }
-    };
-  }, [type, data, options]);
-
-  return <canvas ref={canvasRef} />;
-}
-
-export function SkeletonLoader() {
-  return (
-    <div className="animate-pulse">
-      <div className="h-64 bg-base-300 rounded-lg"></div>
-    </div>
-  );
-}
+interface ChartProps { type: 'doughnut' | 'bar' | 'line'; data: any; options?: any; ariaLabel?: string; }
+export function ChartComponent({ type, data, options = {}, ariaLabel }: ChartProps) { const canvasRef = useRef<HTMLCanvasElement>(null); const chartRef = useRef<Chart | null>(null); useEffect(() => { if (!canvasRef.current) return; chartRef.current?.destroy(); const ctx = canvasRef.current.getContext('2d'); if (!ctx) return; const config: ChartConfiguration = { type, data, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#f8fafc' } } }, scales: type === 'doughnut' ? undefined : { x: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(148,163,184,.15)' } }, y: { beginAtZero: true, ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(148,163,184,.15)' } } }, ...options } }; chartRef.current = new Chart(ctx, config); return () => chartRef.current?.destroy(); }, [type, data, options]); return <div className="h-72"><canvas ref={canvasRef} aria-label={ariaLabel} role="img" /></div>; }
+export function Charts({ stats }: { stats: any }) { const languages = Object.entries(stats.languages || {}).slice(0, 6); const activity = stats.commitActivity || []; if (!languages.length && !activity.length) return <div className="rounded-2xl border border-dashed border-base-content/20 p-6 text-base-content/70">Charts will appear after the snapshot contains language or commit activity. The metric cards and empty-state explanation remain available as static HTML.</div>; return <div className="space-y-8">{languages.length > 0 && <ChartComponent ariaLabel="Language breakdown doughnut chart" type="doughnut" data={{ labels: languages.map(([l])=>l), datasets: [{ data: languages.map(([,v])=>v), backgroundColor: ['#38bdf8','#818cf8','#10b981','#fbbf24','#f87171','#e879f9'] }] }} options={{ plugins: { legend: { position: 'bottom', labels: { color: '#f8fafc' } } } }} />}{activity.length > 0 && <ChartComponent ariaLabel="Commit activity line chart" type="line" data={{ labels: activity.map((w:any)=>w.week || w.date), datasets: [{ label: 'Commits', data: activity.map((w:any)=>w.commits ?? w.count), borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,.15)', tension: .35, fill: true }] }} />}</div>; }
+export function SkeletonLoader() { return <div className="animate-pulse"><div className="h-64 bg-base-300 rounded-lg"></div></div>; }

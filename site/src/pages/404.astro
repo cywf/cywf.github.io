@@ -1,22 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const links = [['Home','/'],['Repository statistics','/statistics'],['Development board','/development-board'],['Documentation','/docs'],['Create issue','/create-issue']];
 ---
-
-<Layout title="404 - Page Not Found" description="Page not found">
-  <div class="hero min-h-[60vh]">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-9xl font-bold">404</h1>
-        <p class="text-2xl font-semibold mt-4 mb-8">Page Not Found</p>
-        <p class="mb-8">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div class="flex gap-4 justify-center flex-wrap">
-          <a href="/" class="btn btn-primary">Go Home</a>
-          <a href="/dashboard" class="btn btn-outline">View Dashboard</a>
-          <a href="/docs" class="btn btn-outline">Read Docs</a>
-        </div>
-      </div>
-    </div>
-  </div>
+<Layout title="404 - Page Not Found" description="Recovery page for missing KP portfolio routes.">
+  <section class="hero min-h-[65vh] command-hero rounded-[2rem] border border-primary/20 shadow-2xl"><div class="hero-content text-center"><div class="max-w-3xl"><p class="text-8xl font-black text-primary">404</p><h1 class="text-4xl md:text-6xl font-black mt-4">That route is not in the command center.</h1><p class="mt-4 text-lg text-base-content/75">The page may have moved, or a copied link may include an old legacy path. Use one of the high-signal recovery links below.</p><div class="mt-8 flex flex-wrap justify-center gap-3">{links.map(([label,href]) => <a class="btn btn-outline" href={href}>{label}</a>)}</div><p class="mt-6 text-sm text-base-content/60">If a public route should exist, open an issue with the missing URL and expected destination.</p></div></div></section>
 </Layout>

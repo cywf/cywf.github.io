@@ -65,3 +65,9 @@ button:focus-visible,
   outline: 3px solid oklch(var(--p));
   outline-offset: 3px;
 }
+.docs-content :where(h2,h3,h4) { scroll-margin-top: 7rem; }
+.docs-content .anchor { opacity: .55; text-decoration: none; }
+.docs-content pre { border: 1px solid color-mix(in oklab, oklch(var(--bc)) 12%, transparent); }
+.docs-content table { display: block; overflow-x: auto; }
+.docs-content th, .docs-content td { border: 1px solid color-mix(in oklab, oklch(var(--bc)) 18%, transparent); padding: .5rem .75rem; }
+iframe { color-scheme: dark; }

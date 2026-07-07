@@ -1,193 +1,24 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { formatSnapshotDate, snapshots, topLanguages, topRepos, formatNumber, percent, repoFallbacks } from '../lib/portfolio';
+import { Charts } from '../components/Charts';
+const { data: stats, fetchedAt } = snapshots.stats;
+const langs = topLanguages(8); const repos = topRepos(8); const totalLang = langs.reduce((s,[,b])=>s+b,0);
+const hasData = stats.repoCount > 0 || repos.length > 0 || langs.length > 0;
 ---
-
-<Layout title="Statistics - Kylo Parisher Portfolio" description="Repository statistics and analytics">
-  <div class="mb-8">
-    <h1 class="text-3xl font-bold mb-2">📈 Repository Statistics</h1>
-    <p class="text-base-content/70">
-      Comprehensive analytics and visualizations across public cywf repositories.
-    </p>
-    <p id="stats-fetched-at" class="text-sm text-base-content/60 mt-2" aria-live="polite">
-      Data as of —
-    </p>
-  </div>
-
-  <div id="stats-container" class="space-y-8">
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="card bg-base-200 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">⭐ Stars</h2>
-          <div class="stat-value" id="stars-count">--</div>
-        </div>
-      </div>
-      <div class="card bg-base-200 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">🍴 Forks</h2>
-          <div class="stat-value" id="forks-count">--</div>
-        </div>
-      </div>
-      <div class="card bg-base-200 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">👀 Watchers</h2>
-          <div class="stat-value" id="watchers-count">--</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card bg-base-200 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title">💻 Language Breakdown</h2>
-        <div id="language-chart-container">
-          <div class="h-64 flex items-center justify-center">
-            <span class="loading loading-spinner loading-lg"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card bg-base-200 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title">📊 Commit Activity (Last 12 Weeks)</h2>
-        <div id="commits-chart-container">
-          <div class="h-64 flex items-center justify-center">
-            <span class="loading loading-spinner loading-lg"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    import { Chart, registerables } from 'chart.js';
-    import { readSnapshot } from '../scripts/snapshot';
-    Chart.register(...registerables);
-
-    interface StatsData {
-      repoCount: number;
-      stars: number;
-      forks: number;
-      watchers: number;
-      languages: Record<string, number>;
-      commitActivity: { week: string; commits: number }[];
-    }
-
-    async function loadStats() {
-      try {
-        const response = await fetch('/data/stats.json');
-        if (!response.ok) {
-          throw new Error('Failed to load stats');
-        }
-        const payload = await response.json();
-        const { data, fetchedAt } = readSnapshot<StatsData>(payload);
-
-        if (fetchedAt) {
-          document.getElementById('stats-fetched-at')!.textContent = `Data as of ${new Date(fetchedAt).toLocaleString()} • ${data.repoCount} repositories`;
-        }
-        
-        // Update stats
-        document.getElementById('stars-count')!.textContent = data.stars.toString();
-        document.getElementById('forks-count')!.textContent = data.forks.toString();
-        document.getElementById('watchers-count')!.textContent = data.watchers.toString();
-
-        // Language chart
-        const languageCtx = document.createElement('canvas');
-        document.getElementById('language-chart-container')!.innerHTML = '';
-        document.getElementById('language-chart-container')!.appendChild(languageCtx);
-
-        const languageLabels = Object.keys(data.languages);
-        const languageData = Object.values(data.languages);
-        
-        new Chart(languageCtx, {
-          type: 'doughnut',
-          data: {
-            labels: languageLabels,
-            datasets: [{
-              data: languageData,
-              backgroundColor: [
-                'rgba(56, 189, 248, 0.8)',
-                'rgba(129, 140, 248, 0.8)',
-                'rgba(16, 185, 129, 0.8)',
-                'rgba(251, 191, 36, 0.8)',
-                'rgba(248, 113, 113, 0.8)',
-              ],
-            }],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-              legend: {
-                position: 'right',
-                labels: {
-                  color: 'rgb(249, 250, 251)',
-                },
-              },
-            },
-          },
-        });
-
-        // Commit activity chart
-        const commitCtx = document.createElement('canvas');
-        document.getElementById('commits-chart-container')!.innerHTML = '';
-        document.getElementById('commits-chart-container')!.appendChild(commitCtx);
-
-        new Chart(commitCtx, {
-          type: 'line',
-          data: {
-            labels: data.commitActivity.map(w => w.week),
-            datasets: [{
-              label: 'Commits',
-              data: data.commitActivity.map(w => w.commits),
-              borderColor: 'rgba(56, 189, 248, 1)',
-              backgroundColor: 'rgba(56, 189, 248, 0.1)',
-              tension: 0.4,
-            }],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  color: 'rgb(249, 250, 251)',
-                },
-                grid: {
-                  color: 'rgba(249, 250, 251, 0.1)',
-                },
-              },
-              x: {
-                ticks: {
-                  color: 'rgb(249, 250, 251)',
-                },
-                grid: {
-                  color: 'rgba(249, 250, 251, 0.1)',
-                },
-              },
-            },
-            plugins: {
-              legend: {
-                labels: {
-                  color: 'rgb(249, 250, 251)',
-                },
-              },
-            },
-          },
-        });
-      } catch (error) {
-        console.error('Error loading statistics:', error);
-        document.getElementById('stats-container')!.innerHTML = `
-          <div class="alert alert-warning">
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            <span>Statistics data not available. This data is generated during CI/CD deployment.</span>
-          </div>
-        `;
-      }
-    }
-
-    loadStats();
-  </script>
+<Layout title="Repository Statistics" description="Static-first repository health, language, momentum, and activity insights for KP's public portfolio.">
+  <section class="command-hero rounded-[2rem] border border-primary/20 bg-base-200 p-6 md:p-10 shadow-2xl mb-8">
+    <p class="badge badge-primary badge-lg mb-4">Snapshot-backed analytics</p><h1 class="text-4xl md:text-6xl font-black mb-4">Repository statistics that read before JavaScript runs.</h1>
+    <p class="max-w-3xl text-lg text-base-content/75">Top-level metrics, language mix, and momentum are rendered into HTML from committed snapshots. Charts enhance the same data when the browser can hydrate them.</p>
+    <p class="mt-4 text-sm text-base-content/60">Data as of {formatSnapshotDate(fetchedAt)}</p>
+  </section>
+  <section class="grid gap-4 md:grid-cols-4 mb-8" aria-label="Top level repository metrics">
+    {[['Repositories', stats.repoCount], ['Stars', stats.stars], ['Forks', stats.forks], ['Watchers', stats.watchers]].map(([label,value]) => <div class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="text-sm uppercase tracking-widest text-base-content/60">{label}</h2><p class="text-4xl font-black">{formatNumber(value as number)}</p></div></div>)}
+  </section>
+  {!hasData && <div class="alert alert-info mb-8"><span>The current public snapshot is intentionally empty. This usually means the scheduled GitHub data job ran without repository visibility or optional scopes; the page still exposes contracts, expected metrics, and recovery paths.</span></div>}
+  <section class="grid gap-8 xl:grid-cols-2 mb-8">
+    <div class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">Language leaders</h2><p class="text-base-content/70">Bytes by primary languages across visible repositories.</p>{langs.length ? <div class="space-y-3 mt-4">{langs.map(([lang,bytes]) => <div><div class="flex justify-between text-sm"><span>{lang}</span><span>{percent(bytes,totalLang)}% · {bytes.toLocaleString()} bytes</span></div><progress class="progress progress-primary" value={bytes} max={langs[0][1]} aria-label={`${lang} ${percent(bytes,totalLang)} percent`}></progress></div>)}</div> : <p class="mt-4 text-base-content/70">Language data is unavailable until repository stats refresh with API visibility.</p>}</div></div>
+    <div class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">Momentum chart</h2><p class="text-base-content/70">The chart is optional enhancement; the list below remains the source-of-truth if scripts fail.</p><Charts client:load stats={stats} /></div></div>
+  </section>
+  <section class="card bg-base-200 shadow-xl mb-8"><div class="card-body"><h2 class="card-title text-2xl">Repository insights</h2><div class="grid gap-4 md:grid-cols-3 mt-4">{repoFallbacks(6).map((repo:any) => <article class="rounded-2xl border border-base-content/10 bg-base-100 p-4"><span class="badge badge-outline">{repo.language || repo.focus || 'Repository'}</span><h3 class="mt-3 font-bold"><a class="link link-hover" href={repo.htmlUrl || repo.url || `https://github.com/cywf/${repo.name}`} target="_blank" rel="noopener noreferrer">{repo.name}</a></h3><p class="mt-2 text-sm text-base-content/70">{repo.description || 'Public project tracked by the portfolio command center.'}</p><p class="mt-3 text-xs text-base-content/60">Stars {formatNumber(repo.stars)} · Forks {formatNumber(repo.forks)} · Issues {formatNumber(repo.openIssues)}</p></article>)}</div></div></section>
 </Layout>

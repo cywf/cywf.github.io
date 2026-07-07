@@ -24,6 +24,11 @@ const activeRepos = getActiveRepositories(stats, projects, 6);
 const recentDiscussions = (discussions.discussions || []).slice(0, 4);
 const freshness = freshnessLabel(projectsFetchedAt || statsFetchedAt || discussionsFetchedAt);
 const topLanguages = Object.entries(stats.languages || {}).sort(([, a], [, b]) => b - a).slice(0, 5);
+const featuredSystems = [
+  ['Portfolio operations hub', 'Static-first Astro surface for project health, docs, diagrams, and contribution paths.', '/docs'],
+  ['Snapshot data contracts', 'Committed JSON envelopes keep public pages useful even when GitHub API scopes are constrained.', '/statistics'],
+  ['Legacy dashboard bridge', 'Original dashboard capabilities preserved inside a clearer framed-shell experience.', '/dashboard'],
+];
 ---
 
 <Layout title="KP Public Projects Command Center" description="Live command center for KP's public projects, tasks, activity, and repository health">
@@ -32,7 +37,7 @@ const topLanguages = Object.entries(stats.languages || {}).sort(([, a], [, b]) =
       <div>
         <p class="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">KP public operations dashboard</p>
         <h1 class="mb-4 max-w-4xl text-4xl font-black leading-tight tracking-tight md:text-6xl">A live command center for public projects, tasks, and momentum.</h1>
-        <p class="max-w-2xl text-lg text-base-content/75">Snapshot-backed visibility across repositories, GitHub Projects, discussions, and recent activity — designed to make the work feel current, trustworthy, and easy to scan.</p>
+        <p class="max-w-2xl text-lg text-base-content/75">KP builds public-facing systems, automation, and portfolio infrastructure. This hub turns repository signals into a polished operating surface so visitors can understand what exists, what is active, and how to contribute.</p>
         <div class="mt-6 flex flex-wrap gap-3">
           <a href="/development-board" class="btn btn-primary">Open task board</a>
           <a href="/statistics" class="btn btn-outline">Repository health</a>
@@ -56,6 +61,12 @@ const topLanguages = Object.entries(stats.languages || {}).sort(([, a], [, b]) =
         <p class="mt-4 text-xs text-base-content/60">Projects: {formatSnapshotDate(projectsFetchedAt)} · Stats: {formatSnapshotDate(statsFetchedAt)}</p>
       </aside>
     </div>
+  </section>
+
+
+  <section class="mb-8 grid gap-6 lg:grid-cols-[.8fr_1.2fr]">
+    <div class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title text-2xl">Mission</h2><p class="text-base-content/75">Make public engineering work legible: clear routes, snapshot-backed evidence, accessible dark UI, and contribution paths that respect public-safe data boundaries.</p></div></div>
+    <div class="grid gap-4 md:grid-cols-3">{featuredSystems.map(([title, body, href]) => <a class="card bg-base-200 shadow-xl hover:outline hover:outline-primary" href={href}><div class="card-body"><h2 class="card-title text-lg">{title}</h2><p class="text-sm text-base-content/70">{body}</p><span class="link link-primary mt-auto">Explore →</span></div></a>)}</div>
   </section>
 
   <section class="mb-8 grid gap-4 md:grid-cols-4" aria-label="Task status summary">

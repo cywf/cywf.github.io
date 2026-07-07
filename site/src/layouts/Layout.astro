@@ -5,9 +5,13 @@ import '../styles/global.css';
 export interface Props {
   title?: string;
   description?: string;
+  image?: string;
 }
 
-const { title = 'Kylo Parisher - Portfolio', description = 'Interactive portfolio and analytics hub' } = Astro.props;
+const { title = 'Kylo Parisher - Portfolio', description = 'Interactive portfolio and analytics hub', image = '/favicon.svg' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, 'https://cywf.github.io').toString();
+const pageTitle = title.includes('Kylo') || title.includes('KP') ? title : `${title} | KP Portfolio`;
+const ogImage = new URL(image, 'https://cywf.github.io').toString();
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -34,16 +38,25 @@ const shortSha = process.env.GITHUB_SHA?.substring(0, 7) || 'dev';
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>{pageTitle}</title>
   </head>
   <body>
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
     
     <!-- Navbar -->
-    <div class="navbar bg-base-200 shadow-lg">
+    <div class="navbar sticky top-0 z-40 border-b border-base-content/10 bg-base-200/95 shadow-lg backdrop-blur">
       <div class="navbar-start">
         <div class="dropdown">
           <div tabindex={0} role="button" class="btn btn-ghost lg:hidden">
@@ -57,12 +70,12 @@ const shortSha = process.env.GITHUB_SHA?.substring(0, 7) || 'dev';
             ))}
           </ul>
         </div>
-        <a href="/" class="btn btn-ghost text-xl">⚡ KP Portfolio</a>
+        <a href="/" class="btn btn-ghost text-xl" aria-label="KP Portfolio home">⚡ KP <span class="hidden sm:inline">Operations Hub</span></a>
       </div>
       <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal px-1">
           {navItems.map(item => (
-            <li><a href={item.href} class={currentPath === item.href ? 'active' : ''}>{item.label}</a></li>
+            <li><a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined} class={currentPath === item.href ? 'active font-bold' : ''}>{item.label}</a></li>
           ))}
         </ul>
       </div>
@@ -94,7 +107,7 @@ const shortSha = process.env.GITHUB_SHA?.substring(0, 7) || 'dev';
     )}
 
     <!-- Main Content -->
-    <main id="main-content" class="min-h-screen container mx-auto px-4 py-8">
+    <main id="main-content" class="min-h-screen container mx-auto px-4 py-10">
       <slot />
     </main>
 
@@ -104,7 +117,8 @@ const shortSha = process.env.GITHUB_SHA?.substring(0, 7) || 'dev';
         <p class="font-semibold">
           Kylo Parisher - Developer Portfolio
         </p>
-        <p>© {new Date().getFullYear()} - MIT License</p>
+        <p>© {new Date().getFullYear()} - MIT License · Static-first portfolio and public operations hub</p>
+        <p class="max-w-2xl text-sm opacity-75">Data comes from committed GitHub snapshot JSON with client enhancement reserved for charts, diagrams, and the preserved legacy dashboard.</p>
         <p class="text-sm opacity-70">
           Last deployed: {new Date(buildTime).toLocaleString()} | SHA: {shortSha}
         </p>

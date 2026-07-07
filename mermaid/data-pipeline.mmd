@@ -1,0 +1,10 @@
+flowchart LR
+  Schedule[Scheduled / manual workflow] --> FetchStats[Fetch repository stats]
+  Schedule --> FetchDiscussions[Fetch discussions]
+  Schedule --> FetchProjects[Fetch Projects v2]
+  FetchStats --> Contracts[public/data/*.json envelope]
+  FetchDiscussions --> Contracts
+  FetchProjects --> Contracts
+  Contracts --> SSG[Astro SSG first paint]
+  SSG --> Enhance[Optional client charts and Mermaid]
+  Contracts --> EmptyStates[Intentional no-data states]

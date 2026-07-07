@@ -1,0 +1,10 @@
+graph TB
+  Visitor[Public visitor] --> Astro[Astro static routes]
+  Astro --> Home[Portfolio home]
+  Astro --> Native[Native pages: stats, discussions, board, docs]
+  Astro --> Legacy[Framed legacy dashboard]
+  Native --> Snapshots[Committed JSON snapshots]
+  Snapshots --> Actions[GitHub Actions snapshot jobs]
+  Actions --> GitHub[GitHub REST + GraphQL APIs]
+  Legacy --> BrowserCache[Client GitHub API + localStorage cache]
+  Astro --> Pages[GitHub Pages deploy]
