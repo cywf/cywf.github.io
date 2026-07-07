@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import mermaid from 'mermaid';
 
 interface MermaidViewerProps {
-  diagrams: { name: string; content: string }[];
+  diagrams: { name: string; content: string; description?: string }[];
 }
 
 export function MermaidViewer({ diagrams }: MermaidViewerProps) {
@@ -61,20 +61,23 @@ export function MermaidViewer({ diagrams }: MermaidViewerProps) {
 
   return (
     <div>
-      <div className="tabs tabs-boxed mb-4">
+      <div className="tabs tabs-boxed mb-4 overflow-x-auto" role="tablist" aria-label="Architecture diagrams">
         {diagrams.map((diagram, index) => (
           <button
             key={index}
-            className={`tab ${index === selectedDiagram ? 'tab-active' : ''}`}
+            className={`tab whitespace-nowrap ${index === selectedDiagram ? 'tab-active' : ''}`}
             onClick={() => setSelectedDiagram(index)}
+            aria-selected={index === selectedDiagram}
+            role="tab"
           >
             {diagram.name}
           </button>
         ))}
       </div>
+      <p className="mb-4 text-sm text-base-content/70">{diagrams[selectedDiagram]?.description}</p>
       <div 
         ref={containerRef} 
-        className="bg-base-200 p-6 rounded-lg overflow-x-auto"
+        className="bg-base-100 p-4 md:p-6 rounded-2xl overflow-x-auto border border-base-content/10"
         style={{ minHeight: '400px' }}
       />
     </div>
