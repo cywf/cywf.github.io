@@ -80,26 +80,74 @@ const Utils = {
 
 // GitHub API Client
 const GitHubAPI = {
+  getStatusMessage(status) {
+    switch (status) {
+      case 401:
+        return 'GitHub API request was not authorized';
+      case 403:
+        return 'GitHub API request was forbidden or rate limited';
+      case 404:
+        return 'GitHub API resource was not found';
+      case 422:
+        return 'GitHub API request was invalid';
+      case 429:
+        return 'GitHub API rate limit was exceeded';
+      default:
+        return status >= 500
+          ? 'GitHub API is temporarily unavailable'
+          : `GitHub API request failed with status ${status}`;
+    }
+  },
+
   // Fetch with error handling
   async fetch(endpoint, options = {}) {
     const url = `${CONFIG.github.apiBase}${endpoint}`;
+    let response;
+
     try {
-      const response = await fetch(url, {
+      response = await fetch(url, {
         ...options,
         headers: {
           'Accept': 'application/vnd.github.v3+json',
           ...options.headers
         }
       });
-
-      if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.status}`);
-      }
-
-      return await response.json();
     } catch (error) {
       console.error(`Failed to fetch ${endpoint}:`, error);
-      throw error;
+      const requestError = new Error(
+        error?.name === 'AbortError'
+          ? `GitHub API request timed out for ${endpoint}`
+          : `GitHub API network error while fetching ${endpoint}`
+      );
+      requestError.cause = error;
+      throw requestError;
+    }
+
+    if (!response.ok) {
+      let details = '';
+
+      try {
+        const errorBody = await response.json();
+        if (errorBody?.message) {
+          details = `: ${errorBody.message}`;
+        }
+      } catch (error) {
+        // Ignore invalid error bodies and fall back to the HTTP status alone.
+      }
+
+      const httpError = new Error(`${this.getStatusMessage(response.status)}${details}`);
+      httpError.status = response.status;
+      console.error(`GitHub API request failed for ${endpoint}:`, httpError);
+      throw httpError;
+    }
+
+    try {
+      return await response.json();
+    } catch (error) {
+      console.error(`Failed to parse GitHub API response for ${endpoint}:`, error);
+      const parseError = new Error(`GitHub API returned invalid JSON for ${endpoint}`);
+      parseError.cause = error;
+      throw parseError;
     }
   },
 
