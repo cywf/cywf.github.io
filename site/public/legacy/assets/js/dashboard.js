@@ -31,6 +31,14 @@ function parseRepoList(value, fallback) {
   return repos.length > 0 ? repos : fallback;
 }
 
+function resolveStringConfig(runtimeValue, scriptValue, fallback) {
+  if (typeof runtimeValue === 'string') {
+    return runtimeValue.trim();
+  }
+
+  return scriptValue || fallback;
+}
+
 function resolveDashboardConfig() {
   const runtimeConfig = window.GITHUB_DASHBOARD_CONFIG?.github || {};
   const scriptConfig = document.currentScript?.dataset || {};
@@ -41,15 +49,15 @@ function resolveDashboardConfig() {
 
   return {
     github: {
-      username: typeof runtimeConfig.username === 'string' ? runtimeConfig.username.trim() : (scriptConfig.githubUsername || DEFAULT_CONFIG.github.username),
-      organization: typeof runtimeConfig.organization === 'string' ? runtimeConfig.organization.trim() : (scriptConfig.githubOrganization || DEFAULT_CONFIG.github.organization),
+      username: resolveStringConfig(runtimeConfig.username, scriptConfig.githubUsername, DEFAULT_CONFIG.github.username),
+      organization: resolveStringConfig(runtimeConfig.organization, scriptConfig.githubOrganization, DEFAULT_CONFIG.github.organization),
       personalRepos,
       siteRepo:
-        (typeof runtimeConfig.siteRepo === 'string' ? runtimeConfig.siteRepo.trim() : scriptConfig.githubSiteRepo) ||
+        resolveStringConfig(runtimeConfig.siteRepo, scriptConfig.githubSiteRepo, '') ||
         personalRepos[0] ||
         DEFAULT_CONFIG.github.siteRepo,
       apiBase:
-        (typeof runtimeConfig.apiBase === 'string' ? runtimeConfig.apiBase.trim() : scriptConfig.githubApiBase) ||
+        resolveStringConfig(runtimeConfig.apiBase, scriptConfig.githubApiBase, '') ||
         DEFAULT_CONFIG.github.apiBase,
     },
     cache: { ...DEFAULT_CONFIG.cache },
@@ -145,7 +153,7 @@ const GitHubAPI = {
       try {
         payload = JSON.parse(responseText);
       } catch (error) {
-        throw new Error(`GitHub API returned invalid JSON for ${endpoint}`);
+        throw new Error(`GitHub API returned invalid JSON for ${endpoint}: ${error.message}`);
       }
     }
 

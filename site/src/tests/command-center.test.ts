@@ -23,6 +23,14 @@ assert.match(userProjectsQuery, /query\(\$login: String!\)/);
 assert.match(userProjectsQuery, /user\(login: \$login\)/);
 assert.match(repositoryProjectsQuery, /projectsV2\(first: 10, orderBy: \{ field: UPDATED_AT, direction: DESC \}\)/);
 assert.match(userProjectsQuery, /projectsV2\(first: 10, orderBy: \{ field: UPDATED_AT, direction: DESC \}\)/);
+assert.match(repositoryProjectsQuery, /repository\s*\{\s*nameWithOwner\s*\}/);
+assert.match(repositoryProjectsQuery, /labels\(first: 10\)\s*\{\s*nodes\s*\{\s*name\s*\}\s*\}/);
+assert.match(repositoryProjectsQuery, /assignees\(first: 10\)\s*\{\s*nodes\s*\{\s*login\s*\}\s*\}/);
+assert.match(repositoryProjectsQuery, /fieldValues\(first: 20\)\s*\{\s*nodes\s*\{\s*\.\.\. on ProjectV2ItemFieldSingleSelectValue/);
+assert.match(userProjectsQuery, /repository\s*\{\s*nameWithOwner\s*\}/);
+assert.match(userProjectsQuery, /labels\(first: 10\)\s*\{\s*nodes\s*\{\s*name\s*\}\s*\}/);
+assert.match(userProjectsQuery, /assignees\(first: 10\)\s*\{\s*nodes\s*\{\s*login\s*\}\s*\}/);
+assert.match(userProjectsQuery, /fieldValues\(first: 20\)\s*\{\s*nodes\s*\{\s*\.\.\. on ProjectV2ItemFieldSingleSelectValue/);
 assert.equal((repositoryProjectsQuery.match(/ProjectV2ItemFieldSingleSelectValue/g) || []).length, 1);
 assert.equal((userProjectsQuery.match(/ProjectV2ItemFieldSingleSelectValue/g) || []).length, 1);
 
