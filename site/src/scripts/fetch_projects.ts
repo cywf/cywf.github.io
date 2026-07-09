@@ -1,4 +1,5 @@
 import { GITHUB_TOKEN, REPO_OWNER, fetchGraphQL, fetchJson, fetchPublicRepositories, getRestHeaders, writeSnapshot } from './github';
+import { createProjectsQuery } from './project-queries';
 
 interface ProjectItem {
   title: string;
@@ -88,143 +89,12 @@ interface GitHubIssue {
   assignees: Array<{ login: string }>;
 }
 
-const REPOSITORY_PROJECTS_QUERY = `
-  query($owner: String!, $name: String!) {
-    repository(owner: $owner, name: $name) {
-      projectsV2(first: 10, orderBy: { field: UPDATED_AT, direction: DESC }) {
-        nodes {
-          title
-          url
-          items(first: 100) {
-            nodes {
-              content {
-                __typename
-                ... on Issue {
-                  title
-                  url
-                  repository {
-                    nameWithOwner
-                  }
-                  labels(first: 10) {
-                    nodes {
-                      name
-                    }
-                  }
-                  assignees(first: 10) {
-                    nodes {
-                      login
-                    }
-                  }
-                }
-                ... on PullRequest {
-                  title
-                  url
-                  repository {
-                    nameWithOwner
-                  }
-                  labels(first: 10) {
-                    nodes {
-                      name
-                    }
-                  }
-                  assignees(first: 10) {
-                    nodes {
-                      login
-                    }
-                  }
-                }
-                ... on DraftIssue {
-                  title
-                }
-              }
-              fieldValues(first: 20) {
-                nodes {
-                  ... on ProjectV2ItemFieldSingleSelectValue {
-                    name
-                    field {
-                      ... on ProjectV2SingleSelectField {
-                        name
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+const REPOSITORY_PROJECTS_QUERY = createProjectsQuery(
+  '$owner: String!, $name: String!',
+  'repository(owner: $owner, name: $name)'
+);
 
-const USER_PROJECTS_QUERY = `
-  query($login: String!) {
-    user(login: $login) {
-      projectsV2(first: 10, orderBy: { field: UPDATED_AT, direction: DESC }) {
-        nodes {
-          title
-          url
-          items(first: 100) {
-            nodes {
-              content {
-                __typename
-                ... on Issue {
-                  title
-                  url
-                  repository {
-                    nameWithOwner
-                  }
-                  labels(first: 10) {
-                    nodes {
-                      name
-                    }
-                  }
-                  assignees(first: 10) {
-                    nodes {
-                      login
-                    }
-                  }
-                }
-                ... on PullRequest {
-                  title
-                  url
-                  repository {
-                    nameWithOwner
-                  }
-                  labels(first: 10) {
-                    nodes {
-                      name
-                    }
-                  }
-                  assignees(first: 10) {
-                    nodes {
-                      login
-                    }
-                  }
-                }
-                ... on DraftIssue {
-                  title
-                }
-              }
-              fieldValues(first: 20) {
-                nodes {
-                  ... on ProjectV2ItemFieldSingleSelectValue {
-                    name
-                    field {
-                      ... on ProjectV2SingleSelectField {
-                        name
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+const USER_PROJECTS_QUERY = createProjectsQuery('$login: String!', 'user(login: $login)');
 
 function normalizeStatus(status: string): string {
   const normalized = status.trim().toLowerCase();
