@@ -4,11 +4,12 @@
  */
 
 // Configuration
-const CONFIG = {
+const DEFAULT_CONFIG = {
   github: {
     username: 'cywf',
     organization: 'PR-CYBR',
-    personalRepos: ['cywf.github.io'], // Add more if needed
+    personalRepos: ['cywf.github.io'],
+    siteRepo: 'cywf.github.io',
     apiBase: 'https://api.github.com',
   },
   cache: {
@@ -17,6 +18,46 @@ const CONFIG = {
   },
   charts: {}
 };
+
+function parseRepoList(value, fallback) {
+  if (!Array.isArray(value) && typeof value !== 'string') {
+    return fallback;
+  }
+
+  const repos = (Array.isArray(value) ? value : value.split(','))
+    .map((repo) => repo.trim())
+    .filter(Boolean);
+
+  return repos.length > 0 ? repos : fallback;
+}
+
+function resolveDashboardConfig() {
+  const runtimeConfig = window.GITHUB_DASHBOARD_CONFIG?.github || {};
+  const scriptConfig = document.currentScript?.dataset || {};
+  const personalRepos = parseRepoList(
+    runtimeConfig.personalRepos ?? scriptConfig.personalRepos,
+    DEFAULT_CONFIG.github.personalRepos
+  );
+
+  return {
+    github: {
+      username: typeof runtimeConfig.username === 'string' ? runtimeConfig.username.trim() : (scriptConfig.githubUsername || DEFAULT_CONFIG.github.username),
+      organization: typeof runtimeConfig.organization === 'string' ? runtimeConfig.organization.trim() : (scriptConfig.githubOrganization || DEFAULT_CONFIG.github.organization),
+      personalRepos,
+      siteRepo:
+        (typeof runtimeConfig.siteRepo === 'string' ? runtimeConfig.siteRepo.trim() : scriptConfig.githubSiteRepo) ||
+        personalRepos[0] ||
+        DEFAULT_CONFIG.github.siteRepo,
+      apiBase:
+        (typeof runtimeConfig.apiBase === 'string' ? runtimeConfig.apiBase.trim() : scriptConfig.githubApiBase) ||
+        DEFAULT_CONFIG.github.apiBase,
+    },
+    cache: { ...DEFAULT_CONFIG.cache },
+    charts: { ...DEFAULT_CONFIG.charts }
+  };
+}
+
+const CONFIG = resolveDashboardConfig();
 
 // Utility Functions
 const Utils = {
@@ -83,24 +124,50 @@ const GitHubAPI = {
   // Fetch with error handling
   async fetch(endpoint, options = {}) {
     const url = `${CONFIG.github.apiBase}${endpoint}`;
+    let response;
+
     try {
-      const response = await fetch(url, {
+      response = await fetch(url, {
         ...options,
         headers: {
           'Accept': 'application/vnd.github.v3+json',
           ...options.headers
         }
       });
+    } catch (error) {
+      throw new Error(`Network error while fetching ${endpoint}: ${error.message}`);
+    }
 
-      if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.status}`);
+    const responseText = await response.text();
+    let payload = null;
+
+    if (responseText) {
+      try {
+        payload = JSON.parse(responseText);
+      } catch (error) {
+        throw new Error(`GitHub API returned invalid JSON for ${endpoint}`);
+      }
+    }
+
+    if (!response.ok) {
+      const message = payload?.message || response.statusText || 'Unknown error';
+
+      if (response.status === 403 && /rate limit/i.test(message)) {
+        throw new Error(`GitHub API rate limit exceeded for ${endpoint}`);
       }
 
-      return await response.json();
-    } catch (error) {
-      console.error(`Failed to fetch ${endpoint}:`, error);
-      throw error;
+      if (response.status === 404) {
+        throw new Error(`GitHub API resource not found for ${endpoint}`);
+      }
+
+      if (response.status >= 500) {
+        throw new Error(`GitHub API server error (${response.status}) for ${endpoint}`);
+      }
+
+      throw new Error(`GitHub API error (${response.status}) for ${endpoint}: ${message}`);
     }
+
+    return payload;
   },
 
   // Get organization repositories
@@ -137,6 +204,25 @@ const GitHubAPI = {
 
 // Dashboard Manager
 const Dashboard = {
+  async getConfiguredRepositories() {
+    const [orgRepos, userRepos] = await Promise.all([
+      CONFIG.github.organization
+        ? GitHubAPI.getOrgRepos(CONFIG.github.organization).catch((error) => {
+            console.warn(`Failed to load organization repositories for ${CONFIG.github.organization}:`, error);
+            return [];
+          })
+        : [],
+      CONFIG.github.username
+        ? GitHubAPI.getUserRepos(CONFIG.github.username).catch((error) => {
+            console.warn(`Failed to load user repositories for ${CONFIG.github.username}:`, error);
+            return [];
+          })
+        : []
+    ]);
+
+    return [...orgRepos, ...userRepos];
+  },
+
   // Initialize dashboard
   async init() {
     console.log('Initializing dashboard...');
@@ -193,70 +279,77 @@ const Dashboard = {
 
   // Load repository health metrics
   async loadRepositoryHealth() {
-    const data = await Utils.getCached('repo_health', async () => {
-      // Fetch repositories
-      const [orgRepos, userRepos] = await Promise.all([
-        GitHubAPI.getOrgRepos(CONFIG.github.organization),
-        GitHubAPI.getUserRepos(CONFIG.github.username)
-      ]);
+    try {
+      const data = await Utils.getCached('repo_health', async () => {
+        const allRepos = await this.getConfiguredRepositories();
+        
+        // Calculate metrics
+        const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        let totalWorkflows = 0;
+        let successfulWorkflows = 0;
+        let activeRepos = 0;
+        let totalIssues = 0;
+        let totalPRs = 0;
+        let mergedPRs = 0;
 
-      const allRepos = [...orgRepos, ...userRepos];
-      
-      // Calculate metrics
-      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-      let totalWorkflows = 0;
-      let successfulWorkflows = 0;
-      let activeRepos = 0;
-      let totalIssues = 0;
-      let totalPRs = 0;
-      let mergedPRs = 0;
+        // Sample subset of repos to avoid rate limiting
+        const sampleRepos = allRepos.slice(0, 10);
 
-      // Sample subset of repos to avoid rate limiting
-      const sampleRepos = allRepos.slice(0, 10);
-
-      for (const repo of sampleRepos) {
-        try {
-          // Check for recent commits
-          const commits = await GitHubAPI.getCommits(repo.owner.login, repo.name, weekAgo);
-          if (commits.length > 0) activeRepos++;
-
-          // Get workflow runs
+        for (const repo of sampleRepos) {
           try {
-            const runs = await GitHubAPI.getWorkflowRuns(repo.owner.login, repo.name);
-            if (runs.workflow_runs) {
-              totalWorkflows += runs.workflow_runs.length;
-              successfulWorkflows += runs.workflow_runs.filter(r => r.conclusion === 'success').length;
+            // Check for recent commits
+            const commits = await GitHubAPI.getCommits(repo.owner.login, repo.name, weekAgo);
+            if (commits.length > 0) activeRepos++;
+
+            // Get workflow runs
+            try {
+              const runs = await GitHubAPI.getWorkflowRuns(repo.owner.login, repo.name);
+              if (runs.workflow_runs) {
+                totalWorkflows += runs.workflow_runs.length;
+                successfulWorkflows += runs.workflow_runs.filter(r => r.conclusion === 'success').length;
+              }
+            } catch (e) {
+              // Repo might not have workflows
             }
-          } catch (e) {
-            // Repo might not have workflows
+
+            // Get issues
+            const issues = await GitHubAPI.getIssues(repo.owner.login, repo.name);
+            totalIssues += issues.filter(i => !i.pull_request).length;
+
+            // Get PRs
+            const prs = await GitHubAPI.getPullRequests(repo.owner.login, repo.name);
+            totalPRs += prs.length;
+            mergedPRs += prs.filter(pr => pr.merged_at).length;
+
+          } catch (error) {
+            console.warn(`Failed to fetch data for ${repo.name}:`, error);
           }
-
-          // Get issues
-          const issues = await GitHubAPI.getIssues(repo.owner.login, repo.name);
-          totalIssues += issues.filter(i => !i.pull_request).length;
-
-          // Get PRs
-          const prs = await GitHubAPI.getPullRequests(repo.owner.login, repo.name);
-          totalPRs += prs.length;
-          mergedPRs += prs.filter(pr => pr.merged_at).length;
-
-        } catch (error) {
-          console.warn(`Failed to fetch data for ${repo.name}:`, error);
         }
-      }
 
-      return {
-        totalRepos: allRepos.length,
-        activeRepos,
-        workflowSuccessRate: totalWorkflows > 0 ? (successfulWorkflows / totalWorkflows * 100).toFixed(1) : 0,
-        totalIssues,
-        totalPRs,
-        mergedPRs,
-        prMergeRate: totalPRs > 0 ? (mergedPRs / totalPRs * 100).toFixed(1) : 0
-      };
-    });
+        return {
+          totalRepos: allRepos.length,
+          activeRepos,
+          workflowSuccessRate: totalWorkflows > 0 ? (successfulWorkflows / totalWorkflows * 100).toFixed(1) : 0,
+          totalIssues,
+          totalPRs,
+          mergedPRs,
+          prMergeRate: totalPRs > 0 ? (mergedPRs / totalPRs * 100).toFixed(1) : 0
+        };
+      });
 
-    this.renderRepositoryHealth(data);
+      this.renderRepositoryHealth(data);
+    } catch (error) {
+      console.warn('Failed to load repository health metrics:', error);
+      this.renderRepositoryHealth({
+        totalRepos: 0,
+        activeRepos: 0,
+        workflowSuccessRate: 0,
+        totalIssues: 0,
+        totalPRs: 0,
+        mergedPRs: 0,
+        prMergeRate: 0
+      });
+    }
   },
 
   // Render repository health section
@@ -381,42 +474,51 @@ const Dashboard = {
 
   // Load AI Agent metrics
   async loadAIAgentMetrics() {
-    const data = await Utils.getCached('ai_agents', async () => {
-      const orgRepos = await GitHubAPI.getOrgRepos(CONFIG.github.organization);
-      
-      // Filter for PR-CYBR-* agent repositories
-      const agentRepos = orgRepos.filter(repo => 
-        repo.name.startsWith('PR-CYBR-') || 
-        repo.name.includes('-AGENT')
-      );
-
-      const agents = [];
-
-      for (const repo of agentRepos.slice(0, 20)) { // Limit to avoid rate limits
-        try {
-          const runs = await GitHubAPI.getWorkflowRuns(repo.owner.login, repo.name, 5);
-          const latestRun = runs.workflow_runs?.[0];
-          
-          agents.push({
-            name: repo.name,
-            status: latestRun?.conclusion || 'unknown',
-            category: this.categorizeAgent(repo.name),
-            url: repo.html_url
-          });
-        } catch (error) {
-          agents.push({
-            name: repo.name,
-            status: 'unknown',
-            category: this.categorizeAgent(repo.name),
-            url: repo.html_url
-          });
+    try {
+      const data = await Utils.getCached('ai_agents', async () => {
+        if (!CONFIG.github.organization) {
+          return [];
         }
-      }
 
-      return agents;
-    });
+        const orgRepos = await GitHubAPI.getOrgRepos(CONFIG.github.organization);
+        const orgPrefix = `${CONFIG.github.organization.toUpperCase()}-`;
+        
+        const agentRepos = orgRepos.filter(repo => 
+          repo.name.toUpperCase().startsWith(orgPrefix) || 
+          repo.name.toUpperCase().includes('-AGENT')
+        );
 
-    this.renderAIAgentMetrics(data);
+        const agents = [];
+
+        for (const repo of agentRepos.slice(0, 20)) { // Limit to avoid rate limits
+          try {
+            const runs = await GitHubAPI.getWorkflowRuns(repo.owner.login, repo.name, 5);
+            const latestRun = runs.workflow_runs?.[0];
+            
+            agents.push({
+              name: repo.name,
+              status: latestRun?.conclusion || 'unknown',
+              category: this.categorizeAgent(repo.name),
+              url: repo.html_url
+            });
+          } catch (error) {
+            agents.push({
+              name: repo.name,
+              status: 'unknown',
+              category: this.categorizeAgent(repo.name),
+              url: repo.html_url
+            });
+          }
+        }
+
+        return agents;
+      });
+
+      this.renderAIAgentMetrics(data);
+    } catch (error) {
+      console.warn('Failed to load AI agent metrics:', error);
+      this.renderAIAgentMetrics([]);
+    }
   },
 
   // Categorize agent by name
@@ -450,18 +552,35 @@ const Dashboard = {
 
   // Load deployment info
   async loadDeploymentInfo() {
-    const data = await Utils.getCached('deployment_info', async () => {
-      const runs = await GitHubAPI.getWorkflowRuns(CONFIG.github.username, 'cywf.github.io', 5);
-      const latestRun = runs.workflow_runs?.[0];
-      
-      return {
-        status: latestRun?.conclusion || 'unknown',
-        updatedAt: latestRun?.updated_at || new Date().toISOString(),
-        url: latestRun?.html_url || '#'
-      };
-    });
+    try {
+      const data = await Utils.getCached('deployment_info', async () => {
+        if (!CONFIG.github.username || !CONFIG.github.siteRepo) {
+          return {
+            status: 'unknown',
+            updatedAt: new Date().toISOString(),
+            url: '#'
+          };
+        }
 
-    this.renderDeploymentInfo(data);
+        const runs = await GitHubAPI.getWorkflowRuns(CONFIG.github.username, CONFIG.github.siteRepo, 5);
+        const latestRun = runs.workflow_runs?.[0];
+        
+        return {
+          status: latestRun?.conclusion || 'unknown',
+          updatedAt: latestRun?.updated_at || new Date().toISOString(),
+          url: latestRun?.html_url || '#'
+        };
+      });
+
+      this.renderDeploymentInfo(data);
+    } catch (error) {
+      console.warn('Failed to load deployment info:', error);
+      this.renderDeploymentInfo({
+        status: 'unknown',
+        updatedAt: new Date().toISOString(),
+        url: '#'
+      });
+    }
   },
 
   // Render deployment info
@@ -469,14 +588,15 @@ const Dashboard = {
     const container = document.getElementById('deployment-info');
     if (!container) return;
 
-    const statusColor = data.status === 'success' ? '#10b981' : '#f87171';
+    const statusColor = data.status === 'success' ? '#10b981' : data.status === 'failure' ? '#f87171' : '#fbbf24';
+    const statusLabel = data.status === 'success' ? 'Success' : data.status === 'failure' ? 'Failed' : 'Unknown';
     
     container.innerHTML = `
       <div class="deployment-status">
         <div class="status-indicator" style="background-color: ${statusColor}; box-shadow: 0 0 10px ${statusColor};"></div>
         <div>
           <div style="font-family: 'Courier New', monospace; font-weight: 600; color: var(--text-primary);">
-            Latest Deployment: ${data.status === 'success' ? 'Success' : 'Failed'}
+            Latest Deployment: ${statusLabel}
           </div>
           <div class="deployment-text">
             Deployed ${Utils.timeAgo(data.updatedAt)} · 
