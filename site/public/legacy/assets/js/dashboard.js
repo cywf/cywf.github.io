@@ -33,7 +33,14 @@ function parseRepoList(value, fallback) {
 
 function resolveStringConfig(runtimeValue, scriptValue, fallback) {
   if (typeof runtimeValue === 'string') {
-    return runtimeValue.trim();
+    const normalizedRuntimeValue = runtimeValue.trim();
+    if (normalizedRuntimeValue) {
+      return normalizedRuntimeValue;
+    }
+  }
+
+  if (typeof scriptValue === 'string') {
+    return scriptValue.trim() || fallback;
   }
 
   return scriptValue || fallback;

@@ -16,21 +16,23 @@ assert.equal(freshnessLabel('2026-07-05T00:00:00Z', new Date('2026-07-06T03:00:0
 
 const repositoryProjectsQuery = buildProjectsQuery('repository');
 const userProjectsQuery = buildProjectsQuery('user');
+const normalizedRepositoryProjectsQuery = repositoryProjectsQuery.replace(/\s+/g, ' ').trim();
+const normalizedUserProjectsQuery = userProjectsQuery.replace(/\s+/g, ' ').trim();
 
-assert.match(repositoryProjectsQuery, /query\(\$owner: String!, \$name: String!\)/);
-assert.match(repositoryProjectsQuery, /repository\(owner: \$owner, name: \$name\)/);
-assert.match(userProjectsQuery, /query\(\$login: String!\)/);
-assert.match(userProjectsQuery, /user\(login: \$login\)/);
-assert.match(repositoryProjectsQuery, /projectsV2\(first: 10, orderBy: \{ field: UPDATED_AT, direction: DESC \}\)/);
-assert.match(userProjectsQuery, /projectsV2\(first: 10, orderBy: \{ field: UPDATED_AT, direction: DESC \}\)/);
-assert.match(repositoryProjectsQuery, /repository\s*\{\s*nameWithOwner\s*\}/);
-assert.match(repositoryProjectsQuery, /labels\(first: 10\)\s*\{\s*nodes\s*\{\s*name\s*\}\s*\}/);
-assert.match(repositoryProjectsQuery, /assignees\(first: 10\)\s*\{\s*nodes\s*\{\s*login\s*\}\s*\}/);
-assert.match(repositoryProjectsQuery, /fieldValues\(first: 20\)\s*\{\s*nodes\s*\{\s*\.\.\. on ProjectV2ItemFieldSingleSelectValue/);
-assert.match(userProjectsQuery, /repository\s*\{\s*nameWithOwner\s*\}/);
-assert.match(userProjectsQuery, /labels\(first: 10\)\s*\{\s*nodes\s*\{\s*name\s*\}\s*\}/);
-assert.match(userProjectsQuery, /assignees\(first: 10\)\s*\{\s*nodes\s*\{\s*login\s*\}\s*\}/);
-assert.match(userProjectsQuery, /fieldValues\(first: 20\)\s*\{\s*nodes\s*\{\s*\.\.\. on ProjectV2ItemFieldSingleSelectValue/);
+assert.ok(normalizedRepositoryProjectsQuery.includes('query($owner: String!, $name: String!)'));
+assert.ok(normalizedRepositoryProjectsQuery.includes('repository(owner: $owner, name: $name)'));
+assert.ok(normalizedUserProjectsQuery.includes('query($login: String!)'));
+assert.ok(normalizedUserProjectsQuery.includes('user(login: $login)'));
+assert.ok(normalizedRepositoryProjectsQuery.includes('projectsV2(first: 10, orderBy: { field: UPDATED_AT, direction: DESC })'));
+assert.ok(normalizedUserProjectsQuery.includes('projectsV2(first: 10, orderBy: { field: UPDATED_AT, direction: DESC })'));
+assert.ok(normalizedRepositoryProjectsQuery.includes('repository { nameWithOwner }'));
+assert.ok(normalizedRepositoryProjectsQuery.includes('labels(first: 10) { nodes { name } }'));
+assert.ok(normalizedRepositoryProjectsQuery.includes('assignees(first: 10) { nodes { login } }'));
+assert.ok(normalizedRepositoryProjectsQuery.includes('fieldValues(first: 20) { nodes { ... on ProjectV2ItemFieldSingleSelectValue'));
+assert.ok(normalizedUserProjectsQuery.includes('repository { nameWithOwner }'));
+assert.ok(normalizedUserProjectsQuery.includes('labels(first: 10) { nodes { name } }'));
+assert.ok(normalizedUserProjectsQuery.includes('assignees(first: 10) { nodes { login } }'));
+assert.ok(normalizedUserProjectsQuery.includes('fieldValues(first: 20) { nodes { ... on ProjectV2ItemFieldSingleSelectValue'));
 assert.equal((repositoryProjectsQuery.match(/ProjectV2ItemFieldSingleSelectValue/g) || []).length, 1);
 assert.equal((userProjectsQuery.match(/ProjectV2ItemFieldSingleSelectValue/g) || []).length, 1);
 
