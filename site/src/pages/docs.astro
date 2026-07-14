@@ -1,17 +1,249 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import { marked } from 'marked';
-const md = readFileSync(join(process.cwd(), '..', 'README.md'), 'utf-8');
-marked.use({ gfm: true, breaks: false });
-const tokens = marked.lexer(md); let seenH1 = false;
-const toc = tokens.filter((t:any)=>t.type==='heading' && t.depth>1 && t.depth<=3).map((t:any)=>({depth:t.depth, text:t.text, slug:t.text.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}));
-const renderer = new marked.Renderer();
-renderer.heading = ({tokens, depth}: any) => { const text = tokens.map((x:any)=>x.raw).join(''); if (depth===1) { if (seenH1) return ''; seenH1=true; } const slug = text.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); return `<h${depth} id="${slug}"><a class="anchor" href="#${slug}" aria-label="Link to ${text}">#</a> ${text}</h${depth}>`; };
-const htmlContent = marked.parse(md, { renderer }) as string;
+import projectWiki from '../../public/data/project-wiki.json';
+
+type ProjectWikiEntry = typeof projectWiki.projects[number];
+
+const projects = projectWiki.projects as ProjectWikiEntry[];
+const updatedAt = new Date(projectWiki.generatedAt).toLocaleString('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  hour: 'numeric',
+  minute: '2-digit',
+});
+
+const formatDate = (value: string) =>
+  new Date(value).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+const projectGroups = [
+  {
+    label: 'Mission systems',
+    description: 'Tactical, security, infrastructure, and operational tooling projects.',
+    projects: projects.filter((project) =>
+      ['vTOC', 'AegisNet', 'SeaSentinel', 'sentinel-project', 'FortiPath', 'Infraguard', 'zerotier-toolkit', 'Heimdall', 'netninja'].includes(project.name),
+    ),
+  },
+  {
+    label: 'Developer + learning tools',
+    description: 'Utilities, CTF/training projects, and portfolio infrastructure.',
+    projects: projects.filter((project) =>
+      ['tle-fetcher', 'the-terraformer', 'ctf-kit', 'Sol-Sentry', 'AirwayAtlas', 'cywf.github.io'].includes(project.name),
+    ),
+  },
+  {
+    label: 'Product concepts',
+    description: 'Public-facing product prototypes with enough polish to inspect.',
+    projects: projects.filter((project) => ['AudiFi'].includes(project.name)),
+  },
+].filter((group) => group.projects.length > 0);
+
+const totalFiles = projects.reduce((sum, project) => sum + project.codebase.fileCount, 0);
+const languageCounts = projects.reduce<Record<string, number>>((acc, project) => {
+  acc[project.language] = (acc[project.language] ?? 0) + 1;
+  return acc;
+}, {});
+const topLanguages = Object.entries(languageCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
 ---
-<Layout title="Documentation" description="README-driven project documentation rendered through a maintainable Markdown pipeline.">
-<section class="command-hero rounded-[2rem] border border-primary/20 bg-base-200 p-6 md:p-10 shadow-2xl mb-8"><p class="badge badge-primary badge-lg mb-4">Product documentation</p><h1 class="text-4xl md:text-6xl font-black mb-4">Documentation for the portfolio and command center.</h1><p class="max-w-3xl text-lg text-base-content/75">README content is rendered with a Markdown parser instead of brittle regex replacements, preserving lists, code blocks, headings, tables, and anchors.</p></section>
-<div class="grid gap-8 lg:grid-cols-[18rem_1fr]"><aside class="card bg-base-200 shadow-xl h-max lg:sticky lg:top-24"><div class="card-body"><h2 class="card-title">Contents</h2><ul class="menu menu-sm">{toc.map(i => <li class={i.depth===3?'ml-4':''}><a href={`#${i.slug}`}>{i.text}</a></li>)}</ul><a class="btn btn-outline btn-sm mt-4" href="https://github.com/cywf/cywf.github.io/blob/main/README.md" target="_blank" rel="noopener noreferrer">Edit on GitHub</a></div></aside><article class="card bg-base-200 shadow-xl"><div class="card-body prose prose-invert max-w-none docs-content"><Fragment set:html={htmlContent} /><hr/><h2 id="migration-notes">Migration notes</h2><p>The portfolio now treats the legacy dashboard as one preserved view inside a broader Astro operations hub. Native routes provide static HTML from snapshot JSON first, then enhance charts and diagrams only where that improves the experience.</p></div></article></div>
+
+<Layout
+  title="Project Docs Wiki"
+  description="A public mini project documentation wiki for KP's most presentable GitHub repositories, with overview cards, collapsible deep dives, and codebase visualization diagrams."
+>
+  <section class="command-hero rounded-[2rem] border border-primary/20 bg-base-200 p-6 shadow-2xl md:p-10">
+    <p class="badge badge-primary badge-lg mb-4">Mini project docs wiki</p>
+    <div class="grid gap-8 lg:grid-cols-[1fr_22rem] lg:items-end">
+      <div>
+        <h1 class="mb-4 text-4xl font-black md:text-6xl">Public projects, documented like a field wiki.</h1>
+        <p class="max-w-3xl text-lg text-base-content/75">
+          Presentable public repositories now have a single documentation entrypoint with quick context, direct board/wiki/issue/PR links, deployment URLs, and collapsible deeper notes for codebase structure.
+        </p>
+      </div>
+      <div class="stats stats-vertical border border-base-content/10 bg-base-100 shadow-xl">
+        <div class="stat">
+          <div class="stat-title">Projects indexed</div>
+          <div class="stat-value text-primary">{projects.length}</div>
+          <div class="stat-desc">public, non-archived repos</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Files mapped</div>
+          <div class="stat-value text-secondary">{totalFiles.toLocaleString()}</div>
+          <div class="stat-desc">from GitHub tree JSON</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-8 grid gap-6 lg:grid-cols-[18rem_1fr]">
+    <aside class="card h-max border border-base-content/10 bg-base-200 shadow-xl lg:sticky lg:top-24">
+      <div class="card-body">
+        <h2 class="card-title">Wiki index</h2>
+        <p class="text-sm text-base-content/65">Generated {updatedAt}. Diagrams are rendered from repository JSON/tree metadata.</p>
+        <ul class="menu menu-sm rounded-box bg-base-100">
+          {projectGroups.map((group) => (
+            <li>
+              <details open>
+                <summary>{group.label}</summary>
+                <ul>
+                  {group.projects.map((project) => (
+                    <li><a href={`#${project.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>{project.name}</a></li>
+                  ))}
+                </ul>
+              </details>
+            </li>
+          ))}
+        </ul>
+        <div class="divider my-1">Stacks</div>
+        <div class="flex flex-wrap gap-2">
+          {topLanguages.map(([language, count]) => (
+            <span class="badge badge-outline">{language} · {count}</span>
+          ))}
+        </div>
+        <a class="btn btn-outline btn-sm mt-4" href="https://github.com/cywf?tab=repositories" target="_blank" rel="noopener noreferrer">All public repos</a>
+      </div>
+    </aside>
+
+    <div class="space-y-8">
+      <section class="card border border-base-content/10 bg-base-200 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title text-2xl">How to use this page</h2>
+          <div class="grid gap-4 md:grid-cols-3">
+            <div class="rounded-2xl border border-base-content/10 bg-base-100 p-4">
+              <h3 class="font-bold text-primary">Overview first</h3>
+              <p class="text-sm text-base-content/70">Each card starts with a short product/repo summary and the most useful status metadata.</p>
+            </div>
+            <div class="rounded-2xl border border-base-content/10 bg-base-100 p-4">
+              <h3 class="font-bold text-secondary">Links up front</h3>
+              <p class="text-sm text-base-content/70">Jump straight to GitHub Discussions, Projects, Wiki, Issues, PRs, and deployed sites.</p>
+            </div>
+            <div class="rounded-2xl border border-base-content/10 bg-base-100 p-4">
+              <h3 class="font-bold text-accent">Collapse for depth</h3>
+              <p class="text-sm text-base-content/70">Open the details panel for codebase maps, top folders, dominant file types, and repo metadata.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {projectGroups.map((group) => (
+        <section class="space-y-5" aria-labelledby={`${group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-heading`}>
+          <div>
+            <p class="badge badge-primary badge-outline mb-2">{group.projects.length} projects</p>
+            <h2 id={`${group.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-heading`} class="text-3xl font-black">{group.label}</h2>
+            <p class="text-base-content/70">{group.description}</p>
+          </div>
+
+          {group.projects.map((project) => {
+            const slug = project.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            const linkItems = [
+              ['Repo', project.links.repository],
+              ['Discussions', project.links.discussionBoard],
+              ['Project board', project.links.githubProjectBoard],
+              ['Wiki', project.links.wiki],
+              ['Issues', project.links.issues],
+              ['New issue', project.links.newIssue],
+              ['Pull requests', project.links.pullRequests],
+              ['PR template', project.links.newPullRequest],
+              ['Deployed site', project.deployedUrl],
+            ];
+
+            return (
+              <article id={slug} class="card border border-base-content/10 bg-base-200 shadow-xl scroll-mt-28">
+                <div class="card-body gap-5">
+                  <div class="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                    <div>
+                      <div class="mb-2 flex flex-wrap items-center gap-2">
+                        <h3 class="card-title text-2xl md:text-3xl">{project.name}</h3>
+                        <span class="badge badge-primary">{project.language}</span>
+                        <span class="badge badge-outline">{project.license}</span>
+                      </div>
+                      <p class="max-w-4xl text-base text-base-content/75">{project.description}</p>
+                    </div>
+                    <div class="stats stats-horizontal w-full max-w-md border border-base-content/10 bg-base-100 shadow md:w-auto">
+                      <div class="stat p-4">
+                        <div class="stat-title text-xs">Open issues</div>
+                        <div class="stat-value text-xl">{project.openIssues}</div>
+                      </div>
+                      <div class="stat p-4">
+                        <div class="stat-title text-xs">Files</div>
+                        <div class="stat-value text-xl">{project.codebase.fileCount}</div>
+                      </div>
+                      <div class="stat p-4">
+                        <div class="stat-title text-xs">Updated</div>
+                        <div class="stat-value text-sm">{formatDate(project.updatedAt)}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="rounded-2xl border border-base-content/10 bg-base-100 p-4">
+                    <h4 class="mb-2 font-bold">Overview</h4>
+                    <p class="text-sm leading-6 text-base-content/75">{project.overview}</p>
+                  </div>
+
+                  <div>
+                    <h4 class="mb-3 font-bold">Project links</h4>
+                    <div class="flex flex-wrap gap-2">
+                      {linkItems.map(([label, href]) => (
+                        href ? <a class="btn btn-sm btn-outline" href={href} target="_blank" rel="noopener noreferrer">{label}</a> : null
+                      ))}
+                    </div>
+                  </div>
+
+                  {project.topics.length > 0 && (
+                    <div class="flex flex-wrap gap-2">
+                      {project.topics.map((topic) => <span class="badge badge-ghost">#{topic}</span>)}
+                    </div>
+                  )}
+
+                  <details class="collapse collapse-arrow border border-base-content/10 bg-base-100">
+                    <summary class="collapse-title text-lg font-bold">Open detailed project wiki: codebase diagram, folders, file types, and repo metadata</summary>
+                    <div class="collapse-content space-y-5">
+                      <div class="rounded-2xl border border-base-content/10 bg-base-200 p-3">
+                        <img src={project.diagram} alt={`${project.name} codebase visualization diagram`} class="w-full rounded-xl border border-base-content/10 bg-slate-950" loading="lazy" />
+                      </div>
+
+                      <div class="grid gap-4 lg:grid-cols-2">
+                        <div class="rounded-2xl border border-base-content/10 bg-base-200 p-4">
+                          <h5 class="mb-3 font-bold">Top repository areas</h5>
+                          <div class="overflow-x-auto">
+                            <table class="table table-sm">
+                              <thead><tr><th>Folder/root</th><th class="text-right">Files</th></tr></thead>
+                              <tbody>
+                                {project.codebase.topFolders.map((folder) => (
+                                  <tr><td>{folder.name}</td><td class="text-right">{folder.files}</td></tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+
+                        <div class="rounded-2xl border border-base-content/10 bg-base-200 p-4">
+                          <h5 class="mb-3 font-bold">Dominant file types</h5>
+                          <div class="flex flex-wrap gap-2">
+                            {Object.entries(project.codebase.extensions).map(([extension, count]) => (
+                              <span class="badge badge-outline">.{extension} · {count}</span>
+                            ))}
+                          </div>
+                          <div class="divider"></div>
+                          <dl class="grid grid-cols-2 gap-3 text-sm">
+                            <div><dt class="text-base-content/60">Repository</dt><dd class="font-semibold">{project.fullName}</dd></div>
+                            <div><dt class="text-base-content/60">Stars</dt><dd class="font-semibold">{project.stars}</dd></div>
+                            <div><dt class="text-base-content/60">Primary language</dt><dd class="font-semibold">{project.language}</dd></div>
+                            <div><dt class="text-base-content/60">License</dt><dd class="font-semibold">{project.license}</dd></div>
+                          </dl>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              </article>
+            );
+          })}
+        </section>
+      ))}
+    </div>
+  </section>
 </Layout>

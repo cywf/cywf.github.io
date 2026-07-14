@@ -1,0 +1,1008 @@
+{
+  "generatedAt": "2026-07-14T20:05:54Z",
+  "source": "GitHub public repository REST API + Git tree JSON; diagram screenshots generated locally from that JSON metadata.",
+  "projects": [
+    {
+      "name": "tle-fetcher",
+      "fullName": "cywf/tle-fetcher",
+      "description": "Terminal utility to retrieve TLE data from the TLE API using NORAD catalog ID",
+      "overview": "This repository contains a robust terminal-based utility for fetching up-to-date Two-Line Element (TLE) data for satellites from publicly available sources. It supports multiple data providers\u2014CelesTrak and Ivan's TLE API by default, with optional fallback to Space-Track and N2YO when credentials are provided. The tool can fetch single IDs interactively or p",
+      "language": "TypeScript",
+      "license": "Unspecified",
+      "topics": [],
+      "stars": 0,
+      "openIssues": 9,
+      "updatedAt": "2026-07-14T04:26:07Z",
+      "deployedUrl": "https://cywf.github.io/tle-fetcher/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "site",
+            "files": 37
+          },
+          {
+            "name": "web",
+            "files": 22
+          },
+          {
+            "name": ".github",
+            "files": 8
+          },
+          {
+            "name": "docs",
+            "files": 7
+          },
+          {
+            "name": "(root)",
+            "files": 6
+          },
+          {
+            "name": "tests",
+            "files": 5
+          }
+        ],
+        "extensions": {
+          "py": 15,
+          "json": 12,
+          "tsx": 12,
+          "astro": 11,
+          "md": 10
+        },
+        "fileCount": 99
+      },
+      "diagram": "/docs/project-wiki/screenshots/tle-fetcher.png",
+      "links": {
+        "repository": "https://github.com/cywf/tle-fetcher",
+        "discussionBoard": "https://github.com/cywf/tle-fetcher/discussions",
+        "githubProjectBoard": "https://github.com/cywf/tle-fetcher/projects",
+        "wiki": "https://github.com/cywf/tle-fetcher/wiki",
+        "issues": "https://github.com/cywf/tle-fetcher/issues",
+        "newIssue": "https://github.com/cywf/tle-fetcher/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/tle-fetcher/pulls",
+        "newPullRequest": "https://github.com/cywf/tle-fetcher/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "vTOC",
+      "fullName": "cywf/vTOC",
+      "description": "Virtual Tactical Operations Center (vTOC)",
+      "overview": "vTOC pairs a FastAPI backend, a map-first Vite frontend, and automation agents to deliver a virtual tactical operations center. This README now serves as the global navigation hub\u2014follow the links below to get to the right branch guide, documentation, or collaboration surface quickly.",
+      "language": "Python",
+      "license": "MIT",
+      "topics": [],
+      "stars": 0,
+      "openIssues": 2,
+      "updatedAt": "2026-07-10T05:14:03Z",
+      "deployedUrl": "https://cywf.github.io/vTOC/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "docs",
+            "files": 64
+          },
+          {
+            "name": "services",
+            "files": 59
+          },
+          {
+            "name": "scripts",
+            "files": 50
+          },
+          {
+            "name": "backend",
+            "files": 43
+          },
+          {
+            "name": "frontend",
+            "files": 41
+          },
+          {
+            "name": ".github",
+            "files": 34
+          }
+        ],
+        "extensions": {
+          "md": 139,
+          "py": 124,
+          "yml": 39,
+          "tsx": 26,
+          "json": 23
+        },
+        "fileCount": 456
+      },
+      "diagram": "/docs/project-wiki/screenshots/vtoc.png",
+      "links": {
+        "repository": "https://github.com/cywf/vTOC",
+        "discussionBoard": "https://github.com/cywf/vTOC/discussions",
+        "githubProjectBoard": "https://github.com/cywf/vTOC/projects",
+        "wiki": "https://github.com/cywf/vTOC/wiki",
+        "issues": "https://github.com/cywf/vTOC/issues",
+        "newIssue": "https://github.com/cywf/vTOC/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/vTOC/pulls",
+        "newPullRequest": "https://github.com/cywf/vTOC/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "the-terraformer",
+      "fullName": "cywf/the-terraformer",
+      "description": "\ud83d\ude80 Introducing The Terraformer \ud83c\udf0d - a spectacular fusion of ChatGPT, AutoGPT, and cutting-edge infrastructure tools! \ud83d\udee0\ufe0f\ud83d\udcac Empower your DevOps with seamless interactions, lightning-fast provisioning, and smooth management of your cloud ecosystem. \ud83c\udf29\ufe0f\ud83d\udcbb Join us on this thrilling journey to reshape the future of infrastructure automation! \ud83c\udf1f\ud83d\ude0e",
+      "overview": "The Terraformer is an open-source project that aims to streamline the process of infrastructure provisioning and management by leveraging the power of ChatGPT and AutoGPT. This project provides a ChatGPT plugin to interact with AutoGPT, which in turn provisions infrastructure using Terraform and Ansible.",
+      "language": "Astro",
+      "license": "MIT",
+      "topics": [
+        "ai",
+        "automation",
+        "chatgpt",
+        "infrastructure",
+        "plugin",
+        "terraform"
+      ],
+      "stars": 4,
+      "openIssues": 1,
+      "updatedAt": "2026-04-08T16:53:03Z",
+      "deployedUrl": "https://cywf.github.io/the-terraformer/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "site",
+            "files": 30
+          },
+          {
+            "name": ".github",
+            "files": 5
+          },
+          {
+            "name": "(root)",
+            "files": 3
+          },
+          {
+            "name": "assets",
+            "files": 1
+          }
+        ],
+        "extensions": {
+          "astro": 11,
+          "json": 5,
+          "ts": 5,
+          "md": 4,
+          "tsx": 4
+        },
+        "fileCount": 39
+      },
+      "diagram": "/docs/project-wiki/screenshots/the-terraformer.png",
+      "links": {
+        "repository": "https://github.com/cywf/the-terraformer",
+        "discussionBoard": "https://github.com/cywf/the-terraformer/discussions",
+        "githubProjectBoard": "https://github.com/cywf/the-terraformer/projects",
+        "wiki": "https://github.com/cywf/the-terraformer/wiki",
+        "issues": "https://github.com/cywf/the-terraformer/issues",
+        "newIssue": "https://github.com/cywf/the-terraformer/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/the-terraformer/pulls",
+        "newPullRequest": "https://github.com/cywf/the-terraformer/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "ctf-kit",
+      "fullName": "cywf/ctf-kit",
+      "description": "A Capture-the-Flag (CTF) Starter Kit",
+      "overview": "Welcome to the CTF-Kit Repository \ud83c\udf10 **Live Site**: https://cywf.github.io/ctf-kit/ Welcome to the CTF-Kit repository! This project is designed to be a collaborative and evolving resource for anyone interested in participating in Capture The Flag (CTF) competitions. Whether you're a seasoned veteran or a newcomer to the world of CTFs, this repository aims to ",
+      "language": "Astro",
+      "license": "MIT",
+      "topics": [],
+      "stars": 1,
+      "openIssues": 0,
+      "updatedAt": "2026-02-14T21:07:22Z",
+      "deployedUrl": "https://cywf.github.io/ctf-kit/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "site",
+            "files": 32
+          },
+          {
+            "name": ".github",
+            "files": 11
+          },
+          {
+            "name": "docs",
+            "files": 11
+          },
+          {
+            "name": "scripts",
+            "files": 7
+          },
+          {
+            "name": "(root)",
+            "files": 4
+          },
+          {
+            "name": "mermaid",
+            "files": 2
+          }
+        ],
+        "extensions": {
+          "md": 21,
+          "astro": 11,
+          "json": 7,
+          "yml": 6,
+          "ts": 5
+        },
+        "fileCount": 67
+      },
+      "diagram": "/docs/project-wiki/screenshots/ctf-kit.png",
+      "links": {
+        "repository": "https://github.com/cywf/ctf-kit",
+        "discussionBoard": "https://github.com/cywf/ctf-kit/discussions",
+        "githubProjectBoard": "https://github.com/cywf/ctf-kit/projects",
+        "wiki": "https://github.com/cywf/ctf-kit/wiki",
+        "issues": "https://github.com/cywf/ctf-kit/issues",
+        "newIssue": "https://github.com/cywf/ctf-kit/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/ctf-kit/pulls",
+        "newPullRequest": "https://github.com/cywf/ctf-kit/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "AegisNet",
+      "fullName": "cywf/AegisNet",
+      "description": "AegisNet: An advanced, integrated defense solution leveraging AI, autonomous drones, and advanced detection systems for comprehensive situational awareness and security.",
+      "overview": "Visit the AegisNet Website The live site features: Project Information** - Overview, quick start, and tech stack Statistics** - Repository metrics and activity charts Discussions** - Browse community discussions Development Board** - Track project progress Documentation** - Comprehensive guides and docs",
+      "language": "TypeScript",
+      "license": "MIT",
+      "topics": [
+        "ai",
+        "defense",
+        "drones",
+        "simulation",
+        "tactical"
+      ],
+      "stars": 3,
+      "openIssues": 0,
+      "updatedAt": "2026-02-01T16:58:32Z",
+      "deployedUrl": "https://cywf.github.io/AegisNet/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "site",
+            "files": 37
+          },
+          {
+            "name": "infra",
+            "files": 24
+          },
+          {
+            "name": "(root)",
+            "files": 14
+          },
+          {
+            "name": ".github",
+            "files": 9
+          },
+          {
+            "name": "mermaid",
+            "files": 5
+          },
+          {
+            "name": "docs",
+            "files": 4
+          }
+        ],
+        "extensions": {
+          "tf": 15,
+          "md": 13,
+          "mmd": 10,
+          "json": 9,
+          "astro": 9
+        },
+        "fileCount": 98
+      },
+      "diagram": "/docs/project-wiki/screenshots/aegisnet.png",
+      "links": {
+        "repository": "https://github.com/cywf/AegisNet",
+        "discussionBoard": "https://github.com/cywf/AegisNet/discussions",
+        "githubProjectBoard": "https://github.com/cywf/AegisNet/projects",
+        "wiki": "https://github.com/cywf/AegisNet/wiki",
+        "issues": "https://github.com/cywf/AegisNet/issues",
+        "newIssue": "https://github.com/cywf/AegisNet/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/AegisNet/pulls",
+        "newPullRequest": "https://github.com/cywf/AegisNet/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "SeaSentinel",
+      "fullName": "cywf/SeaSentinel",
+      "description": "SeaSentinel: An Intrusion Detection System (IDS) designed to enhance the security of GMDSS maritime communications, monitoring for unauthorized access and anomalies.",
+      "overview": "SeaSentinel: An Intrusion Detection System (IDS) designed to enhance the security of GMDSS maritime communications, monitoring for unauthorized access and anomalies. \ud83c\udf10 **View Documentation Site SeaSentinel provides comprehensive security monitoring for the Global Maritime Distress and Safety System (GMDSS), covering:",
+      "language": "TypeScript",
+      "license": "MIT",
+      "topics": [
+        "communication",
+        "gmdss",
+        "ids",
+        "intrusion-detection-system"
+      ],
+      "stars": 1,
+      "openIssues": 0,
+      "updatedAt": "2026-01-29T03:54:41Z",
+      "deployedUrl": "https://cywf.github.io/SeaSentinel/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "site",
+            "files": 30
+          },
+          {
+            "name": ".github",
+            "files": 4
+          },
+          {
+            "name": "(root)",
+            "files": 3
+          }
+        ],
+        "extensions": {
+          "astro": 10,
+          "ts": 6,
+          "tsx": 6,
+          "md": 5,
+          "(none)": 2
+        },
+        "fileCount": 37
+      },
+      "diagram": "/docs/project-wiki/screenshots/seasentinel.png",
+      "links": {
+        "repository": "https://github.com/cywf/SeaSentinel",
+        "discussionBoard": "https://github.com/cywf/SeaSentinel/discussions",
+        "githubProjectBoard": "https://github.com/cywf/SeaSentinel/projects",
+        "wiki": "https://github.com/cywf/SeaSentinel/wiki",
+        "issues": "https://github.com/cywf/SeaSentinel/issues",
+        "newIssue": "https://github.com/cywf/SeaSentinel/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/SeaSentinel/pulls",
+        "newPullRequest": "https://github.com/cywf/SeaSentinel/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "AudiFi",
+      "fullName": "cywf/AudiFi",
+      "description": "AudiFi is a next-generation music IP platform where independent artists mint 1/1 master recordings as NFTs, retain full ownership, and earn perpetual royalties through programmable smart contracts.",
+      "overview": "AudiFi** is a Web3 platform for independent music artists to mint their tracks as NFTs, retain full ownership, and earn perpetual royalties through the innovative \"Mover Advantage\" system. AudiFi empowers artists to: Upload music tracks and artwork Configure release metadata (genre, BPM, mood, description)",
+      "language": "TypeScript",
+      "license": "MIT",
+      "topics": [
+        "minting",
+        "music-nft",
+        "platform",
+        "web3"
+      ],
+      "stars": 0,
+      "openIssues": 7,
+      "updatedAt": "2026-01-16T20:41:55Z",
+      "deployedUrl": "https://audifi.io",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "src",
+            "files": 109
+          },
+          {
+            "name": "docs",
+            "files": 78
+          },
+          {
+            "name": "server",
+            "files": 32
+          },
+          {
+            "name": "(root)",
+            "files": 24
+          },
+          {
+            "name": "db",
+            "files": 12
+          },
+          {
+            "name": "deploy",
+            "files": 5
+          }
+        ],
+        "extensions": {
+          "tsx": 90,
+          "md": 83,
+          "ts": 55,
+          "json": 11,
+          "(none)": 6
+        },
+        "fileCount": 264
+      },
+      "diagram": "/docs/project-wiki/screenshots/audifi.png",
+      "links": {
+        "repository": "https://github.com/cywf/AudiFi",
+        "discussionBoard": "https://github.com/cywf/AudiFi/discussions",
+        "githubProjectBoard": "https://github.com/cywf/AudiFi/projects",
+        "wiki": "https://github.com/cywf/AudiFi/wiki",
+        "issues": "https://github.com/cywf/AudiFi/issues",
+        "newIssue": "https://github.com/cywf/AudiFi/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/AudiFi/pulls",
+        "newPullRequest": "https://github.com/cywf/AudiFi/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "sentinel-project",
+      "fullName": "cywf/sentinel-project",
+      "description": "The Sentinel Project is an advanced security system designed to protect critical infrastructure industries from cyber threats. Using cutting-edge technology and customized algorithms, Sentinel Project aims to reduce the need for human intervention in security incidents, while providing real-time threat intelligence & incident response capabilities",
+      "overview": "\ud83c\udf10 **Live Site** | \ud83d\udcca Statistics | \ud83d\udcac Discussions | \ud83d\udcda Documentation The Sentinel Project is a cutting-edge AI-powered security system that uses Microsoft AutoGen to provide autonomous threat intelligence and incident response for critical infrastructure. Designed by FolkvarLabs, the Sentinel Project features a set of highly specialized \"Sentries\" - AI agents th",
+      "language": "TypeScript",
+      "license": "MIT",
+      "topics": [
+        "ai",
+        "artificial-intelligence",
+        "cloud",
+        "drone",
+        "facial-recognition",
+        "industrial-automation",
+        "machine-learning",
+        "security",
+        "telemetry"
+      ],
+      "stars": 2,
+      "openIssues": 0,
+      "updatedAt": "2026-01-16T00:22:29Z",
+      "deployedUrl": "https://cywf.github.io/sentinel-project/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "terraform",
+            "files": 105
+          },
+          {
+            "name": "ai",
+            "files": 91
+          },
+          {
+            "name": "site",
+            "files": 35
+          },
+          {
+            "name": "autogen",
+            "files": 15
+          },
+          {
+            "name": "docs",
+            "files": 15
+          },
+          {
+            "name": "(root)",
+            "files": 13
+          }
+        ],
+        "extensions": {
+          "md": 116,
+          "tf": 93,
+          "py": 13,
+          "astro": 12,
+          "(none)": 8
+        },
+        "fileCount": 291
+      },
+      "diagram": "/docs/project-wiki/screenshots/sentinel-project.png",
+      "links": {
+        "repository": "https://github.com/cywf/sentinel-project",
+        "discussionBoard": "https://github.com/cywf/sentinel-project/discussions",
+        "githubProjectBoard": "https://github.com/cywf/sentinel-project/projects",
+        "wiki": "https://github.com/cywf/sentinel-project/wiki",
+        "issues": "https://github.com/cywf/sentinel-project/issues",
+        "newIssue": "https://github.com/cywf/sentinel-project/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/sentinel-project/pulls",
+        "newPullRequest": "https://github.com/cywf/sentinel-project/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "FortiPath",
+      "fullName": "cywf/FortiPath",
+      "description": "FortiPath: a comprehensive executive protection tool designed to enhance safety and efficiency of protection details. Using state-of-the-art technologies, aiming to revolutionize the executive protection industry. Features include Advance Surveys, Communication, OSINT, Report Writing, Risk Assessment, Infrastructure Deployment, and Network Security",
+      "overview": "FortiPath: Comprehensive Security Planning Status:** \ud83d\udea7 Active Development | **Version:** 0.1.0 \u2192 1.0.0 (in progress) FortiPath is a comprehensive executive protection toolkit designed to enhance the safety, efficiency, and effectiveness of protection details. By leveraging state-of-the-art technologies and methodologies\u2014including AI-powered threat analysis, ",
+      "language": "Python",
+      "license": "NOASSERTION",
+      "topics": [
+        "communication",
+        "executive-protection",
+        "infrastructure",
+        "network-security",
+        "osint",
+        "report-writing",
+        "risk-assessment",
+        "security",
+        "tak-server",
+        "terraform",
+        "zerotier"
+      ],
+      "stars": 4,
+      "openIssues": 8,
+      "updatedAt": "2026-01-16T00:18:30Z",
+      "deployedUrl": "https://cywf.github.io/FortiPath/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "infra",
+            "files": 90
+          },
+          {
+            "name": "scripts",
+            "files": 42
+          },
+          {
+            "name": "site",
+            "files": 25
+          },
+          {
+            "name": "docs",
+            "files": 14
+          },
+          {
+            "name": ".github",
+            "files": 10
+          },
+          {
+            "name": "(root)",
+            "files": 9
+          }
+        ],
+        "extensions": {
+          "tf": 56,
+          "py": 37,
+          "md": 32,
+          "go": 20,
+          "astro": 9
+        },
+        "fileCount": 205
+      },
+      "diagram": "/docs/project-wiki/screenshots/fortipath.png",
+      "links": {
+        "repository": "https://github.com/cywf/FortiPath",
+        "discussionBoard": "https://github.com/cywf/FortiPath/discussions",
+        "githubProjectBoard": "https://github.com/cywf/FortiPath/projects",
+        "wiki": "https://github.com/cywf/FortiPath/wiki",
+        "issues": "https://github.com/cywf/FortiPath/issues",
+        "newIssue": "https://github.com/cywf/FortiPath/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/FortiPath/pulls",
+        "newPullRequest": "https://github.com/cywf/FortiPath/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "Sol-Sentry",
+      "fullName": "cywf/Sol-Sentry",
+      "description": "A custom AI that specializes in Solana Smart Contracts, Blockchain, and Cryptocurrency. It offers in-depth knowledge about Solana's technology, coding intricacies, and best practices, aiming to enhance the security and efficiency of Solana development",
+      "overview": "Welcome to Sol-Sentry, an innovative AI tool designed for enhancing the security and efficiency of Solana smart contract development. Utilizing advanced AI analysis through GPT-4, Sol-Sentry offers in-depth analysis, predictive threat modeling, and best practice recommendations to fortify blockchain projects.",
+      "language": "TypeScript",
+      "license": "Unspecified",
+      "topics": [
+        "ai",
+        "blockchain-security",
+        "python",
+        "rust",
+        "smart-contracts-audit",
+        "solana"
+      ],
+      "stars": 0,
+      "openIssues": 1,
+      "updatedAt": "2026-01-16T00:16:07Z",
+      "deployedUrl": "https://cywf.github.io/Sol-Sentry/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "site",
+            "files": 37
+          },
+          {
+            "name": "contracts",
+            "files": 33
+          },
+          {
+            "name": "terraform",
+            "files": 16
+          },
+          {
+            "name": "gpt-functions",
+            "files": 11
+          },
+          {
+            "name": "scripts",
+            "files": 7
+          },
+          {
+            "name": ".github",
+            "files": 5
+          }
+        ],
+        "extensions": {
+          "rs": 24,
+          "json": 17,
+          "md": 14,
+          "tf": 12,
+          "astro": 11
+        },
+        "fileCount": 120
+      },
+      "diagram": "/docs/project-wiki/screenshots/sol-sentry.png",
+      "links": {
+        "repository": "https://github.com/cywf/Sol-Sentry",
+        "discussionBoard": "https://github.com/cywf/Sol-Sentry/discussions",
+        "githubProjectBoard": "https://github.com/cywf/Sol-Sentry/projects",
+        "wiki": "https://github.com/cywf/Sol-Sentry/wiki",
+        "issues": "https://github.com/cywf/Sol-Sentry/issues",
+        "newIssue": "https://github.com/cywf/Sol-Sentry/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/Sol-Sentry/pulls",
+        "newPullRequest": "https://github.com/cywf/Sol-Sentry/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "Infraguard",
+      "fullName": "cywf/Infraguard",
+      "description": "Repo containing automated server provisioning and configuration scripts, intended to reduce manual system administration tasks, and securing your infrastructure from launch",
+      "overview": "/|\\ ^ **Infraguard** ^ /|\\ [//]:\"for_entertainment_purposes_only_-_W01F\" _Repo containing automated server provisioning and configuration scripts, intended to reduce manual system administration tasks, and securing your infrastructure from launch._ View the Interactive Documentation Site \u2192",
+      "language": "TypeScript",
+      "license": "MIT",
+      "topics": [
+        "configuration-scripts",
+        "networking",
+        "server-provisioning",
+        "system-administration"
+      ],
+      "stars": 3,
+      "openIssues": 0,
+      "updatedAt": "2025-11-03T13:05:21Z",
+      "deployedUrl": "https://cywf.github.io/Infraguard/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "site",
+            "files": 32
+          },
+          {
+            "name": "terraform",
+            "files": 23
+          },
+          {
+            "name": "cloudinit",
+            "files": 22
+          },
+          {
+            "name": "ansible",
+            "files": 7
+          },
+          {
+            "name": "(root)",
+            "files": 5
+          },
+          {
+            "name": ".github",
+            "files": 4
+          }
+        ],
+        "extensions": {
+          "md": 25,
+          "yaml": 19,
+          "astro": 11,
+          "ts": 8,
+          "tf": 8
+        },
+        "fileCount": 105
+      },
+      "diagram": "/docs/project-wiki/screenshots/infraguard.png",
+      "links": {
+        "repository": "https://github.com/cywf/Infraguard",
+        "discussionBoard": "https://github.com/cywf/Infraguard/discussions",
+        "githubProjectBoard": "https://github.com/cywf/Infraguard/projects",
+        "wiki": "https://github.com/cywf/Infraguard/wiki",
+        "issues": "https://github.com/cywf/Infraguard/issues",
+        "newIssue": "https://github.com/cywf/Infraguard/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/Infraguard/pulls",
+        "newPullRequest": "https://github.com/cywf/Infraguard/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "AirwayAtlas",
+      "fullName": "cywf/AirwayAtlas",
+      "description": "\u2708\ufe0f AirwayAtlas: Your go-to resource for airport city data in North America & the Caribbean! \ud83c\udf0e Featuring an interactive map \ud83d\uddfa\ufe0f, powerful search \ud83d\udd0d, and an easy-to-integrate RESTful API \ud83d\ude80",
+      "overview": "Your go-to resource for airport city data in North America & the Caribbean! Featuring an interactive map \ud83d\uddfa\ufe0f, powerful search \ud83d\udd0d, and an easy-to-integrate RESTful API \ud83d\ude80. \ud83c\udf10 **View Live Demo** - Check out the interactive demo! \ud83d\udcca **Comprehensive database** of 200+ airport cities in the USA, Canada, Mexico, and the Caribbean",
+      "language": "JavaScript",
+      "license": "NOASSERTION",
+      "topics": [
+        "aircraft-traffic-control",
+        "flight-controller",
+        "flight-tracking"
+      ],
+      "stars": 0,
+      "openIssues": 0,
+      "updatedAt": "2025-11-02T03:59:19Z",
+      "deployedUrl": "https://cywf.github.io/AirwayAtlas/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "site",
+            "files": 36
+          },
+          {
+            "name": "frontend",
+            "files": 9
+          },
+          {
+            "name": "src",
+            "files": 9
+          },
+          {
+            "name": "backend",
+            "files": 8
+          },
+          {
+            "name": ".github",
+            "files": 7
+          },
+          {
+            "name": "(root)",
+            "files": 6
+          }
+        ],
+        "extensions": {
+          "js": 16,
+          "md": 11,
+          "astro": 10,
+          "json": 7,
+          "png": 6
+        },
+        "fileCount": 83
+      },
+      "diagram": "/docs/project-wiki/screenshots/airwayatlas.png",
+      "links": {
+        "repository": "https://github.com/cywf/AirwayAtlas",
+        "discussionBoard": "https://github.com/cywf/AirwayAtlas/discussions",
+        "githubProjectBoard": "https://github.com/cywf/AirwayAtlas/projects",
+        "wiki": "https://github.com/cywf/AirwayAtlas/wiki",
+        "issues": "https://github.com/cywf/AirwayAtlas/issues",
+        "newIssue": "https://github.com/cywf/AirwayAtlas/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/AirwayAtlas/pulls",
+        "newPullRequest": "https://github.com/cywf/AirwayAtlas/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "zerotier-toolkit",
+      "fullName": "cywf/zerotier-toolkit",
+      "description": "\ud83c\udf10 ZeroTier Toolkit: A powerful suite designed to empower network & system administrators! \ud83d\udee0\ufe0f With this toolkit, seamlessly build, configure, deploy, and troubleshoot ZeroTier networks. \ud83d\ude80\ud83d\udca1",
+      "overview": "A powerful, enterprise-grade suite designed to empower network & system administrators! \ud83d\udee0\ufe0f With this toolkit, seamlessly build, configure, deploy, and troubleshoot ZeroTier networks with confidence and reliability. \ud83d\ude80\ud83d\udca1 \ud83d\udd27 **Robust Installation Scripts** - Multi-distribution support with automatic dependency management",
+      "language": "Shell",
+      "license": "MIT",
+      "topics": [
+        "automation",
+        "network-administration",
+        "networking",
+        "system-administration",
+        "toolkit",
+        "zerotier"
+      ],
+      "stars": 4,
+      "openIssues": 0,
+      "updatedAt": "2025-11-01T03:10:06Z",
+      "deployedUrl": "https://cywf.github.io/zerotier-toolkit/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "(root)",
+            "files": 6
+          },
+          {
+            "name": "scripts",
+            "files": 6
+          },
+          {
+            "name": ".github",
+            "files": 3
+          },
+          {
+            "name": "examples",
+            "files": 3
+          },
+          {
+            "name": "networking",
+            "files": 3
+          },
+          {
+            "name": "tests",
+            "files": 1
+          }
+        ],
+        "extensions": {
+          "md": 10,
+          "sh": 6,
+          "conf": 3,
+          "(none)": 2,
+          "yml": 1
+        },
+        "fileCount": 22
+      },
+      "diagram": "/docs/project-wiki/screenshots/zerotier-toolkit.png",
+      "links": {
+        "repository": "https://github.com/cywf/zerotier-toolkit",
+        "discussionBoard": "https://github.com/cywf/zerotier-toolkit/discussions",
+        "githubProjectBoard": "https://github.com/cywf/zerotier-toolkit/projects",
+        "wiki": "https://github.com/cywf/zerotier-toolkit/wiki",
+        "issues": "https://github.com/cywf/zerotier-toolkit/issues",
+        "newIssue": "https://github.com/cywf/zerotier-toolkit/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/zerotier-toolkit/pulls",
+        "newPullRequest": "https://github.com/cywf/zerotier-toolkit/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "Heimdall",
+      "fullName": "cywf/Heimdall",
+      "description": "Advanced Detection Surveillance System that uses A.I. and ML to utilize facial recognition, customizable to also preform automated response / actions based off of human behaviors. Both Threat detection, as well as loss prevention.",
+      "overview": "Advanced Detection Surveillance System that uses A.I. and ML to utilize facial recognition, customizable to also perform automated response/actions based on human behaviors. Both threat detection, as well as loss prevention. RTSP Stream Viewing**: Connect to and display RTSP camera streams",
+      "language": "Python",
+      "license": "MIT",
+      "topics": [
+        "ai",
+        "detection",
+        "facial-recognition",
+        "machine-learning"
+      ],
+      "stars": 3,
+      "openIssues": 1,
+      "updatedAt": "2025-11-01T03:08:39Z",
+      "deployedUrl": "https://cywf.github.io/Heimdall/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "(root)",
+            "files": 10
+          },
+          {
+            "name": "rtsp_ip",
+            "files": 3
+          },
+          {
+            "name": "tests",
+            "files": 2
+          }
+        ],
+        "extensions": {
+          "py": 6,
+          "md": 3,
+          "example": 2,
+          "(none)": 2,
+          "toml": 1
+        },
+        "fileCount": 15
+      },
+      "diagram": "/docs/project-wiki/screenshots/heimdall.png",
+      "links": {
+        "repository": "https://github.com/cywf/Heimdall",
+        "discussionBoard": "https://github.com/cywf/Heimdall/discussions",
+        "githubProjectBoard": "https://github.com/cywf/Heimdall/projects",
+        "wiki": "https://github.com/cywf/Heimdall/wiki",
+        "issues": "https://github.com/cywf/Heimdall/issues",
+        "newIssue": "https://github.com/cywf/Heimdall/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/Heimdall/pulls",
+        "newPullRequest": "https://github.com/cywf/Heimdall/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "netninja",
+      "fullName": "cywf/netninja",
+      "description": "Streamline Linux server troubleshooting with NetNinja - the ultimate tool for network and system admins. Automate common checks like ping and process monitoring. Join the open-source community and contribute to the power of NetNinja!",
+      "overview": "Streamline Linux server troubleshooting with NetNinja - the ultimate tool for network and system admins. Now featuring a **fully immersive Rust CLI** with **tmux multiplexer** for real-time network monitoring! Immersive Monitoring Dashboard**: Real-time network monitoring with tmux multiplexer",
+      "language": "Rust",
+      "license": "MIT",
+      "topics": [
+        "linux",
+        "networking",
+        "system-administration",
+        "troubleshooting"
+      ],
+      "stars": 0,
+      "openIssues": 0,
+      "updatedAt": "2025-11-01T03:08:06Z",
+      "deployedUrl": "https://cywf.github.io/netninja/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "src",
+            "files": 6
+          },
+          {
+            "name": "(root)",
+            "files": 5
+          },
+          {
+            "name": "lib",
+            "files": 3
+          },
+          {
+            "name": "docs",
+            "files": 2
+          },
+          {
+            "name": ".github",
+            "files": 1
+          },
+          {
+            "name": "bin",
+            "files": 1
+          }
+        ],
+        "extensions": {
+          "rs": 6,
+          "sh": 5,
+          "(none)": 3,
+          "md": 2,
+          "yml": 1
+        },
+        "fileCount": 19
+      },
+      "diagram": "/docs/project-wiki/screenshots/netninja.png",
+      "links": {
+        "repository": "https://github.com/cywf/netninja",
+        "discussionBoard": "https://github.com/cywf/netninja/discussions",
+        "githubProjectBoard": "https://github.com/cywf/netninja/projects",
+        "wiki": "https://github.com/cywf/netninja/wiki",
+        "issues": "https://github.com/cywf/netninja/issues",
+        "newIssue": "https://github.com/cywf/netninja/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/netninja/pulls",
+        "newPullRequest": "https://github.com/cywf/netninja/compare/main...main?expand=1"
+      }
+    },
+    {
+      "name": "cywf.github.io",
+      "fullName": "cywf/cywf.github.io",
+      "description": "Welcome to my blog, kindly hosted via github",
+      "overview": "Kylo Parisher \u2013 Developer Portfolio \ud83d\ude80 **Live Site:** https://cywf.github.io This is my personal portfolio site - an **interactive analytics and visualization hub** that tracks repository health, workflow status, contribution activity, and cross-project work queues across my public GitHub projects.",
+      "language": "TypeScript",
+      "license": "Unspecified",
+      "topics": [],
+      "stars": 0,
+      "openIssues": 34,
+      "updatedAt": "2026-07-09T21:45:32Z",
+      "deployedUrl": "https://cywf.github.io/",
+      "codebase": {
+        "topFolders": [
+          {
+            "name": "site",
+            "files": 41
+          },
+          {
+            "name": "(root)",
+            "files": 5
+          },
+          {
+            "name": ".github",
+            "files": 4
+          },
+          {
+            "name": "mermaid",
+            "files": 3
+          },
+          {
+            "name": "assets",
+            "files": 2
+          }
+        ],
+        "extensions": {
+          "ts": 12,
+          "astro": 10,
+          "json": 6,
+          "md": 5,
+          "css": 3
+        },
+        "fileCount": 55
+      },
+      "diagram": "/docs/project-wiki/screenshots/cywf-github-io.png",
+      "links": {
+        "repository": "https://github.com/cywf/cywf.github.io",
+        "discussionBoard": "https://github.com/cywf/cywf.github.io/discussions",
+        "githubProjectBoard": "https://github.com/cywf/cywf.github.io/projects",
+        "wiki": "https://github.com/cywf/cywf.github.io/wiki",
+        "issues": "https://github.com/cywf/cywf.github.io/issues",
+        "newIssue": "https://github.com/cywf/cywf.github.io/issues/new/choose",
+        "pullRequests": "https://github.com/cywf/cywf.github.io/pulls",
+        "newPullRequest": "https://github.com/cywf/cywf.github.io/compare/main...main?expand=1"
+      }
+    }
+  ]
+}
