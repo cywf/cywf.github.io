@@ -7,20 +7,22 @@ import { BinaryStructureViewer } from '../components/labs/BinaryStructureViewer'
 import { GraphLab } from '../components/labs/GraphLab';
 import { RepoRelationshipGraph } from '../components/labs/RepoRelationshipGraph';
 import { PRCyberEcosystemGraph } from '../components/labs/PRCyberEcosystemGraph';
+import { WasmReadinessLab } from '../components/labs/WasmReadinessLab';
 ---
 
 <Layout title="Labs" description="WebAssembly-ready static cybersecurity and AI-agent labs for the CYWF portfolio.">
   <div class="space-y-10 text-slate-100">
     <section class="overflow-hidden rounded-[2rem] border border-cyan-400/20 bg-gradient-to-br from-slate-950 via-blue-950 to-purple-950 p-8 shadow-2xl shadow-cyan-950/30">
       <p class="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-200">CYWF Portfolio Labs</p>
-      <h1 class="mt-4 max-w-4xl text-4xl font-black tracking-tight text-white md:text-6xl">WebAssembly-ready technical labs for cyber, AI agents, and static-first operations.</h1>
+      <h1 class="mt-4 max-w-4xl text-4xl font-black tracking-tight text-white md:text-6xl">WebAssembly-forward technical labs for cyber, AI agents, and static-first operations.</h1>
       <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-200">These labs keep Astro routing, SEO, and GitHub Pages compatibility while using React islands for local-only interactivity. Future Rust/Wasm acceleration can enhance graph layout and parsers without requiring a backend server, secrets, SharedArrayBuffer, or special response headers.</p>
       <div class="mt-6 flex flex-wrap gap-3" aria-label="Architecture guarantees">
         <span class="badge badge-info badge-lg">Static hosting safe</span>
         <span class="badge badge-secondary badge-lg">Local input only</span>
-        <span class="badge badge-outline badge-lg text-cyan-100">Progressive Wasm hooks</span>
+        <span class="badge badge-outline badge-lg text-cyan-100">JS fallback active</span>
       </div>
     </section>
+    <LabCard eyebrow="Wasm posture" title="Repo readiness scoring accelerator" description="Browser-local performance comparison with an isolated Wasm-ready module and guaranteed JavaScript fallback."><WasmReadinessLab client:load /></LabCard>
     <LabCard eyebrow="Local utility" title="IT Tools Lab" description="CyberChef-style browser utilities for text transforms, hashing, and quick incident-response prep without sending data anywhere."><ITToolsLab client:load /></LabCard>
     <LabCard eyebrow="Risk workshop" title="Threat Model Simulator" description="Model assets and STRIDE threats, score likelihood and impact, and capture mitigation direction in local browser state."><ThreatModelSimulator client:load /></LabCard>
     <LabCard eyebrow="Wasm-ready graphing" title="Graph / Visualization Engine Lab" description="Interactive SVG network graph for the G8 System, PR-CYBR, Hermes agents, and the static deployment ecosystem."><GraphLab client:load /></LabCard>

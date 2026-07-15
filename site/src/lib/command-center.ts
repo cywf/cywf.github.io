@@ -35,7 +35,7 @@ export interface StatsData {
   watchers: number;
   languages: Record<string, number>;
   commitActivity: Array<{ date: string; count: number }>;
-  repositories: Array<{ name: string; fullName?: string; htmlUrl?: string; description?: string; language?: string; stars?: number; forks?: number; openIssues?: number; pushedAt?: string; updatedAt?: string }>;
+  dataWarnings?: string[]; openIssuesOnly?: number; openPRs?: number; docsWikiCoverage?: number; stableOrReadyCount?: number; readinessDistribution?: Record<string, number>; repositories: Array<{ name: string; fullName?: string; htmlUrl?: string; description?: string; language?: string; stars?: number; forks?: number; openIssues?: number; openIssuesOnly?: number; openPRs?: number; pushedAt?: string; updatedAt?: string; productionReadinessBand?: string; productionReadinessScore?: number }>;
 }
 
 export interface DiscussionsData {

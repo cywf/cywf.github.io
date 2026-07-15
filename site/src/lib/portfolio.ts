@@ -1,6 +1,9 @@
 import statsSnapshot from '../../public/data/stats.json';
 import projectsSnapshot from '../../public/data/projects.json';
 import discussionsSnapshot from '../../public/data/discussions.json';
+import repositoriesSnapshot from '../../public/data/repositories.json';
+import workItemsSnapshot from '../../public/data/work-items.json';
+import docsIndexSnapshot from '../../public/data/docs-index.json';
 import { unwrapSnapshot, formatSnapshotDate, type StatsData, type ProjectsData, type DiscussionsData } from './command-center';
 export { formatSnapshotDate };
 
@@ -12,6 +15,9 @@ export const snapshots = {
   stats: unwrapSnapshot<StatsData>(statsSnapshot),
   projects: unwrapSnapshot<ProjectsData>(projectsSnapshot),
   discussions: unwrapSnapshot<DiscussionsData>(discussionsSnapshot),
+  repositories: unwrapSnapshot<any>(repositoriesSnapshot),
+  workItems: unwrapSnapshot<any>(workItemsSnapshot),
+  docsIndex: unwrapSnapshot<any>(docsIndexSnapshot),
 };
 
 export const seededRepos = [
@@ -36,7 +42,7 @@ export function formatAge(date?: string) {
 }
 export function topLanguages(limit = 6) { return Object.entries(snapshots.stats.data.languages || {}).sort(([,a],[,b]) => b-a).slice(0, limit); }
 export function topRepos(limit = 6) {
-  const repos = safeList(snapshots.stats.data.repositories);
+  const repos: any[] = safeList<any>(snapshots.repositories.data.originals || snapshots.stats.data.repositories);
   return repos.sort((a,b) => (b.stars ?? 0)-(a.stars ?? 0) || Date.parse(b.pushedAt || b.updatedAt || '0') - Date.parse(a.pushedAt || a.updatedAt || '0')).slice(0, limit);
 }
 export function repoFallbacks(limit = 3) { return topRepos(limit).length ? topRepos(limit) : seededRepos.slice(0, limit); }

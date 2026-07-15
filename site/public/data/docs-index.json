@@ -1,0 +1,105 @@
+{
+  "fetchedAt": "2026-07-15T20:13:08.370Z",
+  "data": {
+    "repoCount": 7,
+    "categories": {
+      "portfolio/platform": [
+        {
+          "repo": "cywf",
+          "description": "cywf public project tracked by the portfolio snapshot fallback.",
+          "wikiUrl": "https://github.com/cywf/cywf/wiki",
+          "htmlUrl": "https://github.com/cywf/cywf",
+          "homepage": "",
+          "readmeUrl": "https://github.com/cywf/cywf#readme",
+          "hasWiki": true,
+          "hasPages": false,
+          "hasReadme": true,
+          "updatedAt": "2026-07-15T00:00:00Z",
+          "readinessBand": "Prototype"
+        },
+        {
+          "repo": "cywf.github.io",
+          "description": "cywf.github.io public project tracked by the portfolio snapshot fallback.",
+          "wikiUrl": "https://github.com/cywf/cywf.github.io/wiki",
+          "htmlUrl": "https://github.com/cywf/cywf.github.io",
+          "homepage": "https://cywf.github.io",
+          "readmeUrl": "https://github.com/cywf/cywf.github.io#readme",
+          "hasWiki": true,
+          "hasPages": true,
+          "hasReadme": true,
+          "updatedAt": "2026-07-15T00:00:00Z",
+          "readinessBand": "Active but needs hardening"
+        },
+        {
+          "repo": "aliases",
+          "description": "aliases public project tracked by the portfolio snapshot fallback.",
+          "wikiUrl": "https://github.com/cywf/aliases/wiki",
+          "htmlUrl": "https://github.com/cywf/aliases",
+          "homepage": "",
+          "readmeUrl": "https://github.com/cywf/aliases#readme",
+          "hasWiki": true,
+          "hasPages": false,
+          "hasReadme": true,
+          "updatedAt": "2026-07-15T00:00:00Z",
+          "readinessBand": "Prototype"
+        },
+        {
+          "repo": "tle-fetcher",
+          "description": "tle-fetcher public project tracked by the portfolio snapshot fallback.",
+          "wikiUrl": "https://github.com/cywf/tle-fetcher/wiki",
+          "htmlUrl": "https://github.com/cywf/tle-fetcher",
+          "homepage": "",
+          "readmeUrl": "https://github.com/cywf/tle-fetcher#readme",
+          "hasWiki": true,
+          "hasPages": false,
+          "hasReadme": true,
+          "updatedAt": "2026-07-15T00:00:00Z",
+          "readinessBand": "Active but needs hardening"
+        },
+        {
+          "repo": "FortiPath",
+          "description": "FortiPath public project tracked by the portfolio snapshot fallback.",
+          "wikiUrl": "https://github.com/cywf/FortiPath/wiki",
+          "htmlUrl": "https://github.com/cywf/FortiPath",
+          "homepage": "",
+          "readmeUrl": "https://github.com/cywf/FortiPath#readme",
+          "hasWiki": true,
+          "hasPages": false,
+          "hasReadme": true,
+          "updatedAt": "2026-07-15T00:00:00Z",
+          "readinessBand": "Active but needs hardening"
+        },
+        {
+          "repo": "AudiFi",
+          "description": "AudiFi public project tracked by the portfolio snapshot fallback.",
+          "wikiUrl": "https://github.com/cywf/AudiFi/wiki",
+          "htmlUrl": "https://github.com/cywf/AudiFi",
+          "homepage": "",
+          "readmeUrl": "https://github.com/cywf/AudiFi#readme",
+          "hasWiki": true,
+          "hasPages": false,
+          "hasReadme": true,
+          "updatedAt": "2026-07-15T00:00:00Z",
+          "readinessBand": "Active but needs hardening"
+        },
+        {
+          "repo": "vTOC",
+          "description": "vTOC public project tracked by the portfolio snapshot fallback.",
+          "wikiUrl": "https://github.com/cywf/vTOC/wiki",
+          "htmlUrl": "https://github.com/cywf/vTOC",
+          "homepage": "",
+          "readmeUrl": "https://github.com/cywf/vTOC#readme",
+          "hasWiki": true,
+          "hasPages": false,
+          "hasReadme": true,
+          "updatedAt": "2026-07-15T00:00:00Z",
+          "readinessBand": "Active but needs hardening"
+        }
+      ]
+    },
+    "dataWarnings": [
+      "repository list: fetch failed",
+      "Using checked-in observed fallback repository facts because the GitHub REST repository list was unavailable in this environment."
+    ]
+  }
+}

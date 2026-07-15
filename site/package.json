@@ -8,7 +8,7 @@
     "preview": "astro preview",
     "typecheck": "astro check",
     "astro": "astro",
-    "test": "tsx src/tests/command-center.test.ts && tsx src/tests/fetch-projects-query.test.ts"
+    "test": "tsx src/tests/command-center.test.ts && tsx src/tests/fetch-projects-query.test.ts && tsx src/tests/readiness.test.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
