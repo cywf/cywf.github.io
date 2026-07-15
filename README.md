@@ -188,3 +188,36 @@ I balance roles as an AI & ML research engineer, security instructor, and lifelo
 ## 📄 License
 
 MIT License - See the footer of the site for copyright information.
+
+## Portfolio snapshot contracts and readiness operations
+
+The Astro site under `site/` is static-first for GitHub Pages. Public pages consume committed JSON envelopes in `site/public/data/` with the shape `{ "fetchedAt": string, "data": ... }`.
+
+Snapshot contracts:
+
+- `repositories.json` separates `originals` from `forks` and captures repository metadata, issue/PR pressure, docs/wiki/pages signals, topics, license, CI workflow presence when available, readiness score, readiness band, recommended action, and `dataWarnings`.
+- `stats.json` aggregates original non-fork repository totals, open issues excluding PRs, open PRs, language bytes, docs coverage, readiness distribution, and warnings.
+- `work-items.json` provides a repo-backed work queue so `/development-board` remains useful even when GitHub Projects data is unavailable.
+- `docs-index.json` powers the public wiki/docs index grouped by portfolio category.
+- `discussions.json` and `projects.json` remain optional snapshots. Empty Projects data must not make the development board empty.
+
+Production readiness is scored with a documented 100-point rubric in `site/src/lib/readiness.ts`: README (10), description (5), homepage/demo (10), wiki/docs (10), license (10), CI workflow (15), recent activity within 90 days (10), reviewable open PR count (10), manageable tracked issue count (10), and release/tag signal (10). Bands are Production-ready, Stable, Active but needs hardening, Prototype, and Dormant/incomplete.
+
+Wasm enhancement policy: Labs and visualizations must stay browser-local, require no server calls or browser secrets, avoid SharedArrayBuffer/thread requirements for GitHub Pages, and always provide a JavaScript fallback before optional Wasm acceleration is loaded.
+
+Local workflow:
+
+```bash
+cd site
+npm ci
+npm test
+npm run typecheck
+npm run build
+```
+
+Refresh snapshots when network/API access is available:
+
+```bash
+cd site
+npx tsx src/scripts/fetch_portfolio_snapshots.ts
+```

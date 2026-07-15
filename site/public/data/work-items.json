@@ -1,0 +1,84 @@
+{
+  "fetchedAt": "2026-07-15T20:13:08.370Z",
+  "data": {
+    "repoCount": 7,
+    "totalOpenIssues": 181,
+    "totalOpenPRs": 0,
+    "items": [
+      {
+        "repository": "cywf/cywf",
+        "title": "Add CI workflow coverage.",
+        "url": "https://github.com/cywf/cywf/issues",
+        "type": "repository-health",
+        "openIssuesOnly": 67,
+        "openPRs": 0,
+        "readinessBand": "Prototype",
+        "recommendedNextAction": "Add CI workflow coverage."
+      },
+      {
+        "repository": "cywf/cywf.github.io",
+        "title": "Add CI workflow coverage.",
+        "url": "https://github.com/cywf/cywf.github.io/issues",
+        "type": "repository-health",
+        "openIssuesOnly": 35,
+        "openPRs": 0,
+        "readinessBand": "Active but needs hardening",
+        "recommendedNextAction": "Add CI workflow coverage."
+      },
+      {
+        "repository": "cywf/aliases",
+        "title": "Add CI workflow coverage.",
+        "url": "https://github.com/cywf/aliases/issues",
+        "type": "repository-health",
+        "openIssuesOnly": 53,
+        "openPRs": 0,
+        "readinessBand": "Prototype",
+        "recommendedNextAction": "Add CI workflow coverage."
+      },
+      {
+        "repository": "cywf/tle-fetcher",
+        "title": "Add CI workflow coverage.",
+        "url": "https://github.com/cywf/tle-fetcher/issues",
+        "type": "repository-health",
+        "openIssuesOnly": 9,
+        "openPRs": 0,
+        "readinessBand": "Active but needs hardening",
+        "recommendedNextAction": "Add CI workflow coverage."
+      },
+      {
+        "repository": "cywf/FortiPath",
+        "title": "Add CI workflow coverage.",
+        "url": "https://github.com/cywf/FortiPath/issues",
+        "type": "repository-health",
+        "openIssuesOnly": 8,
+        "openPRs": 0,
+        "readinessBand": "Active but needs hardening",
+        "recommendedNextAction": "Add CI workflow coverage."
+      },
+      {
+        "repository": "cywf/AudiFi",
+        "title": "Add CI workflow coverage.",
+        "url": "https://github.com/cywf/AudiFi/issues",
+        "type": "repository-health",
+        "openIssuesOnly": 7,
+        "openPRs": 0,
+        "readinessBand": "Active but needs hardening",
+        "recommendedNextAction": "Add CI workflow coverage."
+      },
+      {
+        "repository": "cywf/vTOC",
+        "title": "Add CI workflow coverage.",
+        "url": "https://github.com/cywf/vTOC/issues",
+        "type": "repository-health",
+        "openIssuesOnly": 2,
+        "openPRs": 0,
+        "readinessBand": "Active but needs hardening",
+        "recommendedNextAction": "Add CI workflow coverage."
+      }
+    ],
+    "dataWarnings": [
+      "repository list: fetch failed",
+      "Using checked-in observed fallback repository facts because the GitHub REST repository list was unavailable in this environment."
+    ]
+  }
+}

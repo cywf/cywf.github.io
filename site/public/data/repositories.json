@@ -1,31 +1,12 @@
 {
-  "fetchedAt": "2026-07-15T20:13:08.369Z",
+  "fetchedAt": "2026-07-15T20:13:08.367Z",
   "data": {
-    "repoCount": 7,
+    "owner": "cywf",
     "totalPublicRepos": 7,
     "originalRepoCount": 7,
     "forkCount": 0,
     "archivedCount": 0,
-    "stars": 0,
-    "forks": 0,
-    "watchers": 0,
-    "openIssuesOnly": 181,
-    "openPRs": 0,
-    "docsWikiCoverage": 7,
-    "stableOrReadyCount": 0,
-    "languages": {
-      "TypeScript": 6,
-      "Astro": 1
-    },
-    "readinessDistribution": {
-      "Prototype": 2,
-      "Active but needs hardening": 5
-    },
-    "dataWarnings": [
-      "repository list: fetch failed",
-      "Using checked-in observed fallback repository facts because the GitHub REST repository list was unavailable in this environment."
-    ],
-    "repositories": [
+    "originals": [
       {
         "name": "cywf",
         "fullName": "cywf/cywf",
@@ -286,6 +267,10 @@
         "recommendedNextAction": "Add CI workflow coverage."
       }
     ],
-    "commitActivity": []
+    "forks": [],
+    "dataWarnings": [
+      "repository list: fetch failed",
+      "Using checked-in observed fallback repository facts because the GitHub REST repository list was unavailable in this environment."
+    ]
   }
 }
