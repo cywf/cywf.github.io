@@ -1,13 +1,114 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { profile } from '../data/profile';
-import { expertiseDomains, projects, caseStudies, experience, researchNotes } from '../data/portfolio';
+import { expertiseDomains, projects, caseStudies, researchNotes } from '../data/portfolio';
+
+const featuredProjects = projects.filter((project) => project.featured).slice(0, 6);
+const projectStats = [
+  { label: 'Public projects', value: projects.length.toString(), detail: 'Repository-linked entries and labs' },
+  { label: 'Featured systems', value: featuredProjects.length.toString(), detail: 'Curated for first-pass review' },
+  { label: 'Case studies', value: caseStudies.length.toString(), detail: 'Evidence, limitations, next steps' },
+];
 ---
-<Layout title="Kylo Parisher / KP - Intelligent Secure Systems Portfolio" description="Portfolio-first home for Kylo Parisher / KP across AI/ML, cybersecurity, secure infrastructure, autonomous agents, space systems, education, and Developer HQ evidence.">
-  <section class="command-hero mb-8 rounded-[2rem] border border-primary/20 bg-base-200 p-6 shadow-2xl md:p-10"><p class="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">{profile.brand} · professional portfolio</p><h1 class="max-w-5xl text-4xl font-black leading-tight tracking-tight md:text-6xl">{profile.name} / {profile.shortName} builds intelligent, secure, resilient systems.</h1><p class="mt-5 max-w-3xl text-lg leading-8 text-base-content/75">AI/ML, cybersecurity, secure infrastructure, autonomous agents, space systems research, and education/leadership connected through public-safe, reviewable engineering.</p><div class="mt-7 flex flex-wrap gap-3"><a href="/projects" class="btn btn-primary">View Selected Work</a><a href="/projects" class="btn btn-outline">Explore Projects</a><a href="/about" class="btn btn-ghost">About KP</a><a href="/contact" class="btn btn-outline">Contact</a></div></section>
-  <section class="mb-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"><article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title text-2xl">Professional summary</h2><p class="text-base-content/75">{profile.summary}</p><p class="text-sm text-base-content/60">Developer HQ evidence appears later in the page and under its own route so the first viewport remains portfolio-first.</p></div></article><div class="grid gap-4 md:grid-cols-2">{expertiseDomains.map((domain) => <article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title text-lg">{domain.title}</h2><p class="text-sm text-base-content/70">{domain.summary}</p></div></article>)}</div></section>
-  <section class="mb-8 card bg-base-200 shadow-xl"><div class="card-body"><div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between"><div><h2 class="card-title text-2xl">Selected flagship projects</h2><p class="text-base-content/70">Curated narrative is separate from operational GitHub snapshots.</p></div><a class="link link-primary" href="/projects">Open projects →</a></div><div class="mt-5 grid gap-4 md:grid-cols-3">{projects.filter((p) => p.featured).map((project) => <article class="rounded-2xl border border-base-content/10 bg-base-100 p-5"><span class="badge badge-outline">{project.evidenceLevel}</span><h3 class="mt-3 text-xl font-bold"><a class="link link-hover" href={`/projects#${project.slug}`}>{project.name}</a></h3><p class="mt-2 text-sm text-base-content/70">{project.shortDescription}</p></article>)}</div></div></section>
-  <section class="mb-8 grid gap-6 lg:grid-cols-2"><article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title text-2xl">Featured case study preview</h2><p class="font-semibold">{caseStudies[0].title}</p><p class="text-base-content/75">{caseStudies[0].summary}</p><a class="link link-primary" href="/case-studies#kp-dev-hq-portfolio">Read case studies →</a></div></article><article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title text-2xl">Experience / leadership preview</h2><p class="font-semibold">{experience[0].title}</p><p class="text-base-content/75">{experience[0].summary}</p><a class="link link-primary" href="/experience">Read experience →</a></div></article></section>
-  <section class="mb-8 grid gap-6 lg:grid-cols-2"><article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title text-2xl">Research / writing and labs</h2><p class="text-base-content/75">{researchNotes[0].summary}</p><div class="mt-3 flex gap-3"><a class="link link-primary" href="/research">Research →</a><a class="link link-primary" href="/labs">Labs →</a></div></div></article><article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title text-2xl">Developer HQ preview</h2><p class="text-base-content/75">Portfolio headquarters for KP systems work, selected case studies, public-safe proof points, labs, and collaboration pathways.</p><a class="link link-primary" href="/developer-hq">Open Developer HQ →</a></div></article></section>
-  <section class="rounded-[2rem] border border-primary/20 bg-primary/10 p-6 md:p-10"><h2 class="text-3xl font-black">Contact and collaboration</h2><p class="mt-3 max-w-3xl text-base-content/75">Use public channels for employment, consulting, instruction, research, or open-source collaboration. Do not send secrets.</p><a class="btn btn-primary mt-5" href="/contact">Start a conversation</a></section>
+<Layout title="CYWF Public Projects Portfolio" description="Project-first portfolio for CYWF public repositories, systems concepts, labs, case studies, and Developer HQ evidence.">
+  <section class="command-hero mb-8 overflow-hidden rounded-[2rem] border border-primary/20 bg-base-200 shadow-2xl">
+    <div class="grid gap-8 p-6 md:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+      <div>
+        <p class="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">CYWF public project portfolio</p>
+        <h1 class="max-w-5xl text-4xl font-black leading-tight tracking-tight md:text-6xl">Projects first. Evidence close behind.</h1>
+        <p class="mt-5 max-w-3xl text-lg leading-8 text-base-content/75">
+          A public map of CYWF systems, prototypes, labs, and documentation — organized so visitors can scan the work before reading about the builder.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/projects" class="btn btn-primary">Explore projects</a>
+          <a href="/case-studies" class="btn btn-outline">Read case studies</a>
+          <a href="/labs" class="btn btn-outline">Open labs</a>
+          <a href="/developer-hq" class="btn btn-ghost">Developer HQ evidence</a>
+        </div>
+      </div>
+      <aside class="rounded-3xl border border-base-content/10 bg-base-100/80 p-5 shadow-xl" aria-label="Portfolio summary">
+        <p class="text-sm uppercase tracking-[0.2em] text-base-content/60">What this site is for</p>
+        <p class="mt-3 text-lg text-base-content/80">Review project scope, maturity, evidence, limitations, and collaboration paths without relying on live dashboards or private telemetry.</p>
+        <dl class="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+          {projectStats.map((stat) => (
+            <div class="rounded-2xl bg-base-200 p-4">
+              <dt class="text-sm text-base-content/60">{stat.label}</dt>
+              <dd class="text-3xl font-black">{stat.value}</dd>
+              <p class="text-xs text-base-content/60">{stat.detail}</p>
+            </div>
+          ))}
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="mb-8 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+    <article class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-2xl">Portfolio stance</h2>
+        <p class="text-base-content/75">{profile.summary}</p>
+        <p class="text-sm text-base-content/60">Developer HQ remains available for reviewer evidence, but the homepage now leads with projects and their maturity labels.</p>
+      </div>
+    </article>
+    <div class="grid gap-4 md:grid-cols-2">
+      {expertiseDomains.slice(0, 4).map((domain) => (
+        <article class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-lg">{domain.title}</h2>
+            <p class="text-sm text-base-content/70">{domain.summary}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mb-8 card bg-base-200 shadow-xl">
+    <div class="card-body">
+      <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Selected work</p>
+          <h2 class="card-title text-2xl">Project map</h2>
+          <p class="text-base-content/70">Featured systems and utilities, with conservative maturity and evidence labels.</p>
+        </div>
+        <a class="link link-primary" href="/projects">Open full project catalog →</a>
+      </div>
+      <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {featuredProjects.map((project) => (
+          <article class="rounded-2xl border border-base-content/10 bg-base-100 p-5">
+            <div class="flex flex-wrap gap-2"><span class="badge badge-primary">{project.status}</span><span class="badge badge-outline">{project.evidenceLevel}</span></div>
+            <h3 class="mt-3 text-xl font-bold"><a class="link link-hover" href={`/projects#${project.slug}`}>{project.name}</a></h3>
+            <p class="mt-2 text-sm text-base-content/70">{project.shortDescription}</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              {project.repositoryUrl && <a class="btn btn-xs btn-outline" href={project.repositoryUrl}>Repository</a>}
+              {project.caseStudySlug && <a class="btn btn-xs btn-ghost" href={`/case-studies#${project.caseStudySlug}`}>Case study</a>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-8 grid gap-6 lg:grid-cols-2">
+    <article class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-2xl">Case studies with limitations</h2>
+        <p class="font-semibold">{caseStudies[0].title}</p>
+        <p class="text-base-content/75">{caseStudies[0].summary}</p>
+        <a class="link link-primary" href="/case-studies#cywf-project-platform">Read case studies →</a>
+      </div>
+    </article>
+    <article class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-2xl">Research and labs</h2>
+        <p class="text-base-content/75">{researchNotes[0].summary}</p>
+        <div class="mt-3 flex gap-3"><a class="link link-primary" href="/research">Research →</a><a class="link link-primary" href="/labs">Labs →</a></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="rounded-[2rem] border border-primary/20 bg-primary/10 p-6 md:p-10">
+    <h2 class="text-3xl font-black">Collaboration paths</h2>
+    <p class="mt-3 max-w-3xl text-base-content/75">Start with a project, repository, or case study. Use contact for collaboration, consulting, instruction, research, or open-source discussion; do not send secrets through public channels.</p>
+    <div class="mt-5 flex flex-wrap gap-3"><a class="btn btn-primary" href="/contact">Contact</a><a class="btn btn-outline" href="https://github.com/cywf">GitHub organization</a></div>
+  </section>
 </Layout>
