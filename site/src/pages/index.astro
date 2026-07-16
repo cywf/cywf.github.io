@@ -28,6 +28,7 @@ const featuredSystems = [
   ['Portfolio operations hub', 'Static-first Astro surface for project health, docs, diagrams, and contribution paths.', '/docs'],
   ['Snapshot data contracts', 'Committed JSON envelopes keep public pages useful even when GitHub API scopes are constrained.', '/statistics'],
   ['Legacy dashboard bridge', 'Original dashboard capabilities preserved inside a clearer framed-shell experience.', '/dashboard'],
+  ['KP-DEV-HQ blueprint', 'Architecture and product design traceability from the v2.0 specification into implementation phases.', '/dev-hq'],
 ];
 ---
 
@@ -66,7 +67,7 @@ const featuredSystems = [
 
   <section class="mb-8 grid gap-6 lg:grid-cols-[.8fr_1.2fr]">
     <div class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title text-2xl">Mission</h2><p class="text-base-content/75">Make public engineering work legible: clear routes, snapshot-backed evidence, accessible dark UI, and contribution paths that respect public-safe data boundaries.</p></div></div>
-    <div class="grid gap-4 md:grid-cols-3">{featuredSystems.map(([title, body, href]) => <a class="card bg-base-200 shadow-xl hover:outline hover:outline-primary" href={href}><div class="card-body"><h2 class="card-title text-lg">{title}</h2><p class="text-sm text-base-content/70">{body}</p><span class="link link-primary mt-auto">Explore →</span></div></a>)}</div>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">{featuredSystems.map(([title, body, href]) => <a class="card bg-base-200 shadow-xl hover:outline hover:outline-primary" href={href}><div class="card-body"><h2 class="card-title text-lg">{title}</h2><p class="text-sm text-base-content/70">{body}</p><span class="link link-primary mt-auto">Explore →</span></div></a>)}</div>
   </section>
 
   <section class="mb-8 grid gap-4 md:grid-cols-4" aria-label="Task status summary">
