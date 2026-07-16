@@ -59,6 +59,11 @@ jobs:
           
           echo "✓ Data snapshot complete"
 
+      - name: Run tests
+        run: |
+          cd site
+          npm test
+
       - name: Build with Astro
         env:
           GITHUB_SHA: ${{ github.sha }}
