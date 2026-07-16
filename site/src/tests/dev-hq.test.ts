@@ -3,7 +3,7 @@ import specSnapshot from '../../public/data/dev-hq-spec.json' with { type: 'json
 import { getCapabilityCounts, getPrioritizedCapabilities, type DevHqSpec } from '../lib/dev-hq';
 import { unwrapSnapshot } from '../lib/command-center';
 
-const { data: spec } = unwrapSnapshot<DevHqSpec>(specSnapshot);
+const { data: spec } = unwrapSnapshot<DevHqSpec>(specSnapshot as any);
 const counts = getCapabilityCounts(spec.capabilities);
 
 assert.equal(spec.productName, 'KP-DEV-HQ');

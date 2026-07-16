@@ -1,16 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { profile } from '../data/profile';
-import { expertiseDomains } from '../data/expertise';
+import { contactIntents } from '../data/portfolio';
 ---
-<Layout title="contact" description="KP-DEV-HQ portfolio contact route.">
-  <section class="command-hero mb-8 rounded-[2rem] border border-primary/20 bg-base-2 p-6 md:p-10 shadow-2xl bg-base-200">
-    <p class="badge badge-primary badge-lg mb-4">Portfolio</p>
-    <h1 class="text-4xl md:text-6xl font-black capitalize">contact</h1>
-    <p class="mt-4 max-w-3xl text-lg text-base-content/75">Public-safe KP-DEV-HQ contact content for {profile.name}. Detailed claims are intentionally limited to verified public information and clearly labeled placeholders.</p>
-  </section>
-  <section class="grid gap-4 md:grid-cols-2">
-    {expertiseDomains.map((domain) => <article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">{domain.title}</h2><p class="text-base-content/70">{domain.summary}</p></div></article>)}
-  </section>
-  <section class="mt-8 card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">Evidence note</h2><p class="text-base-content/70">Placeholder route scaffold for Phase 1. Phase 2 should replace this with owner-approved case-study detail, evidence labels, and curated content schema expansion where appropriate.</p><div class="card-actions"><a class="btn btn-primary" href="/projects">Selected work</a><a class="btn btn-outline" href="/developer-hq">Developer HQ</a></div></div></section>
+<Layout title="Contact KP" description="Public-safe contact paths for employment, consulting, speaking, research, and open-source collaboration.">
+<section class="command-hero mb-8 rounded-[2rem] bg-base-200 p-8 shadow-xl"><h1 class="text-5xl font-black">Contact and collaboration</h1><p class="mt-4 max-w-3xl">Use approved public channels only. Do not send passwords, tokens, private infrastructure details, or sensitive operational data.</p></section><section class="grid gap-5 md:grid-cols-2"><article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">Collaboration intents</h2><ul class="list-disc pl-5">{contactIntents.map((intent) => <li>{intent}</li>)}</ul></div></article><article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">Public channels</h2><a class="link link-primary" href={profile.contact.github}>GitHub</a><a class="link link-primary" href={profile.contact.linkedin}>LinkedIn</a><a class="link link-primary" href="/create-issue">Create a public issue</a></div></article></section>
 </Layout>

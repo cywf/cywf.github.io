@@ -1,16 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { profile } from '../data/profile';
-import { expertiseDomains } from '../data/expertise';
+import { expertiseDomains } from '../data/portfolio';
 ---
-<Layout title="expertise" description="KP-DEV-HQ portfolio expertise route.">
-  <section class="command-hero mb-8 rounded-[2rem] border border-primary/20 bg-base-2 p-6 md:p-10 shadow-2xl bg-base-200">
-    <p class="badge badge-primary badge-lg mb-4">Portfolio</p>
-    <h1 class="text-4xl md:text-6xl font-black capitalize">expertise</h1>
-    <p class="mt-4 max-w-3xl text-lg text-base-content/75">Public-safe KP-DEV-HQ expertise content for {profile.name}. Detailed claims are intentionally limited to verified public information and clearly labeled placeholders.</p>
-  </section>
-  <section class="grid gap-4 md:grid-cols-2">
-    {expertiseDomains.map((domain) => <article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">{domain.title}</h2><p class="text-base-content/70">{domain.summary}</p></div></article>)}
-  </section>
-  <section class="mt-8 card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">Evidence note</h2><p class="text-base-content/70">Placeholder route scaffold for Phase 1. Phase 2 should replace this with owner-approved case-study detail, evidence labels, and curated content schema expansion where appropriate.</p><div class="card-actions"><a class="btn btn-primary" href="/projects">Selected work</a><a class="btn btn-outline" href="/developer-hq">Developer HQ</a></div></div></section>
+<Layout title="Expertise - KP Portfolio" description="KP expertise across AI/ML, cybersecurity, secure infrastructure, autonomous agents, space systems, education, and leadership.">
+<section class="command-hero mb-8 rounded-[2rem] bg-base-200 p-8 shadow-xl"><h1 class="text-5xl font-black">Expertise domains</h1><p class="mt-4 max-w-3xl">Methods, tools, examples, and evidence paths are public-safe and reviewable.</p></section><section class="grid gap-5 md:grid-cols-2">{expertiseDomains.map((d) => <article id={d.slug} class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title text-2xl">{d.title}</h2><p>{d.summary}</p><h3 class="font-bold">Methods</h3><ul class="list-disc pl-5">{d.methods.map((m) => <li>{m}</li>)}</ul><h3 class="font-bold">Tools</h3><p>{d.tools.join(', ')}</p><h3 class="font-bold">Examples</h3><p>{d.examples.join(', ')}</p>{d.evidenceLinks.map((l) => <a class="link link-primary" href={l.href}>{l.label} →</a>)}</div></article>)}</section>
 </Layout>
