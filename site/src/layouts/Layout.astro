@@ -1,6 +1,6 @@
 ---
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
-import { primaryNavigation, developerHqNavigation } from '../data/navigation';
+import { primaryNavigation, portfolioMoreNavigation, developerHqNavigation } from '../data/navigation';
 import { profile } from '../data/profile';
 import '../styles/global.css';
 
@@ -16,7 +16,9 @@ const pageTitle = title.includes('Kylo') || title.includes('KP') ? title : `${ti
 const ogImage = new URL(image, 'https://cywf.github.io').toString();
 
 const navItems = primaryNavigation;
+const moreItems = portfolioMoreNavigation;
 const utilityItems = developerHqNavigation;
+const mobileItems = [...navItems, ...moreItems, ...utilityItems];
 
 // Get current path for breadcrumb
 const currentPath = Astro.url.pathname;
@@ -48,40 +50,54 @@ const shortSha = process.env.GITHUB_SHA?.substring(0, 7) || 'dev';
   </head>
   <body>
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
-    
-    <!-- Navbar -->
-    <div class="navbar sticky top-0 z-40 border-b border-base-content/10 bg-base-200/95 shadow-lg backdrop-blur">
-      <div class="navbar-start">
+
+    <div class="navbar sticky top-0 z-40 min-h-16 border-b border-base-content/10 bg-base-200/95 shadow-lg backdrop-blur">
+      <div class="navbar-start min-w-0">
         <div class="dropdown">
-          <div tabindex={0} role="button" class="btn btn-ghost lg:hidden">
+          <div tabindex={0} role="button" class="btn btn-ghost xl:hidden" aria-label="Open navigation menu">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
             </svg>
           </div>
-          <ul tabindex={0} class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52">
-            {[...navItems, ...utilityItems].map(item => (
+          <ul tabindex={0} class="menu menu-sm dropdown-content mt-3 z-[1] max-h-[75vh] w-64 overflow-y-auto rounded-box bg-base-200 p-2 shadow">
+            {mobileItems.map(item => (
               <li><a href={item.href}>{item.label}</a></li>
             ))}
           </ul>
         </div>
-        <a href="/" class="btn btn-ghost text-xl" aria-label="KP Portfolio home">⚡ KP <span class="hidden sm:inline">DEV-HQ</span></a>
+        <a href="/" class="btn btn-ghost shrink-0 text-xl" aria-label="KP Portfolio home">⚡ <span>KP Projects</span></a>
       </div>
-      <div class="navbar-center hidden lg:flex">
-        <ul class="menu menu-horizontal px-1">
+      <div class="navbar-center hidden xl:flex">
+        <ul class="menu menu-horizontal flex-nowrap px-1">
           {navItems.map(item => (
             <li><a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined} class={currentPath === item.href ? 'active font-bold' : ''}>{item.label}</a></li>
           ))}
-          <li><details><summary>Developer HQ</summary><ul class="rounded-box bg-base-200 p-2">{utilityItems.map(item => <li><a href={item.href}>{item.label}</a></li>)}</ul></details></li>
+          <li>
+            <details>
+              <summary>More</summary>
+              <ul class="rounded-box bg-base-200 p-2">
+                {moreItems.map(item => <li><a href={item.href}>{item.label}</a></li>)}
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary>Ops Evidence</summary>
+              <ul class="rounded-box bg-base-200 p-2">
+                {utilityItems.map(item => <li><a href={item.href}>{item.label}</a></li>)}
+              </ul>
+            </details>
+          </li>
         </ul>
       </div>
-      <div class="navbar-end">
+      <div class="navbar-end shrink-0 gap-2">
+        <a class="btn btn-sm btn-ghost hidden 2xl:inline-flex" href="/developer-hq">Developer HQ</a>
         <ThemeSwitcher client:load />
       </div>
     </div>
 
-    <!-- Breadcrumb -->
     {pathSegments.length > 0 && (
-      <div class="text-sm breadcrumbs px-4 py-2 bg-base-300">
+      <div class="text-sm breadcrumbs bg-base-300 px-4 py-2">
         <ul>
           <li><a href="/">Home</a></li>
           {pathSegments.map((segment, index) => {
@@ -101,19 +117,17 @@ const shortSha = process.env.GITHUB_SHA?.substring(0, 7) || 'dev';
       </div>
     )}
 
-    <!-- Main Content -->
-    <main id="main-content" class="min-h-screen container mx-auto px-4 py-10">
+    <main id="main-content" class="container mx-auto min-h-screen px-4 py-10">
       <slot />
     </main>
 
-    <!-- Footer -->
-    <footer class="footer footer-center p-10 bg-base-200 text-base-content">
+    <footer class="footer footer-center bg-base-200 p-10 text-base-content">
       <aside>
         <p class="font-semibold">
-          {profile.name} - {profile.brand} Portfolio
+          {profile.name} - public project portfolio
         </p>
-        <p>© {new Date().getFullYear()} - MIT License · Static-first professional portfolio and Developer HQ</p>
-        <p class="max-w-2xl text-sm opacity-75">Portfolio content stays readable without live telemetry; public snapshot JSON supports reviewer-only evidence routes.</p>
+        <p>© {new Date().getFullYear()} - MIT License · Static-first project portfolio and supporting Developer HQ evidence</p>
+        <p class="max-w-2xl text-sm opacity-75">Project pages stay readable without live telemetry; snapshot JSON supports reviewer-only evidence routes.</p>
         <p class="text-sm opacity-70">
           Last deployed: {new Date(buildTime).toLocaleString()} | SHA: {shortSha}
         </p>
