@@ -4,19 +4,24 @@ export interface NavItem {
   section: "portfolio" | "developer-hq" | "utility";
   description?: string;
 }
+
 export const primaryNavigation: NavItem[] = [
   { href: "/", label: "Home", section: "portfolio" },
-  { href: "/about", label: "About", section: "portfolio" },
-  { href: "/expertise", label: "Expertise", section: "portfolio" },
   { href: "/projects", label: "Projects", section: "portfolio" },
   { href: "/case-studies", label: "Case Studies", section: "portfolio" },
-  { href: "/experience", label: "Experience", section: "portfolio" },
-  { href: "/research", label: "Research / Writing", section: "portfolio" },
   { href: "/labs", label: "Labs", section: "portfolio" },
-  { href: "/architecture", label: "Architecture", section: "portfolio" },
+  { href: "/research", label: "Research", section: "portfolio" },
   { href: "/contact", label: "Contact", section: "portfolio" },
+];
+
+export const portfolioMoreNavigation: NavItem[] = [
+  { href: "/about", label: "About", section: "portfolio" },
+  { href: "/expertise", label: "Expertise", section: "portfolio" },
+  { href: "/experience", label: "Experience", section: "portfolio" },
+  { href: "/architecture", label: "Architecture", section: "portfolio" },
   { href: "/developer-hq", label: "Developer HQ", section: "developer-hq" },
 ];
+
 export const developerHqNavigation: NavItem[] = [
   {
     href: "/statistics",
@@ -61,8 +66,10 @@ export const developerHqNavigation: NavItem[] = [
     description: "Compatibility route for static diagrams.",
   },
 ];
+
 export const allRoutes = [
   ...primaryNavigation,
+  ...portfolioMoreNavigation,
   ...developerHqNavigation,
   { href: "/404", label: "404", section: "utility" as const },
 ];
