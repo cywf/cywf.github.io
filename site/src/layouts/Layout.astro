@@ -1,5 +1,7 @@
 ---
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
+import { primaryNavigation, developerHqNavigation } from '../data/navigation';
+import { profile } from '../data/profile';
 import '../styles/global.css';
 
 export interface Props {
@@ -13,17 +15,8 @@ const canonical = new URL(Astro.url.pathname, 'https://cywf.github.io').toString
 const pageTitle = title.includes('Kylo') || title.includes('KP') ? title : `${title} | KP Portfolio`;
 const ogImage = new URL(image, 'https://cywf.github.io').toString();
 
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/dashboard', label: 'Dashboard' },
-  { href: '/statistics', label: 'Statistics' },
-  { href: '/discussions', label: 'Discussions' },
-  { href: '/development-board', label: 'Dev Board' },
-  { href: '/dev-hq', label: 'DEV-HQ' },
-  { href: '/docs', label: 'Docs' },
-  { href: '/labs', label: 'Labs' },
-  { href: '/visualizer', label: 'Visualizer' },
-];
+const navItems = primaryNavigation;
+const utilityItems = developerHqNavigation;
 
 // Get current path for breadcrumb
 const currentPath = Astro.url.pathname;
@@ -66,18 +59,19 @@ const shortSha = process.env.GITHUB_SHA?.substring(0, 7) || 'dev';
             </svg>
           </div>
           <ul tabindex={0} class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52">
-            {navItems.map(item => (
+            {[...navItems, ...utilityItems].map(item => (
               <li><a href={item.href}>{item.label}</a></li>
             ))}
           </ul>
         </div>
-        <a href="/" class="btn btn-ghost text-xl" aria-label="KP Portfolio home">⚡ KP <span class="hidden sm:inline">Operations Hub</span></a>
+        <a href="/" class="btn btn-ghost text-xl" aria-label="KP Portfolio home">⚡ KP <span class="hidden sm:inline">DEV-HQ</span></a>
       </div>
       <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal px-1">
           {navItems.map(item => (
             <li><a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined} class={currentPath === item.href ? 'active font-bold' : ''}>{item.label}</a></li>
           ))}
+          <li><details><summary>Developer HQ</summary><ul class="rounded-box bg-base-200 p-2">{utilityItems.map(item => <li><a href={item.href}>{item.label}</a></li>)}</ul></details></li>
         </ul>
       </div>
       <div class="navbar-end">
@@ -116,9 +110,9 @@ const shortSha = process.env.GITHUB_SHA?.substring(0, 7) || 'dev';
     <footer class="footer footer-center p-10 bg-base-200 text-base-content">
       <aside>
         <p class="font-semibold">
-          Kylo Parisher - Developer Portfolio
+          {profile.name} - {profile.brand} Portfolio
         </p>
-        <p>© {new Date().getFullYear()} - MIT License · Static-first portfolio and public operations hub</p>
+        <p>© {new Date().getFullYear()} - MIT License · Static-first professional portfolio and Developer HQ evidence subsystem</p>
         <p class="max-w-2xl text-sm opacity-75">Data comes from committed GitHub snapshot JSON with client enhancement reserved for charts, diagrams, and the preserved legacy dashboard.</p>
         <p class="text-sm opacity-70">
           Last deployed: {new Date(buildTime).toLocaleString()} | SHA: {shortSha}
