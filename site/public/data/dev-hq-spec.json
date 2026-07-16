@@ -1,0 +1,76 @@
+{
+  "fetchedAt": "2026-07-16T00:00:00.000Z",
+  "data": {
+    "version": "2.0",
+    "updatedAt": "2026-07-16",
+    "productName": "KP-DEV-HQ",
+    "tagline": "A static-first developer headquarters that turns public project signals into an actionable portfolio command center.",
+    "principles": [
+      "Public-safe by default: no secrets, private data, or sensitive workspace variables are exposed in the built site.",
+      "Snapshot-backed reliability: committed JSON envelopes keep the site useful when optional GitHub API scopes are unavailable.",
+      "Portfolio-to-operations bridge: visitors can move from proof-of-work to active task queues, documentation, and contribution paths.",
+      "Accessible command UI: dark, high-contrast, keyboard-accessible routes remain usable without client-side API tokens."
+    ],
+    "architectureLayers": [
+      "GitHub Actions snapshot layer gathers repository, discussion, project, and health signals with graceful fallbacks.",
+      "Astro static application layer renders durable routes from public JSON contracts and shared TypeScript utilities.",
+      "Interactive enhancement layer adds charts, diagrams, labs, and legacy dashboard framing without weakening the static baseline.",
+      "Portfolio governance layer documents roadmap, CI/CD expectations, public data boundaries, and review-ready implementation phases."
+    ],
+    "capabilities": [
+      {
+        "title": "Portfolio operations landing page",
+        "summary": "Home route summarizes mission, data freshness, active repositories, priority work, language signals, and recent public activity.",
+        "evidence": "/",
+        "status": "live"
+      },
+      {
+        "title": "Cross-project development board",
+        "summary": "Projects v2 and issue fallback data are normalized into a public board that highlights blocked, doing, todo, and done work.",
+        "evidence": "/development-board",
+        "status": "live"
+      },
+      {
+        "title": "Repository health and readiness scoring",
+        "summary": "Repository snapshots include readiness bands, docs coverage, issue/PR counts, language usage, and recommended next actions.",
+        "evidence": "/statistics",
+        "status": "live"
+      },
+      {
+        "title": "Architecture and workflow visualization",
+        "summary": "Mermaid diagrams and labs provide a safe browser-only way to inspect system structure and relationship models.",
+        "evidence": "/visualizer",
+        "status": "live"
+      },
+      {
+        "title": "KP-DEV-HQ specification traceability",
+        "summary": "This route maps the v2.0 product design intent into visible principles, capabilities, architecture layers, and implementation phases.",
+        "evidence": "/dev-hq",
+        "status": "ready"
+      },
+      {
+        "title": "Spec-bootstrap-aligned governance",
+        "summary": "Branching, CI/CD, public-safe environment variable conventions, and roadmap checkpoints are documented for future PR-CYBR repositories.",
+        "evidence": "README.md and GitHub Pages workflow",
+        "status": "planned"
+      }
+    ],
+    "roadmap": [
+      {
+        "phase": "Phase 1",
+        "title": "Expose the DEV-HQ blueprint",
+        "outcome": "Publish a navigable product architecture page backed by a public JSON contract."
+      },
+      {
+        "phase": "Phase 2",
+        "title": "Deepen CI/CD governance",
+        "outcome": "Add branch/environment guidance modeled after spec-bootstrap and keep secrets in Terraform Cloud or GitHub Actions environments."
+      },
+      {
+        "phase": "Phase 3",
+        "title": "Automate implementation evidence",
+        "outcome": "Connect snapshot fetchers, readiness tests, and docs pages to show when each capability is live, ready, or planned."
+      }
+    ]
+  }
+}

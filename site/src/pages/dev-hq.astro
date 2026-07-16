@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import devHqSnapshot from '../../public/data/dev-hq-spec.json';
+import { getCapabilityCounts, getPrioritizedCapabilities, type DevHqSpec } from '../lib/dev-hq';
+import { formatSnapshotDate, unwrapSnapshot } from '../lib/command-center';
+
+const { data: spec, fetchedAt } = unwrapSnapshot<DevHqSpec>(devHqSnapshot);
+const counts = getCapabilityCounts(spec.capabilities);
+const capabilities = getPrioritizedCapabilities(spec.capabilities);
+const statusStyles = {
+  live: 'badge-success',
+  ready: 'badge-info',
+  planned: 'badge-warning',
+};
+---
+
+<Layout title="KP-DEV-HQ Architecture" description="KP-DEV-HQ v2.0 architecture and product design implementation map for the CYWF portfolio">
+  <section class="command-hero mb-8 rounded-[2rem] border border-primary/20 bg-base-200 p-6 shadow-2xl md:p-10">
+    <p class="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">{spec.productName} · v{spec.version}</p>
+    <div class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+      <div>
+        <h1 class="max-w-4xl text-4xl font-black tracking-tight md:text-6xl">Developer headquarters architecture and product design map.</h1>
+        <p class="mt-5 max-w-3xl text-lg leading-8 text-base-content/75">{spec.tagline}</p>
+      </div>
+      <aside class="rounded-3xl border border-base-content/10 bg-base-100/80 p-5" aria-label="Specification metadata">
+        <p class="text-sm uppercase tracking-[0.2em] text-base-content/60">Spec status</p>
+        <dl class="mt-4 grid grid-cols-3 gap-3 text-center">
+          <div class="rounded-2xl bg-base-200 p-4"><dt class="text-xs text-base-content/60">Live</dt><dd class="text-3xl font-black">{counts.live}</dd></div>
+          <div class="rounded-2xl bg-base-200 p-4"><dt class="text-xs text-base-content/60">Ready</dt><dd class="text-3xl font-black">{counts.ready}</dd></div>
+          <div class="rounded-2xl bg-base-200 p-4"><dt class="text-xs text-base-content/60">Planned</dt><dd class="text-3xl font-black">{counts.planned}</dd></div>
+        </dl>
+        <p class="mt-4 text-xs text-base-content/60">Snapshot: {formatSnapshotDate(fetchedAt)} · Updated: {spec.updatedAt}</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="mb-8 grid gap-6 lg:grid-cols-2">
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-2xl">Operating principles</h2>
+        <ul class="mt-4 space-y-3">
+          {spec.principles.map((principle) => <li class="rounded-2xl bg-base-100 p-4 text-base-content/75">{principle}</li>)}
+        </ul>
+      </div>
+    </div>
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-2xl">Architecture layers</h2>
+        <ol class="mt-4 space-y-3">
+          {spec.architectureLayers.map((layer, index) => <li class="rounded-2xl bg-base-100 p-4 text-base-content/75"><span class="badge badge-primary mr-2">{index + 1}</span>{layer}</li>)}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-8 card bg-base-200 shadow-xl" aria-labelledby="capability-map">
+    <div class="card-body">
+      <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div>
+          <h2 id="capability-map" class="card-title text-2xl">Capability implementation map</h2>
+          <p class="text-base-content/70">Traceability from the uploaded KP-DEV-HQ v2.0 design intent to current portfolio routes and next implementation checkpoints.</p>
+        </div>
+        <a href="/visualizer" class="link link-primary">View architecture diagrams →</a>
+      </div>
+      <div class="mt-5 grid gap-4 md:grid-cols-2">
+        {capabilities.map((capability) => <article class="rounded-2xl border border-base-content/10 bg-base-100 p-5">
+          <div class="flex flex-wrap items-center gap-2"><span class:list={['badge', statusStyles[capability.status]]}>{capability.status}</span><span class="badge badge-outline">{capability.evidence}</span></div>
+          <h3 class="mt-3 text-xl font-bold">{capability.title}</h3>
+          <p class="mt-2 text-sm leading-6 text-base-content/70">{capability.summary}</p>
+        </article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="card bg-base-200 shadow-xl" aria-labelledby="implementation-roadmap">
+    <div class="card-body">
+      <h2 id="implementation-roadmap" class="card-title text-2xl">Implementation roadmap</h2>
+      <div class="mt-5 grid gap-4 md:grid-cols-3">
+        {spec.roadmap.map((item) => <article class="rounded-2xl bg-base-100 p-5"><span class="badge badge-secondary">{item.phase}</span><h3 class="mt-3 text-lg font-bold">{item.title}</h3><p class="mt-2 text-sm leading-6 text-base-content/70">{item.outcome}</p></article>)}
+      </div>
+    </div>
+  </section>
+</Layout>
