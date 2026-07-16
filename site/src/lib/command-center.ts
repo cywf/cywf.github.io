@@ -34,7 +34,7 @@ export interface StatsData {
   forks: number;
   watchers: number;
   languages: Record<string, number>;
-  commitActivity: Array<{ date: string; count: number }>;
+  commitActivity: Array<{ week: string; commits: number }>;
   dataWarnings?: string[]; openIssuesOnly?: number; openPRs?: number; docsWikiCoverage?: number; stableOrReadyCount?: number; readinessDistribution?: Record<string, number>; repositories: Array<{ name: string; fullName?: string; htmlUrl?: string; description?: string; language?: string; stars?: number; forks?: number; openIssues?: number; openIssuesOnly?: number; openPRs?: number; pushedAt?: string; updatedAt?: string; productionReadinessBand?: string; productionReadinessScore?: number }>;
 }
 
@@ -48,7 +48,7 @@ export interface SnapshotEnvelope<T> {
   data: T;
 }
 
-export function unwrapSnapshot<T>(snapshot: SnapshotEnvelope<T> | T): { data: T; fetchedAt?: string } {
+export function unwrapSnapshot<T>(snapshot: unknown): { data: T; fetchedAt?: string } {
   if (snapshot && typeof snapshot === 'object' && 'data' in snapshot) {
     const envelope = snapshot as SnapshotEnvelope<T>;
     return { data: envelope.data, fetchedAt: envelope.fetchedAt };

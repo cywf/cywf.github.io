@@ -8,7 +8,8 @@
     "preview": "astro preview",
     "typecheck": "astro check",
     "astro": "astro",
-    "test": "tsx src/tests/command-center.test.ts && tsx src/tests/fetch-projects-query.test.ts && tsx src/tests/readiness.test.ts && tsx src/tests/dev-hq.test.ts && tsx src/tests/portfolio-foundation.test.ts"
+    "test": "tsx src/tests/command-center.test.ts && tsx src/tests/fetch-projects-query.test.ts && tsx src/tests/readiness.test.ts && tsx src/tests/dev-hq.test.ts && tsx src/tests/portfolio-foundation.test.ts && tsx src/tests/snapshot-contract.test.ts",
+    "verify:deploy": "npx tsx src/scripts/fetch_repo_data.ts && npx tsx src/scripts/fetch_discussions.ts && npx tsx src/scripts/fetch_projects.ts && npm test && npm run typecheck && NODE_OPTIONS=--max-old-space-size=4096 npm run build"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
