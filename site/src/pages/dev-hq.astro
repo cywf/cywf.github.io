@@ -4,7 +4,7 @@ import devHqSnapshot from '../../public/data/dev-hq-spec.json';
 import { getCapabilityCounts, getPrioritizedCapabilities, type DevHqSpec } from '../lib/dev-hq';
 import { formatSnapshotDate, unwrapSnapshot } from '../lib/command-center';
 
-const { data: spec, fetchedAt } = unwrapSnapshot<DevHqSpec>(devHqSnapshot);
+const { data: spec, fetchedAt } = unwrapSnapshot<DevHqSpec>(devHqSnapshot as any);
 const counts = getCapabilityCounts(spec.capabilities);
 const capabilities = getPrioritizedCapabilities(spec.capabilities);
 const statusStyles = {

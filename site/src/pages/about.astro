@@ -1,16 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { profile } from '../data/profile';
-import { expertiseDomains } from '../data/expertise';
 ---
-<Layout title="about" description="KP-DEV-HQ portfolio about route.">
-  <section class="command-hero mb-8 rounded-[2rem] border border-primary/20 bg-base-2 p-6 md:p-10 shadow-2xl bg-base-200">
-    <p class="badge badge-primary badge-lg mb-4">Portfolio</p>
-    <h1 class="text-4xl md:text-6xl font-black capitalize">about</h1>
-    <p class="mt-4 max-w-3xl text-lg text-base-content/75">Public-safe KP-DEV-HQ about content for {profile.name}. Detailed claims are intentionally limited to verified public information and clearly labeled placeholders.</p>
-  </section>
-  <section class="grid gap-4 md:grid-cols-2">
-    {expertiseDomains.map((domain) => <article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">{domain.title}</h2><p class="text-base-content/70">{domain.summary}</p></div></article>)}
-  </section>
-  <section class="mt-8 card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">Evidence note</h2><p class="text-base-content/70">Placeholder route scaffold for Phase 1. Phase 2 should replace this with owner-approved case-study detail, evidence labels, and curated content schema expansion where appropriate.</p><div class="card-actions"><a class="btn btn-primary" href="/projects">Selected work</a><a class="btn btn-outline" href="/developer-hq">Developer HQ</a></div></div></section>
+<Layout title="About KP - Kylo Parisher" description="Professional biography and public values for Kylo Parisher / KP.">
+<section class="prose max-w-none rounded-[2rem] bg-base-200 p-8 shadow-xl"><h1>About Kylo Parisher / KP</h1><p>{profile.summary}</p><p>KP connects cybersecurity, AI/ML, secure infrastructure, autonomous-agent workflows, space-systems research, and education through one consistent practice: make systems understandable, resilient, reviewable, and safe to discuss in public.</p><h2>Mission</h2><p>Build intelligent systems that help people reason about risk, delivery, and collaboration without depending on secret runtime state or unverifiable claims.</p><h2>Public values</h2><ul><li>Protect secrets and private operational context.</li><li>Prefer accessible, static-first content before client-side effects.</li><li>Label evidence levels, limitations, and research concepts honestly.</li><li>Use PR-CYBR/spec-bootstrap-style branch and CI discipline where appropriate.</li></ul><h2>Public-safe overview</h2><p>PR-CYBR and G8 references are presented as public portfolio context, governance, research, and design language unless a public repository or document verifies implementation details.</p></section>
 </Layout>

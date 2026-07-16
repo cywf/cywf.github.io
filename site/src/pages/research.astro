@@ -1,16 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { profile } from '../data/profile';
-import { expertiseDomains } from '../data/expertise';
+import { researchNotes } from '../data/portfolio';
 ---
-<Layout title="research" description="KP-DEV-HQ portfolio research route.">
-  <section class="command-hero mb-8 rounded-[2rem] border border-primary/20 bg-base-2 p-6 md:p-10 shadow-2xl bg-base-200">
-    <p class="badge badge-primary badge-lg mb-4">Portfolio</p>
-    <h1 class="text-4xl md:text-6xl font-black capitalize">research</h1>
-    <p class="mt-4 max-w-3xl text-lg text-base-content/75">Public-safe KP-DEV-HQ research content for {profile.name}. Detailed claims are intentionally limited to verified public information and clearly labeled placeholders.</p>
-  </section>
-  <section class="grid gap-4 md:grid-cols-2">
-    {expertiseDomains.map((domain) => <article class="card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">{domain.title}</h2><p class="text-base-content/70">{domain.summary}</p></div></article>)}
-  </section>
-  <section class="mt-8 card bg-base-200 shadow-xl"><div class="card-body"><h2 class="card-title">Evidence note</h2><p class="text-base-content/70">Placeholder route scaffold for Phase 1. Phase 2 should replace this with owner-approved case-study detail, evidence labels, and curated content schema expansion where appropriate.</p><div class="card-actions"><a class="btn btn-primary" href="/projects">Selected work</a><a class="btn btn-outline" href="/developer-hq">Developer HQ</a></div></div></section>
+<Layout title="Research and Writing - KP Portfolio" description="KP research notes, writing, architecture decisions, presentations, and experiments.">
+<section class="command-hero mb-8 rounded-[2rem] bg-base-200 p-8 shadow-xl"><h1 class="text-5xl font-black">Research / writing</h1><p class="mt-4 max-w-3xl">Working notes and experiments are labeled by status and evidence level.</p></section><section class="grid gap-5 md:grid-cols-3">{researchNotes.map((note) => <article class="card bg-base-200 shadow-xl"><div class="card-body"><span class="badge badge-outline w-max">{note.status}</span><h2 class="card-title">{note.title}</h2><p>{note.summary}</p>{note.links.map((l) => <a class="link link-primary" href={l.href}>{l.label} →</a>)}</div></article>)}</section>
 </Layout>
