@@ -52,47 +52,51 @@ const shortSha = process.env.GITHUB_SHA?.substring(0, 7) || 'dev';
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
     <div class="navbar sticky top-0 z-40 min-h-16 border-b border-base-content/10 bg-base-200/95 shadow-lg backdrop-blur">
-      <div class="navbar-start min-w-0">
-        <div class="dropdown">
-          <div tabindex={0} role="button" class="btn btn-ghost xl:hidden" aria-label="Open navigation menu">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-            </svg>
+      <div class="container mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div class="flex items-center min-w-0">
+          <div class="dropdown">
+            <div tabindex={0} role="button" class="btn btn-ghost xl:hidden" aria-label="Open navigation menu">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+              </svg>
+            </div>
+            <ul tabindex={0} class="menu menu-sm dropdown-content mt-3 z-[1] max-h-[75vh] w-64 overflow-y-auto rounded-box bg-base-200 p-2 shadow">
+              {mobileItems.map(item => (
+                <li><a href={item.href}>{item.label}</a></li>
+              ))}
+            </ul>
           </div>
-          <ul tabindex={0} class="menu menu-sm dropdown-content mt-3 z-[1] max-h-[75vh] w-64 overflow-y-auto rounded-box bg-base-200 p-2 shadow">
-            {mobileItems.map(item => (
-              <li><a href={item.href}>{item.label}</a></li>
+          <a href="/" class="btn btn-ghost shrink-0 text-xl mr-2" aria-label="KP Portfolio home">⚡ <span>KP Projects</span></a>
+        </div>
+
+        <div class="hidden xl:flex flex-1 min-w-0 justify-end">
+          <ul class="menu menu-horizontal flex-nowrap px-1">
+            {navItems.map(item => (
+              <li><a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined} class={currentPath === item.href ? 'active font-bold' : ''}>{item.label}</a></li>
             ))}
+            <li>
+              <details>
+                <summary>More</summary>
+                <ul class="rounded-box bg-base-200 p-2">
+                  {moreItems.map(item => <li><a href={item.href}>{item.label}</a></li>)}
+                </ul>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary>Ops Evidence</summary>
+                <ul class="rounded-box bg-base-200 p-2">
+                  {utilityItems.map(item => <li><a href={item.href}>{item.label}</a></li>)}
+                </ul>
+              </details>
+            </li>
           </ul>
         </div>
-        <a href="/" class="btn btn-ghost shrink-0 text-xl" aria-label="KP Portfolio home">⚡ <span>KP Projects</span></a>
-      </div>
-      <div class="navbar-center hidden xl:flex">
-        <ul class="menu menu-horizontal flex-nowrap px-1">
-          {navItems.map(item => (
-            <li><a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined} class={currentPath === item.href ? 'active font-bold' : ''}>{item.label}</a></li>
-          ))}
-          <li>
-            <details>
-              <summary>More</summary>
-              <ul class="rounded-box bg-base-200 p-2">
-                {moreItems.map(item => <li><a href={item.href}>{item.label}</a></li>)}
-              </ul>
-            </details>
-          </li>
-          <li>
-            <details>
-              <summary>Ops Evidence</summary>
-              <ul class="rounded-box bg-base-200 p-2">
-                {utilityItems.map(item => <li><a href={item.href}>{item.label}</a></li>)}
-              </ul>
-            </details>
-          </li>
-        </ul>
-      </div>
-      <div class="navbar-end shrink-0 gap-2">
-        <a class="btn btn-sm btn-ghost hidden 2xl:inline-flex" href="/developer-hq">Developer HQ</a>
-        <ThemeSwitcher client:load />
+
+        <div class="flex-none shrink-0 gap-2 ml-4">
+          <a class="btn btn-sm btn-ghost hidden 2xl:inline-flex" href="/developer-hq">Developer HQ</a>
+          <ThemeSwitcher client:load />
+        </div>
       </div>
     </div>
 

@@ -1,0 +1,61 @@
+---
+// SystemConstellation.astro
+// Zero-JS, accessible, pure CSS/SVG decorative background.
+// Acts as a fallback and future slot for the Spline 3D scene.
+---
+<div id="spline-hero-slot" class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-60" aria-hidden="true">
+  <svg class="constellation-svg w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1000 1000" focusable="false">
+    <defs>
+      <radialGradient id="glow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+        <stop offset="0%" stop-color="oklch(var(--p))" stop-opacity="0.15" />
+        <stop offset="100%" stop-color="oklch(var(--b1))" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <rect width="1000" height="1000" fill="url(#glow)" />
+
+    <!-- Decorative nodes and links mimicking a system map -->
+    <g class="nodes" stroke="oklch(var(--bc))" stroke-opacity="0.15" stroke-width="1.5">
+      <line x1="200" y1="300" x2="450" y2="400" />
+      <line x1="450" y1="400" x2="600" y2="250" />
+      <line x1="450" y1="400" x2="700" y2="600" />
+      <line x1="700" y1="600" x2="850" y2="500" />
+      <line x1="450" y1="400" x2="350" y2="700" />
+      <line x1="350" y1="700" x2="600" y2="800" />
+      <line x1="700" y1="600" x2="600" y2="800" />
+    </g>
+
+    <g class="points" fill="oklch(var(--p))">
+      <circle cx="200" cy="300" r="4" class="pulse-point" style="animation-delay: 0s;" />
+      <circle cx="450" cy="400" r="8" class="pulse-point" style="animation-delay: 0.5s;" />
+      <circle cx="600" cy="250" r="5" class="pulse-point" style="animation-delay: 1.2s;" />
+      <circle cx="700" cy="600" r="6" class="pulse-point" style="animation-delay: 0.8s;" />
+      <circle cx="850" cy="500" r="3" class="pulse-point" style="animation-delay: 0.3s;" />
+      <circle cx="350" cy="700" r="5" class="pulse-point" style="animation-delay: 1.5s;" />
+      <circle cx="600" cy="800" r="4" class="pulse-point" style="animation-delay: 2.1s;" />
+    </g>
+  </svg>
+</div>
+
+<style>
+  .constellation-svg {
+    transform: scale(1.1);
+  }
+
+  .pulse-point {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.8); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-point {
+      animation: none !important;
+    }
+  }
+</style>
