@@ -54,6 +54,36 @@ async function runTests() {
     assert.ok(!combinedContent.includes(bad), `Combined content should not contain ${bad}`);
   }
 
+  // 7. Spline integration is opt-in, lazy, sandboxed, and respects constraints
+  assert.ok(indexContent.includes('id="activate-3d-btn"'), 'Activate button should exist');
+  assert.ok(!/<button id="activate-3d-btn"[^>]*aria-label=/.test(indexContent), 'Changing visible text should remain the toggle accessible name');
+  assert.ok(indexContent.includes('hidden lg:inline-flex'), 'Activate button should hide on mobile');
+  assert.ok(indexContent.includes('motion-reduce:hidden'), 'Activate button should hide on reduced-motion');
+  assert.ok(indexContent.includes('aria-pressed="false"'), 'Activate button should initially have aria-pressed false');
+  assert.ok(indexContent.includes('View 3D system'), 'Activate button should have exact label: View 3D system');
+
+  assert.ok(indexContent.includes('setAttribute(\'sandbox\', \'allow-scripts allow-same-origin\')') || indexContent.includes('setAttribute("sandbox", "allow-scripts allow-same-origin")'), 'Iframe should have restrictive sandbox set via setAttribute');
+  assert.ok(indexContent.includes('loading = \'lazy\'') || indexContent.includes('loading = "lazy"'), 'Iframe should load lazily');
+  assert.ok(indexContent.includes('referrerPolicy = \'no-referrer\'') || indexContent.includes('referrerPolicy = "no-referrer"'), 'Iframe should have no-referrer policy');
+
+  // ensure JS guards exist
+  assert.ok(indexContent.includes('window.innerWidth < 1024'), 'Should defensively refuse activation for narrow viewports in JS');
+  assert.ok(indexContent.includes('window.matchMedia(\'(prefers-reduced-motion: reduce)\')') || indexContent.includes('window.matchMedia("(prefers-reduced-motion: reduce)")'), 'Should defensively refuse activation for prefers-reduced-motion in JS');
+
+  // ensure aria toggles and labels are handled in JS
+  assert.ok(indexContent.includes('removeAttribute(\'aria-hidden\')') || indexContent.includes('removeAttribute("aria-hidden")'), 'Should remove aria-hidden from slot when active');
+  assert.ok(indexContent.includes('setAttribute(\'aria-hidden\', \'true\')') || indexContent.includes('setAttribute("aria-hidden", "true")'), 'Should restore aria-hidden to true on slot when closed');
+  assert.ok(indexContent.includes('setAttribute(\'aria-pressed\', \'true\')') || indexContent.includes('setAttribute("aria-pressed", "true")'), 'Should set aria-pressed to true when active');
+  assert.ok(indexContent.includes('setAttribute(\'aria-pressed\', \'false\')') || indexContent.includes('setAttribute("aria-pressed", "false")'), 'Should set aria-pressed to false when closed');
+  assert.ok(indexContent.includes('Return to static system'), 'Should toggle button label to Return to static system');
+
+  // ensure focus path
+  assert.ok(indexContent.includes('activateBtn.focus()'), 'Should retain focus on the control');
+
+  // ensure the url is in index.astro as an inert constant, not an active src string
+  assert.ok(indexContent.includes('https://my.spline.design/cywfportfoliosystems-sMeDudMCJLkvg1dVNzK62F31/'), 'Should have inert URL constant');
+  assert.ok(!indexContent.includes('src="https://my.spline.design'), 'URL should not be an active src attribute initially');
+
   console.log('✅ All Portfolio Experience Requirements passed.');
 }
 

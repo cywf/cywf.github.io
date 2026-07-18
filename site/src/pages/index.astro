@@ -27,6 +27,7 @@ const projectStats = [
           <a href="/case-studies" class="btn btn-outline bg-base-100/50 backdrop-blur-sm shadow-sm">Read case studies</a>
           <a href="/labs" class="btn btn-outline bg-base-100/50 backdrop-blur-sm shadow-sm">Open labs</a>
           <a href="/developer-hq" class="btn btn-ghost bg-base-100/30 backdrop-blur-sm">Developer HQ evidence</a>
+          <button id="activate-3d-btn" class="btn btn-outline bg-base-100/50 backdrop-blur-sm shadow-sm hidden lg:inline-flex motion-reduce:hidden" aria-pressed="false">View 3D system</button>
         </div>
       </div>
       <aside class="pointer-events-auto rounded-3xl border border-base-content/10 bg-base-100/90 p-6 shadow-xl backdrop-blur-md" aria-label="Portfolio summary">
@@ -115,3 +116,53 @@ const projectStats = [
     <div class="mt-5 flex flex-wrap gap-3"><a class="btn btn-primary" href="/contact">Contact</a><a class="btn btn-outline" href="https://github.com/cywf">GitHub organization</a></div>
   </section>
 </Layout>
+
+<script>
+  const activateBtn = document.getElementById('activate-3d-btn');
+  const splineSlot = document.getElementById('spline-hero-slot');
+  const splineUrl = 'https://my.spline.design/cywfportfoliosystems-sMeDudMCJLkvg1dVNzK62F31/';
+  let is3DActive = false;
+
+  if (activateBtn && splineSlot) {
+    activateBtn.addEventListener('click', () => {
+      const isMobile = window.innerWidth < 1024;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (isMobile || prefersReducedMotion) {
+        return;
+      }
+
+      if (!is3DActive) {
+        const iframe = document.createElement('iframe');
+        iframe.id = 'spline-iframe';
+        iframe.src = splineUrl;
+        iframe.title = 'Interactive 3D System Constellation Experience';
+        iframe.loading = 'lazy';
+        iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+        iframe.referrerPolicy = 'no-referrer';
+        iframe.className = 'absolute inset-0 w-full h-full border-0 z-10';
+
+        splineSlot.appendChild(iframe);
+        splineSlot.classList.remove('pointer-events-none');
+        splineSlot.classList.remove('opacity-60');
+        splineSlot.removeAttribute('aria-hidden');
+
+        activateBtn.textContent = 'Return to static system';
+        activateBtn.setAttribute('aria-pressed', 'true');
+        is3DActive = true;
+      } else {
+        const iframe = document.getElementById('spline-iframe');
+        if (iframe) iframe.remove();
+
+        splineSlot.classList.add('pointer-events-none');
+        splineSlot.classList.add('opacity-60');
+        splineSlot.setAttribute('aria-hidden', 'true');
+
+        activateBtn.textContent = 'View 3D system';
+        activateBtn.setAttribute('aria-pressed', 'false');
+        is3DActive = false;
+      }
+      activateBtn.focus();
+    });
+  }
+</script>
