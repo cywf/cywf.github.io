@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SystemConstellation from '../components/SystemConstellation.astro';
 import { profile } from '../data/profile';
 import { expertiseDomains, projects, caseStudies, researchNotes } from '../data/portfolio';
 
@@ -11,30 +12,32 @@ const projectStats = [
 ];
 ---
 <Layout title="CYWF Public Projects Portfolio" description="Project-first portfolio for CYWF public repositories, systems concepts, labs, case studies, and Developer HQ evidence.">
-  <section class="command-hero mb-8 overflow-hidden rounded-[2rem] border border-primary/20 bg-base-200 shadow-2xl">
-    <div class="grid gap-8 p-6 md:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-      <div>
-        <p class="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">CYWF public project portfolio</p>
-        <h1 class="max-w-5xl text-4xl font-black leading-tight tracking-tight md:text-6xl">Projects first. Evidence close behind.</h1>
-        <p class="mt-5 max-w-3xl text-lg leading-8 text-base-content/75">
-          A public map of CYWF systems, prototypes, labs, and documentation — organized so visitors can scan the work before reading about the builder.
+  <section class="command-hero relative mb-8 overflow-hidden rounded-[2rem] border border-primary/20 bg-base-200 shadow-2xl">
+    <SystemConstellation />
+
+    <div class="relative z-10 grid gap-8 p-6 md:p-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center pointer-events-none">
+      <div class="pointer-events-auto">
+        <p class="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary shadow-sm">Systems Engineering & Design</p>
+        <h1 class="max-w-5xl text-4xl font-black leading-tight tracking-tight md:text-6xl drop-shadow-sm">Projects first. Evidence close behind.</h1>
+        <p class="mt-5 max-w-3xl text-lg leading-8 text-base-content/80 drop-shadow-sm font-medium">
+          A public map of CYWF systems, prototypes, labs, and documentation. Explore the architecture and maturity of our solutions before evaluating the builder.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
-          <a href="/projects" class="btn btn-primary">Explore projects</a>
-          <a href="/case-studies" class="btn btn-outline">Read case studies</a>
-          <a href="/labs" class="btn btn-outline">Open labs</a>
-          <a href="/developer-hq" class="btn btn-ghost">Developer HQ evidence</a>
+          <a href="/projects" class="btn btn-primary shadow-md">Explore projects</a>
+          <a href="/case-studies" class="btn btn-outline bg-base-100/50 backdrop-blur-sm shadow-sm">Read case studies</a>
+          <a href="/labs" class="btn btn-outline bg-base-100/50 backdrop-blur-sm shadow-sm">Open labs</a>
+          <a href="/developer-hq" class="btn btn-ghost bg-base-100/30 backdrop-blur-sm">Developer HQ evidence</a>
         </div>
       </div>
-      <aside class="rounded-3xl border border-base-content/10 bg-base-100/80 p-5 shadow-xl" aria-label="Portfolio summary">
-        <p class="text-sm uppercase tracking-[0.2em] text-base-content/60">What this site is for</p>
-        <p class="mt-3 text-lg text-base-content/80">Review project scope, maturity, evidence, limitations, and collaboration paths without relying on live dashboards or private telemetry.</p>
-        <dl class="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+      <aside class="pointer-events-auto rounded-3xl border border-base-content/10 bg-base-100/90 p-6 shadow-xl backdrop-blur-md" aria-label="Portfolio summary">
+        <p class="text-sm uppercase font-bold tracking-[0.2em] text-primary">Portfolio Status</p>
+        <p class="mt-3 text-lg text-base-content/90 font-medium">Review project scope, maturity, evidence, and limitations without relying on live dashboards or private telemetry.</p>
+        <dl class="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
           {projectStats.map((stat) => (
-            <div class="rounded-2xl bg-base-200 p-4">
-              <dt class="text-sm text-base-content/60">{stat.label}</dt>
-              <dd class="text-3xl font-black">{stat.value}</dd>
-              <p class="text-xs text-base-content/60">{stat.detail}</p>
+            <div class="rounded-2xl border border-base-content/5 bg-base-200/50 p-4 transition-colors hover:bg-base-200">
+              <dt class="text-sm font-semibold text-base-content/70">{stat.label}</dt>
+              <dd class="mt-1 text-3xl font-black text-primary">{stat.value}</dd>
+              <p class="mt-1 text-xs text-base-content/70">{stat.detail}</p>
             </div>
           ))}
         </dl>
